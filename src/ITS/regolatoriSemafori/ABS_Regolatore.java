@@ -111,7 +111,7 @@ public abstract class ABS_Regolatore implements Regolatore{
 		//serve per evitare loop infiniti sullo scheduler degli eventi
 		if(tempoDiFase < Param.elaborationTime) tempoDiFase = Param.elaborationTime;
 		
-		Message cambioFase = new Message("CAMBIO FASE", sourceRSU, sourceRSU, tempoDiFase);
+		Message cambioFase = new Message("CAMBIO FASE", sourceRSU.getNetNode(), sourceRSU.getNetNode(), tempoDiFase);
 		sourceRSU.sendEvent(cambioFase);
 		
 		

@@ -41,7 +41,7 @@ public class SemaforoIntelligente extends ABS_Semaforo{
 		RSU source = regolatore.getRSU();
 		
 		for(Vehicle v : coda){
-			msg = new Message(messaggio, source, v, Param.elaborationTime);
+			msg = new Message(messaggio, source.getNetNode(), v, Param.elaborationTime);
 			source.sendEvent(msg);
 		}
 	}
@@ -77,17 +77,6 @@ public class SemaforoIntelligente extends ABS_Semaforo{
 		if(percentuale > sogliaCongestione){
 			percentuale = 1;
 		}
-		
-		/*print*
-		if(edge.getTargetNode().getId().equals("O")){
-			
-			System.out.println(this+": veicolo all'incrocio");
-			System.out.println("----- gradoCongest="+gradoCongestione);
-			System.out.println("----- percentuale="+percentuale);
-			System.out.println("----- tempo di verde = "+(percentuale * tempoMax) + tempoMin);
-			System.out.println("----- tempo minimo= "+tempoMin);
-		}
-		/**/
 		double tempoDiVerde = ((double)(percentuale * tempoMax) + tempoMin);
 		
 		verde = true;

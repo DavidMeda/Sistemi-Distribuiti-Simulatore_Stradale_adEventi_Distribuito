@@ -2,8 +2,8 @@ package vanet;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map.Entry;
 import org.graphstream.graph.Edge;
-import org.graphstream.graph.Node;
 import org.graphstream.ui.spriteManager.Sprite;
 import org.graphstream.ui.spriteManager.SpriteManager;
 import ITS.RSU.RSU;
@@ -11,7 +11,7 @@ import events.Ping;
 import events.UpdatePosition;
 import network.NetEdge;
 import network.NetGraph;
-import simEventiDiscreti.Scheduler;
+import network.NetNode;
 import util.Param;
 
 public class CityGraph extends NetGraph{
@@ -57,8 +57,8 @@ public class CityGraph extends NetGraph{
 	// METHODS //////////////////////////////////
 	
 	public void ping() throws InterruptedException{
-		for(RSU rsu : listaRSU ){
-			rsu.pingToVehicle();
+		for(Entry<NetNode, RSU> e : mappaNodoRSU.entrySet() ){
+			e.getValue().pingToVehicle();
 		}
 		getScheduler().addEvent(new Ping(this, Param.pingTime));
 		

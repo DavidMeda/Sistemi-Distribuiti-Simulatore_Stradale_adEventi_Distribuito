@@ -1,9 +1,11 @@
 package network;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.AbstractGraph;
 import org.graphstream.graph.implementations.MultiNode;
-
+import ITS.RSU.RSU;
 import simEventiDiscreti.Event;
 import simEventiDiscreti.Scheduler;
 
@@ -31,7 +33,14 @@ public class NetNode extends MultiNode implements NetEntity {
 	}
 	//from entity
 	@Override
-	public void handler(Event event){}
+	public void handler(Event event){
+		HashMap<NetNode,RSU> mappaNodoRSU =  ((NetGraph)getGraph()).getMappa();
+		for(Entry<NetNode, RSU> e : mappaNodoRSU.entrySet()) {
+			if(e.getKey().equals(this)) {
+				e.getValue().handler(event);
+			}
+		}
+	}
 
 //	@Override
 //	public void setScheduler(Scheduler scheduler) {

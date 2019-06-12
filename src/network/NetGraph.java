@@ -1,5 +1,6 @@
 package network;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import org.graphstream.graph.Edge;
@@ -14,7 +15,8 @@ import util.Param;
 import vanet.CityGraph;
 
 public class NetGraph extends MultiGraph {
-	protected LinkedList<RSU> listaRSU = new LinkedList<RSU>();
+	
+	protected HashMap<NetNode,RSU> mappaNodoRSU = new HashMap<NetNode,RSU>();
 
 	// //////////////////////
 	// node factory
@@ -67,6 +69,8 @@ public class NetGraph extends MultiGraph {
 	public String getDescription() {
 		return description;
 	}
+	
+	public HashMap<NetNode,RSU> getMappa(){return mappaNodoRSU;}
 
 	// METHODS ///////////////////
 	public void resetScheduler() {
@@ -76,7 +80,7 @@ public class NetGraph extends MultiGraph {
 	public void init() {
 		for (Node n : getEachNode()) {
 			RSU rsu = new RSU(n);
-			listaRSU.add(rsu);
+			mappaNodoRSU.put(((NetNode)n), rsu);
 			rsu.start();
 		}
 	}

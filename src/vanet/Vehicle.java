@@ -96,6 +96,9 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 	
 	// SETTER ///////////////
 	public Vehicle setStartingNode(int index){
+		/*print*
+		System.out.println(this+": set nodo iniziale = "+getGraph().getNode(index));
+		/**/
 		startingNode = getGraph().getNode(index);
 		setCurrentNode(index);
 		
@@ -188,10 +191,8 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 //			stat = new StatVeicolo(this);
 
 			/*print*
-			if(getId().equals("")){
 			System.out.println();
 			System.out.println(this+": sono fermo al primo nodo");
-			}
 			/**/
 			
 			//se è stato assegnato un percorso al veicolo
@@ -200,9 +201,7 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 				fermoAlPrimoNodo = ( (path.getFirst() != null) && getGraph().edgeIsFull(path.getFirst()) );
 				
 				/*print*
-				if(getId().equals("5")){
 				System.out.println(this+": sono ancora fermo al primo nodo? "+fermoAlPrimoNodo);
-				}
 				/**/
 				
 				//se l'arco è pieno non mi muovo
@@ -228,14 +227,12 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 				attachToEdge(currentEdge.getId());
 				
 				//comunico al primo RSU che inizio a muovermi
-				Message cambioArco = new Message("CAMBIO ARCO", this, registeredRSU, Param.elaborationTime);
-				cambioArco.setData(null, nextNode);
-				sendEvent(cambioArco);
+//				Message cambioArco = new Message("CAMBIO ARCO", this, registeredRSU, Param.elaborationTime);
+//				cambioArco.setData(null, nextNode);
+//				sendEvent(cambioArco);
 
 				/*print*
-				if(getId().equals("5")){
 				System.out.println(this+": inizio a muovermi per la prima volta sull'arco "+currentEdge+" a "+startTime);
-				}
 				/**/
 				
 			}
@@ -250,9 +247,8 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 			tempoDiAttesaSuArco += Param.updatePositionTime;
 		
 			/*print*
-			if(getId().equals("5")){
 			System.out.println(this+": sono fermo dietro ad un veicolo");
-			}/**/
+			/**/
 		
 			return;
 		}
@@ -288,10 +284,7 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 //					statisticheVeicoli.addStatVeicolo(stat);
 					
 					/*print*
-					if(getId().equals("5")){
-					System.out.println();
-					System.out.println(this+": sono arrivato a destinazione, tempo di attesa totale = "+tempoDiAttesaTotale);
-					}
+					System.out.println("\n"+this+": sono arrivato a destinazione, tempo di attesa totale = "+tempoDiAttesaTotale);
 					/**/
 					return;
 				}
@@ -430,7 +423,7 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 		path.clear();
 		
 		/*print*
-		System.out.println("\n"+this+": invio richiesta percorso a "+currentNode);
+		System.out.println("\n"+this+": invio richiesta percorso a "+currentNode +" per la destinazione "+destination);
 		/**/
 		
 		Message askPath = new Message("RICHIESTA PERCORSO", this, currentNode, Param.elaborationTime); 

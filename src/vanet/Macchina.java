@@ -49,9 +49,7 @@ public class Macchina extends Vehicle{
 		/********/		
 		case "VERDE":
 			/*print*
-			if(((RSU)message.getSource()).getId().equals("A")){
 			System.out.println(this+": è arrivato il verde dal semaforo di "+message.getSource());			
-			}
 			/**/
 			verdeAlSemaforo = true;
 			moving = true;
@@ -61,9 +59,7 @@ public class Macchina extends Vehicle{
 		/********/		
 		case "ROSSO":
 			/*print*
-			if(((RSU)message.getSource()).getId().equals("I")){
 			System.out.println(this+": Ã¨ arrivato il rosso dal semaforo di "+message.getSource());
-			}
 			/**/
 
 			verdeAlSemaforo = false;

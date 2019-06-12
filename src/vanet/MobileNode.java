@@ -43,7 +43,7 @@ public abstract class MobileNode extends Sprite implements NetEntity{
 	}
 	///////////// METHODS /////////////////////
 	public void beginsToMoveAt(double millisec){
-		/* * 
+		/* *
 		System.out.println("mobilenode. "+this+" begintomove in "+millisec);
 		/**/
 		sendEvent(new Message("START", this, this, millisec));
