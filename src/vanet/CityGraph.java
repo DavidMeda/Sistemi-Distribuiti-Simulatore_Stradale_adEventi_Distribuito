@@ -24,20 +24,22 @@ public class CityGraph extends NetGraph{
 	private SpriteManager vehicleManager;
 //	private Statistiche statistiche = new Statistiche();
 	private LinkedList<Vehicle> veicoliDaRimuovere = new LinkedList<>();
+	public static int cont = 0;
 	
 	
 	// COSTR ////////////////////////////////
 
 	public CityGraph(String name){
 		super(name);
+//		System.out.println("cytu "+cont++);
 		vehicleManager = new SpriteManager(this);
 		
 	}
-	public CityGraph(String name, Scheduler scheduler) {
-		super(name, scheduler);
-		vehicleManager = new SpriteManager(this);
-	
-	}
+//	public CityGraph(String name, Scheduler scheduler) {
+//		super(name, scheduler);
+//		vehicleManager = new SpriteManager(this);
+//	
+//	}
 	
 	
 	

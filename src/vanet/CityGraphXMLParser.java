@@ -12,6 +12,7 @@ import ITS.RSU.RSU;
 public class CityGraphXMLParser {
 //	private static Random random = new Random(167);
 	private static SAXBuilder saxBuilder = new SAXBuilder();
+	
     
     
     public static CityGraph getGraph(String graphName, String XMLFile){
@@ -30,16 +31,14 @@ public class CityGraphXMLParser {
     	String name = "";
     	String description = "";
     	String stylesheet = "";
-    	
+    	int i =0;
     	//search graph name
     	listElement = rootElement.getChildren("graph");
     	for(Element _graph : listElement){
     		name = _graph.getText().trim();
-
     		if(graphName.equals(name)){
     			// create graph
     			graph = new CityGraph(name);
-    			
     			//set description to graph
     			listElement = _graph.getChildren("description");
     			description = listElement.get(0).getText();

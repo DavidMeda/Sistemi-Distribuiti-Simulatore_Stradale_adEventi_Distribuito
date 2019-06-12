@@ -38,12 +38,12 @@ public class NetGraph extends MultiGraph{
 		scheduler = new Scheduler(Param.orizzonteTemporaleSimulazione);
 		
 	}
-	public NetGraph(String name, Scheduler scheduler) {
-		super(name);
-		setNodeFactory(new NetNodeFactory());
-		setEdgeFactory(new NetEdgeFactory());
-		this.scheduler = scheduler;
-	}
+//	public NetGraph(String name, Scheduler scheduler) {
+//		super(name);
+//		setNodeFactory(new NetNodeFactory());
+//		setEdgeFactory(new NetEdgeFactory());
+//		this.scheduler = scheduler;
+//	}
 	//////////////////////////////////////
 	
 	// SETTER /////////////////////////

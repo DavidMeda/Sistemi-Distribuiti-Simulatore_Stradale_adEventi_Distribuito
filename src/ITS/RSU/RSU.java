@@ -52,7 +52,6 @@ public class RSU extends NetNode implements Runnable{
 
 	// una volta completato il grafo inizializza semafori,colonia e tabelle di routing
 	public void init() {
-		 System.out.println("rsu.init. "+this);
 		archiUscenti = new ArrayList<>(10);
 		archiEntranti = new ArrayList<>(10);
 
@@ -78,7 +77,7 @@ public class RSU extends NetNode implements Runnable{
 		// sendEvent(new Message("PING", this, this, Param.pingTime));
 	}
 	
-	public  void routing(){
+	public synchronized void routing(){
 		
 		//lista di tutti i percorsi per la destinazione
 		LinkedList<HashMap<NetNode, Path>> listaMappe = new LinkedList<>();
@@ -237,7 +236,6 @@ public class RSU extends NetNode implements Runnable{
 			Vehicle vehicle = (Vehicle) m.getSource();
 			NetEdge nextEdge = scegliProssimoArco(vehicle.getTargetNode(), vehicle.getCurrentEdge());
 
-			System.out.println("\n" + this + ": pong-sto indirizzando " + vehicle + " verso " + nextEdge);
 
 			// comunica all'auto in quale arco è stata indirizzata
 			Message direzione = new Message("DIREZIONE", this, vehicle, Param.elaborationTime);
