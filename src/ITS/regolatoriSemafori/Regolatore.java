@@ -1,9 +1,8 @@
-package ITS.semafori.regolatori;
+package ITS.regolatoriSemafori;
 
 import java.util.ArrayList;
-
-import ITS.RSU;
-import ITS.semafori.regolatori.ABS_Regolatore.Fase;
+import ITS.RSU.RSU;
+import ITS.regolatoriSemafori.ABS_Regolatore.Fase;
 import network.NetEdge;
 import network.message.Message;
 

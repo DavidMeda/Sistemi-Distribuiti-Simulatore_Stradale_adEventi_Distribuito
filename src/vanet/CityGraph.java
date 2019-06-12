@@ -6,7 +6,7 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.spriteManager.Sprite;
 import org.graphstream.ui.spriteManager.SpriteManager;
-import ITS.RSU;
+import ITS.RSU.RSU;
 import events.Ping;
 import events.UpdatePosition;
 import network.NetEdge;

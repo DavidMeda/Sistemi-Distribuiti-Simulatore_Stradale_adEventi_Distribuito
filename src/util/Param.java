@@ -1,9 +1,8 @@
 package util;
 
 import java.util.Random;
-
+import ITS.regolatoriSemafori.Regolatore;
 import ITS.semafori.Semaforo;
-import ITS.semafori.regolatori.Regolatore;
 
 public final class Param {
 	/** descrizione [unità di misura] */

@@ -1,6 +1,6 @@
 package ITS.semafori;
 
-import ITS.semafori.regolatori.Regolatore;
+import ITS.regolatoriSemafori.Regolatore;
 import network.NetEdge;
 
 public interface Semaforo {

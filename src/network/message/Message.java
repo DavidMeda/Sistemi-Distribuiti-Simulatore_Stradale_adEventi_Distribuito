@@ -1,6 +1,6 @@
 package network.message;
 
-import ITS.RSU;
+import ITS.RSU.RSU;
 import network.NetEntity;
 import simEventiDiscreti.Event;
 import vanet.Vehicle;

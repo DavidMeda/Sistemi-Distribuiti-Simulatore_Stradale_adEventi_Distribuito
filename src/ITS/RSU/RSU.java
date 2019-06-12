@@ -1,4 +1,4 @@
-package ITS;
+package ITS.RSU;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.Map.Entry;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
-import ITS.semafori.regolatori.Regolatore;
+import ITS.regolatoriSemafori.Regolatore;
 import network.NetEdge;
 import network.NetNode;
 import network.algorithm.Dijkstra;

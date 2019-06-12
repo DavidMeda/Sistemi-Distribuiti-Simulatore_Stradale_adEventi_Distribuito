@@ -1,12 +1,11 @@
-package ITS.semafori.regolatori;
+package ITS.regolatoriSemafori;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import ITS.RSU;
+import ITS.RSU.RSU;
 import ITS.semafori.MessageManager;
 import ITS.semafori.Semaforo;
 import network.NetEdge;

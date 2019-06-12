@@ -1,11 +1,10 @@
-package ITS.semafori.regolatori;
+package ITS.regolatoriSemafori;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
-
-import ITS.RSU;
+import ITS.RSU.RSU;
 import ITS.semafori.Semaforo;
 import network.NetEdge;
 import network.NetNode;

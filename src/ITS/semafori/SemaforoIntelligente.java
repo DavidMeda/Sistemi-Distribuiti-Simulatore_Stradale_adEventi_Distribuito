@@ -1,10 +1,9 @@
 package ITS.semafori;
 
 import java.util.LinkedList;
-
-import ITS.RSU;
-import ITS.semafori.regolatori.Regolatore;
-import ITS.semafori.regolatori.RegolatoreIntelligente;
+import ITS.RSU.RSU;
+import ITS.regolatoriSemafori.Regolatore;
+import ITS.regolatoriSemafori.RegolatoreIntelligente;
 import network.NetEdge;
 import network.message.Message;
 import util.Param;
