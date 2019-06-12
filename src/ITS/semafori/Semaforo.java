@@ -25,6 +25,6 @@ public interface Semaforo {
 	boolean isRosso();
 	
 	NetEdge getEdge();
-	MessageManager getMessageManager();
+//	MessageManager getMessageManager();
 	
 }

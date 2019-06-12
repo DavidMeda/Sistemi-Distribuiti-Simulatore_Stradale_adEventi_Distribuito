@@ -10,7 +10,7 @@ public abstract class ABS_Semaforo implements Semaforo {
 	protected NetEdge edge = null;
 	
 	//gestore messaggi
-	protected MessageManager messageManager = null;
+//	protected MessageManager messageManager = null;
 	
 	//regolatore a cui è stato assegnato il semaforo
 	protected Regolatore regolatore = null;

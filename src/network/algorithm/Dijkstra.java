@@ -13,6 +13,7 @@ import network.NetNode;
 import vanet.CityGraph;
 
 public class Dijkstra {
+	
 	public static NetNode[] getMinimumPath(NetNode from, NetNode to){
 		NetGraph g = (NetGraph)from.getGraph();
 		
@@ -84,7 +85,10 @@ public class Dijkstra {
 	public static int[] getSpanningTree(NetNode from, List<NetEdge> archiDaEliminare){
 		
 		NetGraph reteVera = (NetGraph)from.getGraph();
+		
 		NetGraph rete = new CityGraph("");
+		
+		
 		
 		for(Node n : reteVera.getEachNode()){
 			rete.addNode(n.getId());

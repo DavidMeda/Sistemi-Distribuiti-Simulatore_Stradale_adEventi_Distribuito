@@ -118,10 +118,6 @@ public class SemaforoIntelligente extends ABS_Semaforo{
 		return edge;
 	}
 
-	@Override
-	public MessageManager getMessageManager() {
-		return null;
-	}
 	
 	
 

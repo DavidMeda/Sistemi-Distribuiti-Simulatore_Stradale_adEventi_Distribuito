@@ -8,6 +8,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import ITS.RSU.RSU;
+import network.NetNode;
 
 public class CityGraphXMLParser {
 //	private static Random random = new Random(167);
@@ -50,7 +51,7 @@ public class CityGraphXMLParser {
     			String y;
     			
     			listElement = _graph.getChildren("node");
-    			RSU node = null; 
+    			NetNode node = null; 
 //    			StatisticheRSU statisticheRSU = new StatisticheRSU();
     			for(Element _node : listElement){
     				nodeName = _node.getText().trim();
@@ -64,7 +65,7 @@ public class CityGraphXMLParser {
     				/**/
 
     				if(graph.addNode(nodeName) != null){
-    					node = (RSU)graph.getNode(nodeName);
+    					node = graph.getNode(nodeName);
     					node.setAttribute("ui.label", nodeName);
     					node.addAttribute("ui.style", "fill-color: rgba(0,100,255,60); size: 60px,60px;");
     				}

@@ -6,8 +6,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import ITS.RSU.RSU;
-import ITS.semafori.MessageManager;
 import ITS.semafori.Semaforo;
+import ITS.semafori.SemaforoIntelligente;
 import network.NetEdge;
 import network.NetNode;
 import network.message.Message;
@@ -15,7 +15,7 @@ import util.Param;
 
 public abstract class ABS_Regolatore implements Regolatore{
 	//tipo di semaforo da utilizzare
-	public static Semaforo.Type tipoSemaforo = Param.tipoSemaforo;
+//	public static Semaforo.Type tipoSemaforo = Param.tipoSemaforo;
 		
 	//rsu a cui è assegnato il regolatore
 	protected RSU sourceRSU;
@@ -27,7 +27,7 @@ public abstract class ABS_Regolatore implements Regolatore{
 	protected HashMap<NetNode, ArrayList<Semaforo>> semafori = new HashMap<>(); 
 		
 	//gestore dei messaggi
-	private MessageManager semaphoreMessageManager;	
+//	private MessageManager semaphoreMessageManager;	
 	
 	//variabili per la gestione del round robin delle fasi
 	private Iterator<Fase> it;
@@ -50,55 +50,46 @@ public abstract class ABS_Regolatore implements Regolatore{
 		for(NetEdge edge : archiEntranti){	
 			//aggiungo un semaforo per ogni corsia
 			int numeroCorsie = 1;
-			//int numeroCorsie = strada.getNumCorsie(); TODO
+			//int numeroCorsie = strada.getNumCorsie(); 
 			semaforiPerCorsia = new ArrayList<>(numeroCorsie);
 			
 			for (int i = 0; i < numeroCorsie; i++) {
-				s = Semaforo.getType(tipoSemaforo, this, edge);
+//				s = Semaforo.getType(tipoSemaforo, this, edge);
+				s = new SemaforoIntelligente(this, edge);
 				semaforiPerCorsia.add(s);
 
 			}
-			
 			semafori.put(edge.getSourceNode(), semaforiPerCorsia);
 		}
 		
-		//chiedo il message manager al semaforo
-		semaphoreMessageManager = s.getMessageManager();
-
 	}
 	
 	// SETTER ////////////////////
-	public void setFasi(ArrayList<Fase> fasi){
+	public synchronized void setFasi(ArrayList<Fase> fasi){
 		this.fasi = fasi;
 	}
 	
-	// OVERRIDE ///////////////////
-	//from regolatore
-	@Override
-	public void readMessage(Message message) {
-		if(message.getName().equals("CAMBIO FASE")){
-			nextPhase();
-			
+//	// OVERRIDE ///////////////////
+//	//from regolatore
+//	@Override
+//	public void handler(Event message) {
+//		if(message.getName().equals("CAMBIO FASE")){
+//			nextPhase();
+//			
+//
+//
+////			//aggiornamento statistiche sulla congestione ad ogni cambio di fase
+////			StatRSU stat = source.getStat();
+////			stat.updateCongestioneMedia();
+////			stat.updateCongestioneMediaArchi();
+//		
+//		}
+//		
+//	}
 
-
-//			//aggiornamento statistiche sulla congestione ad ogni cambio di fase
-//			StatRSU stat = source.getStat();
-//			stat.updateCongestioneMedia();
-//			stat.updateCongestioneMediaArchi();
-		
-		}else if(semaphoreMessageManager != null){
-			semaphoreMessageManager.readMessage(message);
-		}
-		
-	}
-
-	@Override
-	public RSU getRSU() {
-		return sourceRSU;
-	}
 	
 	@Override
-	public Fase nextPhase() {
+	public synchronized Fase nextPhase() {
 		
 		if(!init) throw new IllegalStateException("Ricorda che devi chiamare super.init di :"+this);
 		
@@ -128,7 +119,12 @@ public abstract class ABS_Regolatore implements Regolatore{
 	}
 	
 	@Override
-	public void init(){
+	public RSU getRSU() {
+		return sourceRSU;
+	}
+	
+	@Override
+	public synchronized void init(){
 		it = fasi.iterator();
 		faseCorrente = it.next();
 		init = true;

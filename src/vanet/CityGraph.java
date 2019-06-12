@@ -31,7 +31,6 @@ public class CityGraph extends NetGraph{
 
 	public CityGraph(String name){
 		super(name);
-//		System.out.println("cytu "+cont++);
 		vehicleManager = new SpriteManager(this);
 		
 	}
@@ -57,10 +56,8 @@ public class CityGraph extends NetGraph{
 	
 	// METHODS //////////////////////////////////
 	
-	public void ping(){
-		RSU rsu = null;
-		for(Node n : getEachNode() ){
-			rsu = (RSU)n;
+	public void ping() throws InterruptedException{
+		for(RSU rsu : listaRSU ){
 			rsu.pingToVehicle();
 		}
 		getScheduler().addEvent(new Ping(this, Param.pingTime));

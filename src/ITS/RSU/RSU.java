@@ -5,22 +5,27 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
+import java.util.concurrent.Semaphore;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
 import ITS.regolatoriSemafori.Regolatore;
+import ITS.regolatoriSemafori.RegolatoreIntelligente;
 import network.NetEdge;
+import network.NetEntity;
 import network.NetNode;
 import network.algorithm.Dijkstra;
 import network.message.Message;
 import simEventiDiscreti.Event;
+import simEventiDiscreti.Scheduler;
 import util.Param;
 import util.Path;
 import vanet.CityGraph;
 import vanet.MobileNode;
 import vanet.Vehicle;
 
-public class RSU extends NetNode implements Runnable{
-
+public class RSU extends Thread implements NetEntity{
+	private NetNode node;
 	// macchine nel raggio d'azione dell'RSU
 	private ArrayList<Vehicle> nearbyVehicle = new ArrayList<>(20);
 
@@ -29,49 +34,55 @@ public class RSU extends NetNode implements Runnable{
 	private HashMap<NetNode, LinkedList<Path>> routingTable = new HashMap<>();
 		
 	// regola il verde ai semafori
-	private Regolatore regolatore;
-	private Regolatore.Type tipoRegolatore = Param.tipoRegolatore;
+	private RegolatoreIntelligente regolatoreIntelligente;
+	private Semaphore a = new Semaphore(1);
+//	private Regolatore.Type tipoRegolatore = Param.tipoRegolatore;
 
 	// private StatRSU stat = new StatRSU(this);
 
 	// COSTR //////////////////////////////
-	public RSU(CityGraph graph, String name) {
-		super(graph, name);
+	public RSU(Node node) {
+		this.node = (NetNode)node;
+		
 
 	}
 
 	@Override
 	public void run() {
-		init();
-//		while(getScheduler().getStart()) {
-//			pingToVehicle();
-//		}
+		try {
+			init();
+//			while(getScheduler().getStart()) {
+//				pingToVehicle();
+//			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	// METHODS ////////////////////////////
 
 	// una volta completato il grafo inizializza semafori,colonia e tabelle di routing
-	public void init() {
+	public  void init() throws InterruptedException {
+		a.acquire();
 		archiUscenti = new ArrayList<>(10);
 		archiEntranti = new ArrayList<>(10);
 
-		for (Edge edge : getGraph().getEachEdge()) {
+		for (Edge edge : node.getGraph().getEachEdge()) {
 			// preparo gli archi uscenti da assegnare alla colonia
-			if (edge.getSourceNode().equals(this)) {
+			if (edge.getSourceNode().equals(node)) {
 				archiUscenti.add((NetEdge) edge);
 			}
 			// preparo gli archi entranti da assegnare al regolatore dei semafori
-			else if (edge.getTargetNode().equals(this)) {
+			else if (edge.getTargetNode().equals(node)) {
 				archiEntranti.add((NetEdge) edge);
 			}
 		}
-
 		// genera regolatore dei semafori
-		regolatore = Regolatore.getType(tipoRegolatore, this, archiEntranti);
-		regolatore.init();
-
+		regolatoreIntelligente = new RegolatoreIntelligente(this, archiEntranti);
+		regolatoreIntelligente.init();
 		routing();
-
+		a.release();
 		// inizializza ping loop
 		// sendEvent(new EntityCreation("ENTITY CREATION", 0, this));
 		// sendEvent(new Message("PING", this, this, Param.pingTime));
@@ -138,19 +149,19 @@ public class RSU extends NetNode implements Runnable{
        
         HashMap<NetNode, Path> routingTablePath = new HashMap<>();
        
-        int[] pred = Dijkstra.getSpanningTree(this,archiDaRimuovere);
+        int[] pred = Dijkstra.getSpanningTree((NetNode)node,archiDaRimuovere);
        
         /*print*
         System.out.println("GestorePrenotazioni.makeroutingtable. spanningTree = "+Arrays.toString(pred));
         /**/
        
-        int myIndex = getIndex();
+        int myIndex = node.getIndex();
        
         String id1; String id2;
         int curr; int prev;
         NetEdge nextHop = null;
         Path path = new Path();
-        Graph graph = getGraph();
+        Graph graph = node.getGraph();
         try {
         for(int i=0; i<graph.getNodeCount(); i++){
             //if the node "i" it's me don't do anything
@@ -195,10 +206,11 @@ public class RSU extends NetNode implements Runnable{
     }
 	
 
-	public synchronized void pingToVehicle() {
+	public synchronized void pingToVehicle() throws InterruptedException {
 		// search car in my range
+//		a.acquire();
 		double carDistance;
-		for (MobileNode car : ((CityGraph) getGraph()).getNodiInMovimento()) {
+		for (MobileNode car : ((CityGraph) node.getGraph()).getNodiInMovimento()) {
 			carDistance = distance(car);
 			// send ping message at the car in my range
 			if (carDistance < Param.raggioRSU) {
@@ -213,6 +225,7 @@ public class RSU extends NetNode implements Runnable{
 				nearbyVehicle.remove(car);
 			}
 		}
+//		a.release();
 		// colonia.evaporate();
 
 	}
@@ -225,7 +238,7 @@ public class RSU extends NetNode implements Runnable{
 
 		Message m = (Message) message;
 
-		regolatore.readMessage(m);
+//		regolatore.handler(m);
 //		colonia.readMessage(m);
 
 		String nameMessage = m.getName();
@@ -266,7 +279,9 @@ public class RSU extends NetNode implements Runnable{
 			Message forCar = new Message("DIREZIONE", this, vehicle, Param.elaborationTime);
 			forCar.setData(nextEdge);
 			sendEvent(forCar);
-
+			
+			
+			
 			// se sono la destinazione non fare niente
 			if (destinationOfVehicle.equals(this)) { return; }
 
@@ -304,8 +319,8 @@ public class RSU extends NetNode implements Runnable{
 	}
 
 	private double distance(MobileNode car) {
-		double xRSU = getAttribute("x");
-		double yRSU = getAttribute("y");
+		double xRSU = node.getAttribute("x");
+		double yRSU = node.getAttribute("y");
 		double xCAR = car.getX();
 		double yCAR = car.getY();
 
@@ -320,6 +335,22 @@ public class RSU extends NetNode implements Runnable{
 	@Override
 	public String toString() {
 		return "RSU[" + getId() + "]";
+	}
+
+	@Override
+	public void sendEvent(Event event) {
+		node.sendEvent(event);
+
+		
+	}
+
+	@Override
+	public Scheduler getScheduler() {
+		return node.getScheduler();
+	}
+
+	public CityGraph getGraph() {
+		return (CityGraph)node.getGraph();
 	}
 
 }

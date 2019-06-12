@@ -12,8 +12,13 @@ public class Ping extends Event {
 	}
 
 	@Override
-	public void action() {
-		grafo.ping();
+	public void action()  {
+		try {
+			grafo.ping();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
