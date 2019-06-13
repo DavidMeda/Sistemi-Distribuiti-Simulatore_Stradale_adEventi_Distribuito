@@ -5,17 +5,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
-import java.util.concurrent.Semaphore;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
-import ITS.regolatoriSemafori.Regolatore;
 import ITS.regolatoriSemafori.RegolatoreIntelligente;
 import network.NetEdge;
-import network.NetEntity;
 import network.NetNode;
 import network.algorithm.Dijkstra;
 import network.message.Message;
+import simEventiDiscreti.Entity;
 import simEventiDiscreti.Event;
 import simEventiDiscreti.Scheduler;
 import util.Param;
@@ -24,7 +22,7 @@ import vanet.CityGraph;
 import vanet.MobileNode;
 import vanet.Vehicle;
 
-public class RSU extends Thread implements NetEntity {
+public class RSU extends Thread implements Entity {
 
 	private NetNode node;
 	// macchine nel raggio d'azione dell'RSU

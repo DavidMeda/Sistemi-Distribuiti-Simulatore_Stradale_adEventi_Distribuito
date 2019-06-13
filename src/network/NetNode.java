@@ -6,10 +6,11 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.AbstractGraph;
 import org.graphstream.graph.implementations.MultiNode;
 import ITS.RSU.RSU;
+import simEventiDiscreti.Entity;
 import simEventiDiscreti.Event;
 import simEventiDiscreti.Scheduler;
 
-public class NetNode extends MultiNode implements NetEntity {
+public class NetNode extends MultiNode implements Entity {
 //	private Scheduler scheduler;
 	
 	/////////////////////////////////////////////////////

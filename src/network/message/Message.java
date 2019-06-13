@@ -1,19 +1,17 @@
 package network.message;
 
-import ITS.RSU.RSU;
-import network.NetEntity;
+import simEventiDiscreti.Entity;
 import simEventiDiscreti.Event;
-import vanet.Vehicle;
 
 public class Message extends Event { 
 	private Object[] data;
 	private int TTL;
 	
-	private NetEntity 
+	private Entity 
 		source,
 		destination;
 	
-	public Message(String messageName, NetEntity source, NetEntity destination, double amongManyMillisec) {
+	public Message(String messageName, Entity source, Entity destination, double amongManyMillisec) {
 		super(messageName, amongManyMillisec);
 		
 		this.source = source;
@@ -29,8 +27,8 @@ public class Message extends Event {
 	
 	
 	public Object[] getData(){return data;}
-	public NetEntity getSource(){return source;}
-	public NetEntity getDestination(){return destination;}
+	public Entity getSource(){return source;}
+	public Entity getDestination(){return destination;}
 	public int getTTL(){return TTL;}
 	
 	

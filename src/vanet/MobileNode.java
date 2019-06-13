@@ -1,13 +1,12 @@
 package vanet;
 
 import org.graphstream.ui.spriteManager.Sprite;
-
-import network.NetEntity;
 import network.message.Message;
+import simEventiDiscreti.Entity;
 import simEventiDiscreti.Event;
 import simEventiDiscreti.Scheduler;
 
-public abstract class MobileNode extends Sprite implements NetEntity{	
+public abstract class MobileNode extends Sprite implements Entity{	
 	
 	private CityGraph graph;
 //	private Scheduler scheduler;

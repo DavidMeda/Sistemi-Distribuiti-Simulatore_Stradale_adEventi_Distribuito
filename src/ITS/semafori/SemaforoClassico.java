@@ -76,11 +76,6 @@ public class SemaforoClassico extends ABS_Semaforo{
 	}
 	
 
-	@Override
-	public MessageManager getMessageManager() {
-		return null;
-	}
-	
 	
 
 }
