@@ -92,7 +92,7 @@ public class Simulazione {
 		Param.setSeed(389);
 		
 		
-		int numeroVeicoli = 1;
+		int numeroVeicoli = 10;
 		String feromone = "No Feromone";
 		
 //		for(int i = 10; i<=numeroMaxVeicoli; i+=100){

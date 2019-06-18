@@ -81,7 +81,7 @@ public class RSU extends Thread implements Entity {
 		routing();
 	}
 
-	public synchronized void routing() {
+	private void routing() {
 
 		// lista di tutti i percorsi per la destinazione
 		LinkedList<HashMap<NetNode, Path>> listaMappe = new LinkedList<>();
@@ -204,7 +204,7 @@ public class RSU extends Thread implements Entity {
 		return routingTablePath;
 	}
 
-	public synchronized void pingToVehicle() throws InterruptedException {
+	public  void pingToVehicle() throws InterruptedException {
 		// search car in my range
 		// a.acquire();
 		double carDistance;
@@ -227,7 +227,7 @@ public class RSU extends Thread implements Entity {
 	}
 
 	@Override
-	public synchronized void handler(Event message) {
+	public void handler(Event message) {
 
 		if (!(message instanceof Message))
 			throw new IllegalArgumentException("the event sended at " + this + " is not a message");
