@@ -88,12 +88,11 @@ public class Simulazione {
 //		Param.setPeriodoGenereazione(150);
 //		Param.setPeriodoGenereazione(100);
 //		Param.setPeriodoGenereazione(50);
-		
 		//Setta il tuo seed da qua
 		Param.setSeed(389);
 		
 		
-		int numeroVeicoli = 100;
+		int numeroVeicoli = 1;
 		String feromone = "No Feromone";
 		
 //		for(int i = 10; i<=numeroMaxVeicoli; i+=100){

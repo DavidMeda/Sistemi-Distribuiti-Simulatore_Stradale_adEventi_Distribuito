@@ -8,7 +8,8 @@ import java.util.Map.Entry;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
-import ITS.regolatoriSemafori.RegolatoreIntelligente;
+import ITS.regolatoriSemafori.Regolatore;
+import ITS.regolatoriSemafori.RegolatoreClassico;
 import network.NetEdge;
 import network.NetNode;
 import network.algorithm.Dijkstra;
@@ -33,7 +34,7 @@ public class RSU extends Thread implements Entity {
 	private HashMap<NetNode, LinkedList<Path>> routingTable = new HashMap<>();
 
 	// regola il verde ai semafori
-	private RegolatoreIntelligente regolatoreIntelligente;
+	private Regolatore regolatore;
 	// private Regolatore.Type tipoRegolatore = Param.tipoRegolatore;
 
 	// private StatRSU stat = new StatRSU(this);
@@ -41,11 +42,16 @@ public class RSU extends Thread implements Entity {
 	// COSTR //////////////////////////////
 	public RSU(Node node) {
 		this.node = (NetNode) node;
-
+		/*print*/
+		System.out.println("Creato "+this+"");
+		/**/
 	}
 
 	@Override
 	public void run() {
+		/*print*/
+		System.out.println("inizializzazione  "+getName());
+		/**/
 		init();
 		// while(getScheduler().getStart()) {
 		// pingToVehicle();
@@ -70,12 +76,9 @@ public class RSU extends Thread implements Entity {
 			}
 		}
 		// genera regolatore dei semafori
-		regolatoreIntelligente = new RegolatoreIntelligente(this, archiEntranti);
-		regolatoreIntelligente.init();
+		regolatore = new RegolatoreClassico(this, archiEntranti);
+		regolatore.init();
 		routing();
-		// inizializza ping loop
-		// sendEvent(new EntityCreation("ENTITY CREATION", 0, this));
-		// sendEvent(new Message("PING", this, this, Param.pingTime));
 	}
 
 	public synchronized void routing() {
@@ -209,9 +212,10 @@ public class RSU extends Thread implements Entity {
 			carDistance = distance(car);
 			// send ping message at the car in my range
 			if (carDistance < Param.raggioRSU) {
-				long millisec = 10;
-				getScheduler().addEvent(new Message("PING", node, car, millisec));
-
+				getScheduler().addEvent(new Message("PING", node, car, Param.elaborationTime));
+				/*print*/
+				System.out.println(this+" invio ping a "+car);
+				/**/
 			} else {
 				// lista veicoli registrati nell'RSU
 				nearbyVehicle.remove(car);
@@ -273,7 +277,7 @@ public class RSU extends Thread implements Entity {
 
 
 		}else if (nameMessage.equals("CAMBIO FASE")) {
-			regolatoreIntelligente.nextPhase();
+			regolatore.nextPhase();
 		}
 
 	}

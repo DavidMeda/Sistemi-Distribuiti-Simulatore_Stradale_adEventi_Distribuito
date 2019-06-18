@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import ITS.RSU.RSU;
 import ITS.semafori.Semaforo;
-import ITS.semafori.SemaforoIntelligente;
+import ITS.semafori.SemaforoClassico;
 import network.NetEdge;
 import network.NetNode;
 import network.message.Message;
@@ -55,7 +55,7 @@ public abstract class ABS_Regolatore implements Regolatore{
 			
 			for (int i = 0; i < numeroCorsie; i++) {
 //				s = Semaforo.getType(tipoSemaforo, this, edge);
-				s = new SemaforoIntelligente(this, edge);
+				s = new SemaforoClassico(this, edge);
 				semaforiPerCorsia.add(s);
 
 			}

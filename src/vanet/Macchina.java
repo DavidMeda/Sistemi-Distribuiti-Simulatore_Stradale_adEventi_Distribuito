@@ -33,7 +33,7 @@ public class Macchina extends Vehicle{
 		
 		/********/	
 		case "PING":
-			/*print*
+			/*print*/
 			System.out.println(this+" ha ricevuto ping da "+message.getSource());
 			/**/
 			
@@ -48,7 +48,7 @@ public class Macchina extends Vehicle{
 			
 		/********/		
 		case "VERDE":
-			/*print*
+			/*print*/
 			System.out.println(this+": è arrivato il verde dal semaforo di "+message.getSource());			
 			/**/
 			verdeAlSemaforo = true;
@@ -58,7 +58,7 @@ public class Macchina extends Vehicle{
 		
 		/********/		
 		case "ROSSO":
-			/*print*
+			/*print*/
 			System.out.println(this+": Ã¨ arrivato il rosso dal semaforo di "+message.getSource());
 			/**/
 
@@ -72,7 +72,7 @@ public class Macchina extends Vehicle{
 			path.add((NetEdge)message.getData()[0]);
 
 
-			/*print*
+			/*print*/
 			System.out.println("\n"+this+": aggiunto "+(NetEdge)message.getData()[0]+" al percorso");
 			/**/
 			
@@ -81,7 +81,7 @@ public class Macchina extends Vehicle{
 			
 		/********/		
 		case "START":
-			/*print*
+			/*print*/
 			System.out.println("\n"+this+" START!!! destinazione "+destinationNode);
 			/**/
 			moving = true;

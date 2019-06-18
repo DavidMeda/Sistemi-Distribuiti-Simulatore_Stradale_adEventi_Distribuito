@@ -64,7 +64,7 @@ public class SemaforoClassico extends ABS_Semaforo{
 		}
 		/**/
 		for(Vehicle v : coda){
-			msg = new Message(messaggio, sourceRSU, v, Param.elaborationTime);
+			msg = new Message(messaggio, sourceRSU.getNetNode(), v, Param.elaborationTime);
 			sourceRSU.sendEvent(msg);
 		}
 	}
