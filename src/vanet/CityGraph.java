@@ -57,10 +57,10 @@ public class CityGraph extends NetGraph{
 	// METHODS //////////////////////////////////
 	
 	public void ping() throws InterruptedException{
-		for(Entry<NetNode, RSU> e : mappaNodoRSU.entrySet() ){
-			e.getValue().pingToVehicle();
-		}
-		getScheduler().addEvent(new Ping(this, Param.pingTime));
+//		for(Entry<NetNode, RSU> e : mappaNodoRSU.entrySet() ){
+//			e.getValue().pingToVehicle();
+//		}
+//		getScheduler().addEvent(new Ping(this, Param.pingTime));
 		
 	}
 	public void setNodoInMovimento(MobileNode nodoMobile){
@@ -76,11 +76,11 @@ public class CityGraph extends NetGraph{
 			n.move();
 		}
 		
-		for(Vehicle v : veicoliDaRimuovere) {
-			removeMobileNode(v);
-			v = null;
-			
-		}
+//		for(Vehicle v : veicoliDaRimuovere) {
+//			removeMobileNode(v);
+//			v = null;
+//			
+//		}
 		
 		getScheduler().addEvent(new UpdatePosition(this, Param.updatePositionTime));
 	

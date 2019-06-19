@@ -37,7 +37,7 @@ public class RegolatoreClassico extends ABS_Regolatore {
 		setFasi(fasi);
 
 		//inizia il ciclo delle fasi
-		Message start = new Message("CAMBIO FASE", sourceRSU.getNetNode(), sourceRSU, 0);
+		Message start = new Message("CAMBIO FASE", sourceRSU.getNetNode(), sourceRSU, 0);//posso inviarlo direttamente all'rsu TODO provare 
 		sourceRSU.sendEvent(start);
 		
 		super.init();

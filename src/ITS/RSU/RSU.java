@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
+import java.util.concurrent.Semaphore;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -36,6 +37,7 @@ public class RSU extends Thread implements Entity {
 	// regola il verde ai semafori
 	private Regolatore regolatore;
 	// private Regolatore.Type tipoRegolatore = Param.tipoRegolatore;
+//	private Semaphore mutex = new Semaphore(1);
 
 	// private StatRSU stat = new StatRSU(this);
 
@@ -53,9 +55,15 @@ public class RSU extends Thread implements Entity {
 		System.out.println("inizializzazione  "+getName());
 		/**/
 		init();
-		// while(getScheduler().getStart()) {
-		// pingToVehicle();
-		// }
+//		while(node.getScheduler().getStart()) {
+//			try {
+//				pingToVehicle();
+//				Thread.sleep(100);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 	}
 
 	// METHODS ////////////////////////////
@@ -204,23 +212,25 @@ public class RSU extends Thread implements Entity {
 		return routingTablePath;
 	}
 
-	public  void pingToVehicle() throws InterruptedException {
-		// search car in my range
-		// a.acquire();
-		double carDistance;
-		for (MobileNode car : ((CityGraph) node.getGraph()).getNodiInMovimento()) {
-			carDistance = distance(car);
-			// send ping message at the car in my range
-			if (carDistance < Param.raggioRSU) {
-				getScheduler().addEvent(new Message("PING", node, car, Param.elaborationTime));
-				/*print*/
-				System.out.println(this+" invio ping a "+car);
-				/**/
-			} else {
-				// lista veicoli registrati nell'RSU
-				nearbyVehicle.remove(car);
-			}
-		}
+	public synchronized void pingToVehicle() throws InterruptedException {
+//		// search car in my range
+//		// a.acquire();
+//		double carDistance;
+////		mutex.acquire();
+//		for (MobileNode car : ((CityGraph) node.getGraph()).getNodiInMovimento()) {
+//			carDistance = distance(car);
+//			// send ping message at the car in my range
+//			if (carDistance < Param.raggioRSU) {
+//				getScheduler().addEvent(new Message("PING", node, car, Param.elaborationTime));
+//				/*print*/
+//				System.out.println(this+" invio ping a "+car);
+//				/**/
+//			} else {
+//				// lista veicoli registrati nell'RSU
+//				nearbyVehicle.remove(car);
+//			}
+//		}
+//		mutex.release();
 		// a.release();
 		// colonia.evaporate();
 
@@ -239,12 +249,12 @@ public class RSU extends Thread implements Entity {
 
 		String nameMessage = m.getName();
 
-		if (nameMessage.equals("PONG")) {
-
+		if (nameMessage.equals("CAMBIO ARCO")) {
 			// indirizza auto
 			Vehicle vehicle = (Vehicle) m.getSource();
 			NetEdge nextEdge = scegliProssimoArco(vehicle.getTargetNode(), vehicle.getCurrentEdge());
 
+			System.out.println(this+" arrivato cambio arco da "+vehicle);
 			// comunica all'auto in quale arco è stata indirizzata
 			Message direzione = new Message("DIREZIONE", node, vehicle, Param.elaborationTime);
 			direzione.setData(nextEdge);
@@ -258,11 +268,16 @@ public class RSU extends Thread implements Entity {
 			 */
 			Vehicle vehicle = (Vehicle) m.getSource();
 			NetNode destinationOfVehicle = (NetNode) m.getData()[0];
-
+//			try {
+//				mutex.acquire();
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+			((CityGraph)node.getGraph()).setNodoInMovimento(vehicle);
+//			mutex.release();
 			
 			
-			
-//			System.out.println("\n"+this+": richiesta percorso di "+vehicle+" verso "+destinationOfVehicle);
+			System.out.println("\n"+this+": richiesta percorso di "+vehicle+" verso "+destinationOfVehicle);
 			NetEdge nextEdge = scegliProssimoArco(destinationOfVehicle, vehicle.getCurrentEdge());
 
 //			System.out.println("------ arco consigliato "+nextEdge);
@@ -273,16 +288,32 @@ public class RSU extends Thread implements Entity {
 			sendEvent(forCar);
 			
 			// se sono la destinazione non fare niente
-			if (destinationOfVehicle.equals(node)) { return; }
+			if (destinationOfVehicle.equals(node)) {
+				System.out.println("DESTINAZIONE"); 
+				return; }
 
 
 		}else if (nameMessage.equals("CAMBIO FASE")) {
 			regolatore.nextPhase();
 		}
+		else if(nameMessage.equals("ARRIVATO")) {
+			Vehicle v = (Vehicle) m.getSource();
+			//rimuovo il veicolo dal grafo
+//			try {
+//				mutex.acquire();
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+			((CityGraph) node.getGraph()).rimuoviVeicolo(v);
+			((CityGraph) node.getGraph()).removeMobileNode(v);
+//			mutex.release();
+			v.addAttribute("ui.style", "fill-color: rgba(0,0,0,100);");
+			v.addAttribute("ui.label", "");
+		}
 
 	}
 
-	private NetEdge scegliProssimoArco(NetNode destination, NetEdge arcoDaEscludere) {
+	private synchronized NetEdge scegliProssimoArco(NetNode destination, NetEdge arcoDaEscludere) {
 
 		NetEdge nodoScelto = null;
 		if (destination.equals(node)) { return null; }

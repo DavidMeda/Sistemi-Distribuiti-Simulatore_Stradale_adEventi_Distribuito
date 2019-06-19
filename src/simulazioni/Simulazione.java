@@ -93,7 +93,6 @@ public class Simulazione {
 		
 		
 		int numeroVeicoli = 10;
-		String feromone = "No Feromone";
 		
 //		for(int i = 10; i<=numeroMaxVeicoli; i+=100){
 			

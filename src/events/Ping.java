@@ -1,5 +1,7 @@
 package events;
 
+import org.graphstream.graph.Node;
+import network.NetNode;
 import simEventiDiscreti.Event;
 import vanet.CityGraph;
 
@@ -13,11 +15,13 @@ public class Ping extends Event {
 
 	@Override
 	public void action()  {
-		try {
-			grafo.ping();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		for(Node n : grafo.getEachNode()) {
+			try {
+				((NetNode)n).ping();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

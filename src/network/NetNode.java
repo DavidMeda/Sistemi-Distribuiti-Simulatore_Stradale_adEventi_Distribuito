@@ -1,7 +1,5 @@
 package network;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.AbstractGraph;
 import org.graphstream.graph.implementations.MultiNode;
@@ -12,11 +10,18 @@ import simEventiDiscreti.Scheduler;
 
 public class NetNode extends MultiNode implements Entity {
 //	private Scheduler scheduler;
+	private RSU rsu;
 	
 	/////////////////////////////////////////////////////
 	public NetNode(NetGraph graph, String name) {
 		super((AbstractGraph)graph, name);
 		
+	}
+	
+	
+	public void init() {
+		rsu = new RSU(this);
+		rsu.init();
 	}
 	
 	/////////////////////////////////////////////////////////
@@ -35,12 +40,13 @@ public class NetNode extends MultiNode implements Entity {
 	//from entity
 	@Override
 	public void handler(Event event){
-		HashMap<NetNode,RSU> mappaNodoRSU =  ((NetGraph)getGraph()).getMappa();
-		for(Entry<NetNode, RSU> e : mappaNodoRSU.entrySet()) {
-			if(e.getKey().equals(this)) {
-				e.getValue().handler(event);
-			}
-		}
+//		HashMap<NetNode,RSU> mappaNodoRSU =  ((NetGraph)getGraph()).getMappa();
+//		for(Entry<NetNode, RSU> e : mappaNodoRSU.entrySet()) {
+//			if(e.getKey().equals(this)) {
+//				e.getValue().handler(event);
+//			}
+//		}
+		rsu.handler(event);
 	}
 
 //	@Override
@@ -67,6 +73,7 @@ public class NetNode extends MultiNode implements Entity {
 		
 		
 	}
+	public void ping() throws InterruptedException {rsu.pingToVehicle();}
 	//from object
 	@Override
 	public boolean equals(Object netNode){

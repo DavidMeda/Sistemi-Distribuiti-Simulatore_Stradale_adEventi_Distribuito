@@ -38,11 +38,11 @@ public class Macchina extends Vehicle{
 			/**/
 			
 			
-			if(message.getSource() == registeredRSU)return;
+			if(message.getSource() == registeredNode)return;
 			
 			sendEvent(new Message("PONG", this, message.getSource(), Param.elaborationTime));
-			registeredRSU = (NetNode)message.getSource();
 			
+			registeredNode = (NetNode)message.getSource();
 			break;
 		
 			
@@ -69,27 +69,38 @@ public class Macchina extends Vehicle{
 			
 		/********/		
 		case "DIREZIONE":
-			path.add((NetEdge)message.getData()[0]);
+			NetEdge nextEdge = (NetEdge)message.getData()[0];
+			path.add(nextEdge);
+			if(nextEdge != null) setCurrentNode(nextEdge.getTargetNode());
 
-
-			/*print*
-			System.out.println("\n"+this+": aggiunto "+(NetEdge)message.getData()[0]+" al percorso");
+			/*print*/
+			System.out.println("\n"+this+": aggiunto "+nextEdge+" al percorso");
 			/**/
+			
 			
 			break;
 		
 			
 		/********/		
 		case "START":
-			/*print*/
+			/*print*
 			System.out.println("\n"+this+" START!!! destinazione "+destinationNode);
 			/**/
 			moving = true;
-			registeredRSU = getCurrentNode();
+			registeredNode = getCurrentNode();
 			
-			getGraph().setNodoInMovimento(this);
-			getPathTo(destinationNode);
+//			getGraph().setNodoInMovimento(this);
+//			getPathTo(destinationNode);
+			path.clear();
 			
+			/*print*/
+			System.out.println("\n"+this+": invio richiesta percorso a "+currentNode +" per la destinazione "+destinationNode);
+			/**/
+			
+			Message askPath = new Message("RICHIESTA PERCORSO", this, currentNode, Param.elaborationTime); 
+			
+			askPath.setData(destinationNode);
+			sendEvent(askPath);
 			break;
 			
 		}

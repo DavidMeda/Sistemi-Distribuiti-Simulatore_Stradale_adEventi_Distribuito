@@ -79,9 +79,10 @@ public class NetGraph extends MultiGraph {
 
 	public void init() {
 		for (Node n : getEachNode()) {
-			RSU rsu = new RSU(n);
-			mappaNodoRSU.put(((NetNode)n), rsu);
-			rsu.start();
+			((NetNode)n).init();
+//			RSU rsu = new RSU(n);
+//			mappaNodoRSU.put(((NetNode)n), rsu);
+//			rsu.start();
 		}
 	}
 

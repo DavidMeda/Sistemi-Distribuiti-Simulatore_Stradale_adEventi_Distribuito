@@ -28,7 +28,7 @@ public final class Param {
 	
 	public static final double
 	updatePositionTime = 2, //periodo di aggiornamento posizione veicoli [millisec]
-	pingTime = 250, //tempo tra due ping consecutivi [millisec]
+	pingTime = 5, //tempo tra due ping consecutivi [millisec]
 	elaborationTime = 20; //tempo di elaborazione per l'invio di un messaggio [millisec]
 	
 	

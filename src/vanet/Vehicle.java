@@ -13,7 +13,7 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 //	protected StatVeicolo stat;
 	
 	//indica l'ultimo rsu a cui mi sono registrato
-	protected NetNode registeredRSU;
+	protected NetNode registeredNode;
 	//indica il path da seguire
 	protected LinkedList<NetEdge> path = new LinkedList<>();
 	//indica l'arco in cui mi trovo
@@ -94,6 +94,7 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 	public double getTempoDiAttesa() {return tempoDiAttesaTotale;}
 	public double getNumeroNodiAttraversati() {return numNodiAttraversati;}
 	
+	
 	// SETTER ///////////////
 	public Vehicle setStartingNode(int index){
 		/*print*
@@ -124,6 +125,9 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 		currentNode = getGraph().getNode(node);
 		return this;
 	
+	}
+	public void setCurrentNode(NetNode node) {
+		registeredNode = node;
 	}
 	public Vehicle setNextNode(String node){
 		nextNode = getGraph().getNode(node);
@@ -227,11 +231,11 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 				attachToEdge(currentEdge.getId());
 				
 				//comunico al primo RSU che inizio a muovermi
-//				Message cambioArco = new Message("CAMBIO ARCO", this, registeredRSU, Param.elaborationTime);
-//				cambioArco.setData(null, nextNode);
-//				sendEvent(cambioArco);
+				Message cambioArco = new Message("CAMBIO ARCO", this, registeredNode, Param.elaborationTime);
+				cambioArco.setData(currentNode, nextNode);
+				sendEvent(cambioArco);
 
-				/*print*
+				/*print*/
 				System.out.println(this+": inizio a muovermi per la prima volta sull'arco "+currentEdge+" a "+startTime);
 				/**/
 				
@@ -260,15 +264,18 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 				if(path.size() <=0 || path.getFirst() == null) {
 					
 					//comunico che il veicolo ha abbandonato l'arco
-					Message cambioArco = new Message("CAMBIO ARCO", this, registeredRSU, Param.elaborationTime);
+					Message cambioArco = new Message("ARRIVATO", this, registeredNode, Param.elaborationTime);
 					cambioArco.setData(currentEdge.getSourceNode(), null);
 					sendEvent(cambioArco);
+					/*print*/
+					System.out.println(this+": ARRIVATO!");
+					/**/
 
 					
-					//rimuovo il veicolo dal grafo
-					getGraph().rimuoviVeicolo(this);
-					addAttribute("ui.style", "fill-color: rgba(0,0,0,100);");
-					addAttribute("ui.label", "");
+//					//rimuovo il veicolo dal grafo
+//					getGraph().rimuoviVeicolo(this);
+//					addAttribute("ui.style", "fill-color: rgba(0,0,0,100);");
+//					addAttribute("ui.label", "");
 					
 					//aggiorno i parametri statistici
 					tempoDiAttesaTotale += tempoDiAttesaSuArco;
@@ -290,29 +297,29 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 				}
 
 				//se il semaforo è rosso resto fermo
-				if(!verdeAlSemaforo) {
-					tempoDiAttesaSuArco += Param.updatePositionTime;
-					
-					/*print*
-					if(getId().equals("5")){
-						System.out.println();
-						System.out.println(this+": sono a FINE ARCO ma il semaforo è ROSSO");
-					}/**/
-					
-					return;
-				}
+//				if(!verdeAlSemaforo) {
+//					tempoDiAttesaSuArco += Param.updatePositionTime;
+//					
+//					/*print*
+//					if(getId().equals("5")){
+//						System.out.println();
+//						System.out.println(this+": sono a FINE ARCO ma il semaforo è ROSSO");
+//					}/**/
+//					
+//					return;
+//				}
 
-				//se il prossimo arco è pieno resto fermo
-				if(getGraph().edgeIsFull(path.getFirst())) {
-					tempoDiAttesaSuArco += Param.updatePositionTime;
-					
-					/*print*
-					if(getId().equals("5")){
-					System.out.println();
-					System.out.println(this+": sono a FINE ARCO ma l'arco "+path.getFirst()+" è PIENO");
-					}/**/
-					return;
-				}
+//				//se il prossimo arco è pieno resto fermo
+//				if(getGraph().edgeIsFull(path.getFirst())) {
+//					tempoDiAttesaSuArco += Param.updatePositionTime;
+//					
+//					/*print*
+//					if(getId().equals("5")){
+//					System.out.println();
+//					System.out.println(this+": sono a FINE ARCO ma l'arco "+path.getFirst()+" è PIENO");
+//					}/**/
+//					return;
+//				}
 				
 				
 				//cambio arco
@@ -324,11 +331,13 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 				nextNode = currentEdge.getTargetNode();
 				
 				NetNode nodoSuccessuvo = nextNode;
-				
 				//comunico il cambio arco all'RSU
-				Message cambioArco = new Message("CAMBIO ARCO", this, registeredRSU, Param.elaborationTime);
+				Message cambioArco = new Message("CAMBIO ARCO", this, registeredNode, Param.elaborationTime);
 				cambioArco.setData(nodoProvenienza, nodoSuccessuvo);
 				sendEvent(cambioArco);
+				/*print*/
+				System.out.println(this+": invio cambio arco sono su "+currentEdge+"  ");
+				/**/
 
 				
 				//aggiorno le statistiche semafori
@@ -419,19 +428,19 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 		return distanceFromSourceNode/edgeLength;
 
 	}
-	public void getPathTo(NetNode destination){
-		path.clear();
-		
-		/*print*
-		System.out.println("\n"+this+": invio richiesta percorso a "+currentNode +" per la destinazione "+destination);
-		/**/
-		
-		Message askPath = new Message("RICHIESTA PERCORSO", this, currentNode, Param.elaborationTime); 
-		
-		askPath.setData(destinationNode);
-		sendEvent(askPath);
-
-	}
+//	public void getPathTo(NetNode destination){
+//		path.clear();
+//		
+//		/*print*/
+//		System.out.println("\n"+this+": invio richiesta percorso a "+currentNode +" per la destinazione "+destination);
+//		/**/
+//		
+//		Message askPath = new Message("RICHIESTA PERCORSO", this, currentNode, Param.elaborationTime); 
+//		
+//		askPath.setData(destinationNode);
+//		sendEvent(askPath);
+//
+//	}
 	
 //	public StatVeicolo getStat(){return stat;}
 	
