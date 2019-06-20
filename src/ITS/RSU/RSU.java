@@ -5,13 +5,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
-import java.util.concurrent.Semaphore;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import ITS.regolatoriSemafori.Regolatore;
 import ITS.regolatoriSemafori.RegolatoreClassico;
 import network.NetEdge;
+import network.NetGraph;
 import network.NetNode;
 import network.algorithm.Dijkstra;
 import network.message.Message;
@@ -21,14 +21,14 @@ import simEventiDiscreti.Scheduler;
 import util.Param;
 import util.Path;
 import vanet.CityGraph;
-import vanet.MobileNode;
 import vanet.Vehicle;
 
 public class RSU extends Thread implements Entity {
 
-	private NetNode node;
+	private NetNode nodo;
+	private NetGraph grafo;
 	// macchine nel raggio d'azione dell'RSU
-	private ArrayList<Vehicle> nearbyVehicle = new ArrayList<>(20);
+	// private ArrayList<Vehicle> nearbyVehicle = new ArrayList<>(20);
 
 	private ArrayList<NetEdge> archiEntranti, archiUscenti;
 	// tabella di routing con la lista degli archi per arrivare a destinazione
@@ -37,33 +37,34 @@ public class RSU extends Thread implements Entity {
 	// regola il verde ai semafori
 	private Regolatore regolatore;
 	// private Regolatore.Type tipoRegolatore = Param.tipoRegolatore;
-//	private Semaphore mutex = new Semaphore(1);
+	// private Semaphore mutex = new Semaphore(1);
 
 	// private StatRSU stat = new StatRSU(this);
 
 	// COSTR //////////////////////////////
 	public RSU(Node node) {
-		this.node = (NetNode) node;
-		/*print*/
-		System.out.println("Creato "+this+"");
+		nodo = (NetNode) node;
+		grafo = nodo.getGraph();
+		/* print */
+		System.out.println("Creato " + this + "");
 		/**/
 	}
 
 	@Override
 	public void run() {
-		/*print*/
-		System.out.println("inizializzazione  "+getName());
+		/* print */
+		System.out.println("inizializzazione  " + getName());
 		/**/
 		init();
-//		while(node.getScheduler().getStart()) {
-//			try {
-//				pingToVehicle();
-//				Thread.sleep(100);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
+		// while(node.getScheduler().getStart()) {
+		// try {
+		// pingToVehicle();
+		// Thread.sleep(100);
+		// } catch (InterruptedException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
 	}
 
 	// METHODS ////////////////////////////
@@ -73,13 +74,13 @@ public class RSU extends Thread implements Entity {
 		archiUscenti = new ArrayList<>(10);
 		archiEntranti = new ArrayList<>(10);
 
-		for (Edge edge : node.getGraph().getEachEdge()) {
+		for (Edge edge : grafo.getEachEdge()) {
 			// preparo gli archi uscenti da assegnare alla colonia
-			if (edge.getSourceNode().equals(node)) {
+			if (edge.getSourceNode().equals(nodo)) {
 				archiUscenti.add((NetEdge) edge);
 			}
 			// preparo gli archi entranti da assegnare al regolatore dei semafori
-			else if (edge.getTargetNode().equals(node)) {
+			else if (edge.getTargetNode().equals(nodo)) {
 				archiEntranti.add((NetEdge) edge);
 			}
 		}
@@ -151,7 +152,7 @@ public class RSU extends Thread implements Entity {
 
 		HashMap<NetNode, Path> routingTablePath = new HashMap<>();
 
-		int[] pred = Dijkstra.getSpanningTree((NetNode) node, archiDaRimuovere);
+		int[] pred = Dijkstra.getSpanningTree((NetNode) nodo, archiDaRimuovere);
 
 		/*
 		 * print*
@@ -159,7 +160,7 @@ public class RSU extends Thread implements Entity {
 		 * toString(pred)); /
 		 **/
 
-		int myIndex = node.getIndex();
+		int myIndex = nodo.getIndex();
 
 		String id1;
 		String id2;
@@ -167,7 +168,7 @@ public class RSU extends Thread implements Entity {
 		int prev;
 		NetEdge nextHop = null;
 		Path path = new Path();
-		Graph graph = node.getGraph();
+		Graph graph = grafo;
 		try {
 			for (int i = 0; i < graph.getNodeCount(); i++) {
 				// if the node "i" it's me don't do anything
@@ -212,31 +213,30 @@ public class RSU extends Thread implements Entity {
 		return routingTablePath;
 	}
 
-	public synchronized void pingToVehicle() throws InterruptedException {
-//		// search car in my range
-//		// a.acquire();
-//		double carDistance;
-////		mutex.acquire();
-//		for (MobileNode car : ((CityGraph) node.getGraph()).getNodiInMovimento()) {
-//			carDistance = distance(car);
-//			// send ping message at the car in my range
-//			if (carDistance < Param.raggioRSU) {
-//				getScheduler().addEvent(new Message("PING", node, car, Param.elaborationTime));
-//				/*print*/
-//				System.out.println(this+" invio ping a "+car);
-//				/**/
-//			} else {
-//				// lista veicoli registrati nell'RSU
-//				nearbyVehicle.remove(car);
-//			}
-//		}
-//		mutex.release();
-		// a.release();
-		// colonia.evaporate();
+//	public synchronized void pingToVehicle() throws InterruptedException {
+//		 // search car in my range
+//		 // a.acquire();
+//		 double carDistance;
+//		// mutex.acquire();
+//		 for (MobileNode car : ((CityGraph) node.getGraph()).getNodiInMovimento()) {
+//		 carDistance = distance(car);
+//		 // send ping message at the car in my range
+//		 if (carDistance < Param.raggioRSU) {
+//		 getScheduler().addEvent(new Message("PING", node, car, Param.elaborationTime));
+//		 /*print*/
+//		 System.out.println(this+" invio ping a "+car);
+//		 /**/
+//		 } else {
+//		 // lista veicoli registrati nell'RSU
+//		 nearbyVehicle.remove(car);
+//		 }
+//		 }
+//		 mutex.release();
+//		 a.release();
+//		 colonia.evaporate();
+//	}
 
-	}
-
-	@Override
+	
 	public void handler(Event message) {
 
 		if (!(message instanceof Message))
@@ -254,59 +254,57 @@ public class RSU extends Thread implements Entity {
 			Vehicle vehicle = (Vehicle) m.getSource();
 			NetEdge nextEdge = scegliProssimoArco(vehicle.getTargetNode(), vehicle.getCurrentEdge());
 
-			System.out.println(this+" arrivato cambio arco da "+vehicle);
+			// System.out.println(this+" arrivato cambio arco da "+vehicle);
 			// comunica all'auto in quale arco Ã¨ stata indirizzata
-			Message direzione = new Message("DIREZIONE", node, vehicle, Param.elaborationTime);
+			Message direzione = new Message("DIREZIONE", nodo, vehicle, Param.elaborationTime);
 			direzione.setData(nextEdge);
 			sendEvent(direzione);
 		}
 
 		else if (nameMessage.equals("RICHIESTA PERCORSO")) {
-
-			/**
+			/*
 			 * l'auto chiede il percorso verso la destinazione indirizza auto chiedendo alla colonia
 			 */
 			Vehicle vehicle = (Vehicle) m.getSource();
 			NetNode destinationOfVehicle = (NetNode) m.getData()[0];
-//			try {
-//				mutex.acquire();
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-			((CityGraph)node.getGraph()).setNodoInMovimento(vehicle);
-//			mutex.release();
-			
-			
-			System.out.println("\n"+this+": richiesta percorso di "+vehicle+" verso "+destinationOfVehicle);
+			// try {
+			// mutex.acquire();
+			// } catch (InterruptedException e) {
+			// e.printStackTrace();
+			// }
+			((CityGraph) grafo).setNodoInMovimento(vehicle);
+			// mutex.release();
+
+			// System.out.println("\n"+this+": richiesta percorso di "+vehicle+" verso
+			// "+destinationOfVehicle);
 			NetEdge nextEdge = scegliProssimoArco(destinationOfVehicle, vehicle.getCurrentEdge());
 
-//			System.out.println("------ arco consigliato "+nextEdge);
+			// System.out.println("------ arco consigliato "+nextEdge);
 
 			// comunica all'auto su quale arco è stata indirizzata
-			Message forCar = new Message("DIREZIONE", node, vehicle, Param.elaborationTime);
+			Message forCar = new Message("DIREZIONE", nodo, vehicle, Param.elaborationTime);
 			forCar.setData(nextEdge);
 			sendEvent(forCar);
-			
+
 			// se sono la destinazione non fare niente
-			if (destinationOfVehicle.equals(node)) {
-				System.out.println("DESTINAZIONE"); 
-				return; }
+			if (destinationOfVehicle.equals(nodo)) {
+				// System.out.println("DESTINAZIONE");
+				return;
+			}
 
-
-		}else if (nameMessage.equals("CAMBIO FASE")) {
+		} else if (nameMessage.equals("CAMBIO FASE")) {
 			regolatore.nextPhase();
-		}
-		else if(nameMessage.equals("ARRIVATO")) {
+		} else if (nameMessage.equals("ARRIVATO")) {
 			Vehicle v = (Vehicle) m.getSource();
-			//rimuovo il veicolo dal grafo
-//			try {
-//				mutex.acquire();
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-			((CityGraph) node.getGraph()).rimuoviVeicolo(v);
-			((CityGraph) node.getGraph()).removeMobileNode(v);
-//			mutex.release();
+			// rimuovo il veicolo dal grafo
+			// try {
+			// mutex.acquire();
+			// } catch (InterruptedException e) {
+			// e.printStackTrace();
+			// }
+			((CityGraph) grafo).rimuoviVeicolo(v);
+			((CityGraph) grafo).removeMobileNode(v);
+			// mutex.release();
 			v.addAttribute("ui.style", "fill-color: rgba(0,0,0,100);");
 			v.addAttribute("ui.label", "");
 		}
@@ -316,7 +314,7 @@ public class RSU extends Thread implements Entity {
 	private synchronized NetEdge scegliProssimoArco(NetNode destination, NetEdge arcoDaEscludere) {
 
 		NetEdge nodoScelto = null;
-		if (destination.equals(node)) { return null; }
+		if (destination.equals(nodo)) { return null; }
 		LinkedList<Path> percorsiDestinazione = routingTable.get(destination);
 
 		// tra tutti gli archi che portano a destinazione
@@ -335,40 +333,41 @@ public class RSU extends Thread implements Entity {
 		return null;
 	}
 
-	private double distance(MobileNode car) {
-		double xRSU = node.getAttribute("x");
-		double yRSU = node.getAttribute("y");
-		double xCAR = car.getX();
-		double yCAR = car.getY();
-
-		double x = xRSU - xCAR;
-		double y = yRSU - yCAR;
-
-		double distance = Math.sqrt((x * x) + (y * y));
-		return Math.abs(distance);
-
-	}
+	// private double distance(MobileNode car) {
+	// double xRSU = nodo.getAttribute("x");
+	// double yRSU = nodo.getAttribute("y");
+	// double xCAR = car.getX();
+	// double yCAR = car.getY();
+	//
+	// double x = xRSU - xCAR;
+	// double y = yRSU - yCAR;
+	//
+	// double distance = Math.sqrt((x * x) + (y * y));
+	// return Math.abs(distance);
+	//
+	// }
 
 	@Override
 	public String toString() {
-		return "RSU[" + getId() + "]";
+		return "RSU[nodo " + nodo.getId() + "]";
 	}
 
 	@Override
 	public void sendEvent(Event event) {
-		node.sendEvent(event);
+		nodo.sendEvent(event);
 
+	}
+	public NetGraph getGraph() {
+		return grafo;
 	}
 
 	@Override
 	public Scheduler getScheduler() {
-		return node.getScheduler();
+		return nodo.getScheduler();
 	}
 
-	public CityGraph getGraph() {
-		return (CityGraph) node.getGraph();
+	public NetNode getNetNode() {
+		return nodo;
 	}
-	
-	public NetNode getNetNode() {return node;}
 
 }

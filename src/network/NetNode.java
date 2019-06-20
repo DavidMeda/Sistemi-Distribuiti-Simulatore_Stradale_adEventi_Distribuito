@@ -11,10 +11,12 @@ import simEventiDiscreti.Scheduler;
 public class NetNode extends MultiNode implements Entity {
 //	private Scheduler scheduler;
 	private RSU rsu;
+	private NetGraph graph;
 	
 	/////////////////////////////////////////////////////
 	public NetNode(NetGraph graph, String name) {
 		super((AbstractGraph)graph, name);
+		this.graph = graph;
 		
 	}
 	
@@ -57,30 +59,50 @@ public class NetNode extends MultiNode implements Entity {
 	@Override
 	public Scheduler getScheduler() {
 //		return scheduler;
-		return ((NetGraph)getGraph()).getScheduler();
+		return graph.getScheduler();
 	}
 
 	@Override
 	public void sendEvent(Event event) {
-		/* *
-		if(event.getName().equals("ROUND ROBIN")){
-			System.out.println("netnode. sendevent. "+event.getName());
-			System.out.println("                  . round robin inviato a "+((Message)event).getDestination());
-		}
-		/**/
-		
-		getScheduler().addEvent(event);
-		
-		
+		graph.getScheduler().addEvent(event);
 	}
-	public void ping() throws InterruptedException {rsu.pingToVehicle();}
+	
+	
+	
+	public RSU getRsu() {
+		return rsu;
+	}
+
+
+	
+	public void setRsu(RSU rsu) {
+		this.rsu = rsu;
+	}
+
+
+	
+	public NetGraph getGraph() {
+		return graph;
+	}
+
+
+	
+	public void setGraph(NetGraph graph) {
+		this.graph = graph;
+	}
+
+
+//	public void ping() throws InterruptedException {
+//		rsu.pingToVehicle();
+//	}
+	
 	//from object
 	@Override
 	public boolean equals(Object netNode){
 		if(!(netNode instanceof NetNode))return false;
 		NetNode n = (NetNode)netNode;
 		
-		boolean vero = getGraph().getId().equals(n.getGraph().getId());
+		boolean vero = graph.getId().equals(n.getGraph().getId());
 		boolean falso = getId().equals(n.getId());
 
 		/*print*

@@ -235,7 +235,7 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 				cambioArco.setData(currentNode, nextNode);
 				sendEvent(cambioArco);
 
-				/*print*/
+				/*print*
 				System.out.println(this+": inizio a muovermi per la prima volta sull'arco "+currentEdge+" a "+startTime);
 				/**/
 				
@@ -267,7 +267,7 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 					Message cambioArco = new Message("ARRIVATO", this, registeredNode, Param.elaborationTime);
 					cambioArco.setData(currentEdge.getSourceNode(), null);
 					sendEvent(cambioArco);
-					/*print*/
+					/*print*
 					System.out.println(this+": ARRIVATO!");
 					/**/
 
@@ -297,29 +297,27 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 				}
 
 				//se il semaforo è rosso resto fermo
-//				if(!verdeAlSemaforo) {
-//					tempoDiAttesaSuArco += Param.updatePositionTime;
-//					
-//					/*print*
-//					if(getId().equals("5")){
-//						System.out.println();
-//						System.out.println(this+": sono a FINE ARCO ma il semaforo è ROSSO");
-//					}/**/
-//					
-//					return;
-//				}
+				if(!verdeAlSemaforo) {
+					tempoDiAttesaSuArco += Param.updatePositionTime;
+					
+					/*print*
+					System.out.println(this+": sono a FINE ARCO ma il semaforo è ROSSO su "+currentEdge);
+					/**/
+					
+					return;
+				}
 
-//				//se il prossimo arco è pieno resto fermo
-//				if(getGraph().edgeIsFull(path.getFirst())) {
-//					tempoDiAttesaSuArco += Param.updatePositionTime;
-//					
-//					/*print*
-//					if(getId().equals("5")){
-//					System.out.println();
-//					System.out.println(this+": sono a FINE ARCO ma l'arco "+path.getFirst()+" è PIENO");
-//					}/**/
-//					return;
-//				}
+				//se il prossimo arco è pieno resto fermo
+				if(getGraph().edgeIsFull(path.getFirst())) {
+					tempoDiAttesaSuArco += Param.updatePositionTime;
+					
+					/*print*
+					if(getId().equals("5")){
+					System.out.println();
+					System.out.println(this+": sono a FINE ARCO ma l'arco "+path.getFirst()+" è PIENO");
+					}/**/
+					return;
+				}
 				
 				
 				//cambio arco
@@ -335,7 +333,7 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 				Message cambioArco = new Message("CAMBIO ARCO", this, registeredNode, Param.elaborationTime);
 				cambioArco.setData(nodoProvenienza, nodoSuccessuvo);
 				sendEvent(cambioArco);
-				/*print*/
+				/*print*
 				System.out.println(this+": invio cambio arco sono su "+currentEdge+"  ");
 				/**/
 
@@ -431,9 +429,6 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 //	public void getPathTo(NetNode destination){
 //		path.clear();
 //		
-//		/*print*/
-//		System.out.println("\n"+this+": invio richiesta percorso a "+currentNode +" per la destinazione "+destination);
-//		/**/
 //		
 //		Message askPath = new Message("RICHIESTA PERCORSO", this, currentNode, Param.elaborationTime); 
 //		

@@ -92,14 +92,14 @@ public class Simulazione {
 		Param.setSeed(389);
 		
 		
-		int numeroVeicoli = 10;
+		int numeroVeicoli = 1;
 		
 //		for(int i = 10; i<=numeroMaxVeicoli; i+=100){
 			
 //			System.out.println("\nSIMULAZIONE "+(i/100)+"\n");
 //			System.out.println("Orario INIZIO: "+new OraCorrente()+"\n");
 //			System.out.println("veicoli: "+i+" rate = "+Param.periodoGenerazione+"ms "+feromone+" seed["+Param.seed+"]\n");
-			Simulazione sim = new Simulazione(dir, numeroVeicoli, Param.periodoGenerazione, Scenario.RANDOM	);
+			Simulazione sim = new Simulazione(dir, numeroVeicoli, Param.periodoGenerazione, Scenario.UNA_DESTINAZIONE_DUE_SORGENTI	);
 	
 			try {
 				sim.display();

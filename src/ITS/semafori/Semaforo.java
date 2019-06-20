@@ -21,8 +21,8 @@ public interface Semaforo {
 	double setVerde(); //restituisce anche la durata del verde
 	void setRosso();
 	
-	boolean isVerde();
-	boolean isRosso();
+//	boolean isVerde();
+//	boolean isRosso();
 	
 	NetEdge getEdge();
 //	MessageManager getMessageManager();

@@ -1,18 +1,15 @@
 package ITS.semafori;
 
-import java.util.LinkedList;
-import ITS.RSU.RSU;
 import ITS.regolatoriSemafori.Regolatore;
 import ITS.regolatoriSemafori.RegolatoreIntelligente;
 import network.NetEdge;
-import network.message.Message;
 import util.Param;
 import vanet.CityGraph;
 import vanet.Vehicle;
 
 public class SemaforoIntelligente extends ABS_Semaforo{
 	private boolean verde = false;
-	private LinkedList<Vehicle> coda = null;
+//	private LinkedList<Vehicle> coda = null;
 	
 //	private double velocitaVeicolo = Param.velocitaVeicolo;
 	private double raggioAccettazione = Param.distanzaMinimaAutorizzazione;
@@ -36,15 +33,15 @@ public class SemaforoIntelligente extends ABS_Semaforo{
 	}
 	
 	// METHODS /////////////////
-	private void avvisaVeicoli(String messaggio){
-		Message msg = null;
-		RSU source = regolatore.getRSU();
-		
-		for(Vehicle v : coda){
-			msg = new Message(messaggio, source.getNetNode(), v, Param.elaborationTime);
-			source.sendEvent(msg);
-		}
-	}
+//	private void avvisaVeicoli(String messaggio){
+//		Message msg = null;
+//		RSU source = regolatore.getRSU();
+//		
+//		for(Vehicle v : coda){
+//			msg = new Message(messaggio, source, v, Param.elaborationTime);
+//			source.sendEvent(msg);
+//		}
+//	}
 	
 	private boolean macchineVicine(){
 		double lunghezzaArco = ((Double)edge.getAttribute("length"));
@@ -92,15 +89,6 @@ public class SemaforoIntelligente extends ABS_Semaforo{
 		avvisaVeicoli("ROSSO");
 	}
 
-	@Override
-	public boolean isVerde() {
-		return verde;
-	}
-
-	@Override
-	public boolean isRosso() {
-		return !verde;
-	}
 
 	@Override
 	public NetEdge getEdge() {

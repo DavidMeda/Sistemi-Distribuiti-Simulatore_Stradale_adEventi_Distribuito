@@ -1,10 +1,16 @@
 package ITS.semafori;
 
+import java.util.LinkedList;
+import ITS.RSU.RSU;
 import ITS.regolatoriSemafori.Regolatore;
 import network.NetEdge;
+import network.message.Message;
+import util.Param;
+import vanet.Vehicle;
 
 public abstract class ABS_Semaforo implements Semaforo {
 	protected boolean verde = false;
+	protected LinkedList<Vehicle> coda = null;
 	
 	//arco associato al semaforo
 	protected NetEdge edge = null;
@@ -23,19 +29,24 @@ public abstract class ABS_Semaforo implements Semaforo {
 	
 	// OVERRIDE /////////////
 	//from semaforo
-	@Override
-	public boolean isVerde() {
-		return verde;
-	}
-
-	@Override
-	public boolean isRosso() {
-		return !verde;
-	}
 
 	@Override
 	public NetEdge getEdge() {
 		return edge;
+	}
+	
+	protected void avvisaVeicoli(String messaggio){
+		Message msg = null;
+		RSU sourceRSU = regolatore.getRSU();
+		/*print*
+		if(source.getId().equals("A")) {
+		System.out.println(this+": messaggio "+messaggio+" alla coda del semaforo = "+coda);
+		}
+		/**/
+		for(Vehicle v : coda){
+			msg = new Message(messaggio, sourceRSU, v, Param.elaborationTime);
+			sourceRSU.sendEvent(msg);
+		}
 	}
 	
 	//from obj

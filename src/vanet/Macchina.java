@@ -32,18 +32,18 @@ public class Macchina extends Vehicle{
 		switch(event.getName()){
 		
 		/********/	
-		case "PING":
-			/*print*/
-			System.out.println(this+" ha ricevuto ping da "+message.getSource());
-			/**/
-			
-			
-			if(message.getSource() == registeredNode)return;
-			
-			sendEvent(new Message("PONG", this, message.getSource(), Param.elaborationTime));
-			
-			registeredNode = (NetNode)message.getSource();
-			break;
+//		case "PING":
+//			/*print*
+//			System.out.println(this+" ha ricevuto ping da "+message.getSource());
+//			/**/
+//			
+//			
+//			if(message.getSource() == registeredNode)return;
+//			
+//			sendEvent(new Message("PONG", this, message.getSource(), Param.elaborationTime));
+//			
+//			registeredNode = (NetNode)message.getSource();
+//			break;
 		
 			
 		/********/		
@@ -59,7 +59,7 @@ public class Macchina extends Vehicle{
 		/********/		
 		case "ROSSO":
 			/*print*
-			System.out.println(this+": Ã¨ arrivato il rosso dal semaforo di "+message.getSource());
+			System.out.println(this+": è arrivato il rosso dal semaforo di "+message.getSource());
 			/**/
 
 			verdeAlSemaforo = false;
@@ -73,7 +73,7 @@ public class Macchina extends Vehicle{
 			path.add(nextEdge);
 			if(nextEdge != null) setCurrentNode(nextEdge.getTargetNode());
 
-			/*print*/
+			/*print
 			System.out.println("\n"+this+": aggiunto "+nextEdge+" al percorso");
 			/**/
 			
@@ -93,7 +93,7 @@ public class Macchina extends Vehicle{
 //			getPathTo(destinationNode);
 			path.clear();
 			
-			/*print*/
+			/*print*
 			System.out.println("\n"+this+": invio richiesta percorso a "+currentNode +" per la destinazione "+destinationNode);
 			/**/
 			

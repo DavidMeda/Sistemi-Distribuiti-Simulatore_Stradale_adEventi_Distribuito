@@ -111,7 +111,7 @@ public abstract class ABS_Regolatore implements Regolatore{
 		//serve per evitare loop infiniti sullo scheduler degli eventi
 		if(tempoDiFase < Param.elaborationTime) tempoDiFase = Param.elaborationTime;
 		
-		Message cambioFase = new Message("CAMBIO FASE", sourceRSU.getNetNode(), sourceRSU.getNetNode(), tempoDiFase); //posso inviarlo all'rsu TODO
+		Message cambioFase = new Message("CAMBIO FASE", sourceRSU, sourceRSU, tempoDiFase); //posso inviarlo all'rsu TODO
 		sourceRSU.sendEvent(cambioFase);
 		
 		
@@ -147,7 +147,7 @@ public abstract class ABS_Regolatore implements Regolatore{
 		private LinkedList<Semaforo> sottoFasi;
 		private double durata = 0;
 		
-		public Fase(Semaforo semafori) {semaforoPrincipale = semafori;}
+		public Fase(Semaforo semaforo) {semaforoPrincipale = semaforo;}
 		
 		public void attiva(){
 			//attiva il semaforo principale

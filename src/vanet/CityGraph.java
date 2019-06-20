@@ -2,16 +2,12 @@ package vanet;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map.Entry;
 import org.graphstream.graph.Edge;
 import org.graphstream.ui.spriteManager.Sprite;
 import org.graphstream.ui.spriteManager.SpriteManager;
-import ITS.RSU.RSU;
-import events.Ping;
 import events.UpdatePosition;
 import network.NetEdge;
 import network.NetGraph;
-import network.NetNode;
 import util.Param;
 
 public class CityGraph extends NetGraph{
@@ -94,7 +90,7 @@ public class CityGraph extends NetGraph{
 			vehiclesAttached.put((NetEdge)e, new LinkedList<>());
 		}
 		getScheduler().addEvent(new UpdatePosition(this, Param.updatePositionTime));
-		getScheduler().addEvent(new Ping(this, Param.pingTime));
+//		getScheduler().addEvent(new Ping(this, Param.pingTime));
 
 		super.init();
 		
