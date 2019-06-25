@@ -1,5 +1,10 @@
 package ITS.RSU;
 
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,6 +20,7 @@ import network.NetGraph;
 import network.NetNode;
 import network.algorithm.Dijkstra;
 import network.message.Message;
+import serverStatistiche.ServerStatistiche;
 import simEventiDiscreti.Entity;
 import simEventiDiscreti.Event;
 import simEventiDiscreti.Scheduler;
@@ -23,22 +29,25 @@ import util.Path;
 import vanet.CityGraph;
 import vanet.Vehicle;
 
-public class RSU extends Thread implements Entity {
+public class RSU extends Thread implements Entity, RemoteRSU {
 
 	private NetNode nodo;
 	private NetGraph grafo;
+	private LinkedList<Vehicle> listaAutoIncrocio = new LinkedList<Vehicle>();
 	// macchine nel raggio d'azione dell'RSU
 	// private ArrayList<Vehicle> nearbyVehicle = new ArrayList<>(20);
 
 	private ArrayList<NetEdge> archiEntranti, archiUscenti;
+	private ArrayList<NetNode> nodiEntranti, nodiUscenti;
 	// tabella di routing con la lista degli archi per arrivare a destinazione
 	private HashMap<NetNode, LinkedList<Path>> routingTable = new HashMap<>();
+	private ServerStatistiche serverStat;
 
 	// regola il verde ai semafori
 	private Regolatore regolatore;
 	// private Regolatore.Type tipoRegolatore = Param.tipoRegolatore;
 	// private Semaphore mutex = new Semaphore(1);
-
+	private int numMessaggi = 0, numAuto = 0;
 	// private StatRSU stat = new StatRSU(this);
 
 	// COSTR //////////////////////////////
@@ -73,21 +82,38 @@ public class RSU extends Thread implements Entity {
 	public synchronized void init() {
 		archiUscenti = new ArrayList<>(10);
 		archiEntranti = new ArrayList<>(10);
+		nodiUscenti = new ArrayList<>(10);
+		nodiEntranti = new ArrayList<>(10);
 
 		for (Edge edge : grafo.getEachEdge()) {
 			// preparo gli archi uscenti da assegnare alla colonia
 			if (edge.getSourceNode().equals(nodo)) {
 				archiUscenti.add((NetEdge) edge);
+				nodiUscenti.add((NetNode) edge.getSourceNode());
 			}
 			// preparo gli archi entranti da assegnare al regolatore dei semafori
 			else if (edge.getTargetNode().equals(nodo)) {
 				archiEntranti.add((NetEdge) edge);
+				nodiEntranti.add((NetNode) edge.getTargetNode());
 			}
 		}
 		// genera regolatore dei semafori
 		regolatore = new RegolatoreClassico(this, archiEntranti);
 		regolatore.init();
 		routing();
+		try {
+
+			UnicastRemoteObject.exportObject(this, 1098);
+			try {
+				serverStat = (ServerStatistiche)Naming.lookup("Server");
+			} catch (MalformedURLException | NotBoundException e) {
+				e.printStackTrace();
+			}
+			
+			serverStat.registraRSU(this);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void routing() {
@@ -213,47 +239,57 @@ public class RSU extends Thread implements Entity {
 		return routingTablePath;
 	}
 
-//	public synchronized void pingToVehicle() throws InterruptedException {
-//		 // search car in my range
-//		 // a.acquire();
-//		 double carDistance;
-//		// mutex.acquire();
-//		 for (MobileNode car : ((CityGraph) node.getGraph()).getNodiInMovimento()) {
-//		 carDistance = distance(car);
-//		 // send ping message at the car in my range
-//		 if (carDistance < Param.raggioRSU) {
-//		 getScheduler().addEvent(new Message("PING", node, car, Param.elaborationTime));
-//		 /*print*/
-//		 System.out.println(this+" invio ping a "+car);
-//		 /**/
-//		 } else {
-//		 // lista veicoli registrati nell'RSU
-//		 nearbyVehicle.remove(car);
-//		 }
-//		 }
-//		 mutex.release();
-//		 a.release();
-//		 colonia.evaporate();
-//	}
+	// public synchronized void pingToVehicle() throws InterruptedException {
+	// // search car in my range
+	// // a.acquire();
+	// double carDistance;
+	// // mutex.acquire();
+	// for (MobileNode car : ((CityGraph) node.getGraph()).getNodiInMovimento()) {
+	// carDistance = distance(car);
+	// // send ping message at the car in my range
+	// if (carDistance < Param.raggioRSU) {
+	// getScheduler().addEvent(new Message("PING", node, car, Param.elaborationTime));
+	// /*print*/
+	// System.out.println(this+" invio ping a "+car);
+	// /**/
+	// } else {
+	// // lista veicoli registrati nell'RSU
+	// nearbyVehicle.remove(car);
+	// }
+	// }
+	// mutex.release();
+	// a.release();
+	// colonia.evaporate();
+	// }
 
-	
 	public void handler(Event message) {
 
 		if (!(message instanceof Message))
 			throw new IllegalArgumentException("the event sended at " + this + " is not a message");
-
+		numMessaggi++;
 		Message m = (Message) message;
 
 		// regolatore.handler(m);
 		// colonia.readMessage(m);
 
 		String nameMessage = m.getName();
+		if (nameMessage.equals("ARRIVA MACCHINA")) {
+			Vehicle v = (Vehicle) m.getData()[0];
+			listaAutoIncrocio.add(v);
+		}
 
 		if (nameMessage.equals("CAMBIO ARCO")) {
 			// indirizza auto
 			Vehicle vehicle = (Vehicle) m.getSource();
 			NetEdge nextEdge = scegliProssimoArco(vehicle.getTargetNode(), vehicle.getCurrentEdge());
+			listaAutoIncrocio.remove(vehicle);
 
+			//se è null vuol dire che soo arrivato a destinazine
+			if (nextEdge != null) {
+				Message toRsu = new Message("ARRIVA MACCHINA", nodo, nextEdge.getTargetNode(), Param.elaborationTime);
+				toRsu.setData(vehicle);
+				sendEvent(toRsu);
+			}
 			// System.out.println(this+" arrivato cambio arco da "+vehicle);
 			// comunica all'auto in quale arco Ã¨ stata indirizzata
 			Message direzione = new Message("DIREZIONE", nodo, vehicle, Param.elaborationTime);
@@ -285,6 +321,8 @@ public class RSU extends Thread implements Entity {
 			Message forCar = new Message("DIREZIONE", nodo, vehicle, Param.elaborationTime);
 			forCar.setData(nextEdge);
 			sendEvent(forCar);
+			Message updateStatistiche = new Message("STATISTICHE", this, this, Param.elaborationTime);
+			sendEvent(updateStatistiche);
 
 			// se sono la destinazione non fare niente
 			if (destinationOfVehicle.equals(nodo)) {
@@ -295,6 +333,7 @@ public class RSU extends Thread implements Entity {
 		} else if (nameMessage.equals("CAMBIO FASE")) {
 			regolatore.nextPhase();
 		} else if (nameMessage.equals("ARRIVATO")) {
+			numAuto++;
 			Vehicle v = (Vehicle) m.getSource();
 			// rimuovo il veicolo dal grafo
 			// try {
@@ -307,6 +346,15 @@ public class RSU extends Thread implements Entity {
 			// mutex.release();
 			v.addAttribute("ui.style", "fill-color: rgba(0,0,0,100);");
 			v.addAttribute("ui.label", "");
+			Message updateStatistiche = new Message("STATISTICHE", this, this, Param.elaborationTime);
+			sendEvent(updateStatistiche);
+		}
+		else if (nameMessage.equals("STATISTICHE")) {
+			try {
+				serverStat.updateStatistiche("", numMessaggi, numAuto);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -357,6 +405,7 @@ public class RSU extends Thread implements Entity {
 		nodo.sendEvent(event);
 
 	}
+
 	public NetGraph getGraph() {
 		return grafo;
 	}
@@ -368,6 +417,12 @@ public class RSU extends Thread implements Entity {
 
 	public NetNode getNetNode() {
 		return nodo;
+	}
+
+	@Override
+	public void stampaStatistiche(double statistica) throws RemoteException {
+		System.out.println("Il server mi ah mandato "+statistica);
+		
 	}
 
 }

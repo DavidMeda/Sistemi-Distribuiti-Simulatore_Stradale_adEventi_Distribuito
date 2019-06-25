@@ -16,6 +16,7 @@ public class UpdatePosition extends Event{
 	public void action() {
 		graph.updateMobileNode();
 		
+		
 	}
 
 }

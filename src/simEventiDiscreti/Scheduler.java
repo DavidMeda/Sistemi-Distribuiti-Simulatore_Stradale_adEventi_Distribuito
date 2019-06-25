@@ -115,57 +115,18 @@ public class Scheduler extends Thread{
 				}
 				
 			}
+			else {
+				start = false;
+				
+			}
+			
 		}
 		
-		/*print*
+		/*print*/
 		System.out.println("\n"+this+": SIMULAZIONE TERMINATA");
 		/**/
+		System.exit(-1);
 	}
 	// GETTER ////////////////////////////////
 	public double getCurrentTime(){return currentTime;}
-	
-	/////////////////////// TODO ///////////////////////////////
-	@Deprecated
-	public void pause(){/*pause = true;*/}
-	@Deprecated
-	public void restart(){/*pause = false;*/}
-	
-	
-	
-	//////////////////////////////
-	/////////////////////////////
-	/* *
-	public static void main(String[] args) {
-		Scheduler s = new Scheduler();
-		s.addEvent(new Event("forseNO", 10) {
-			
-			@Override
-			public void action() {
-				System.out.println(getName()+" "+getTime());
-			}
-
-		});
-		s.start();
-//		try {
-//			Thread.sleep(2);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-		s.addEvent(new Event("forseSI", 5) {
-			
-			@Override
-			public void action() {
-				System.out.println(getName()+" "+getTime());
-//				s.stopSimulation();
-			}
-		});
-		try {
-			Thread.sleep(900);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		s.stopSimulation();
-	}
-	/**/
 }

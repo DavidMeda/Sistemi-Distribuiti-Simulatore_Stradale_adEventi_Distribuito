@@ -114,10 +114,11 @@ public class Simulazione {
 //			StatisticheI_O.salvaStatistiche(sim.getStatistiche(), "statistiche con arco N-H semaforo classico", feromone,
 //					"periodoGenerazione = "+Param.periodoGenerazione+"ms", i+" auto");
 			
-			
+		
 //		}
 //		System.out.println("\n||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
-//		System.out.println("FINITOOOOOO!!!");
+		
+		System.out.println("SIMULAZIONE FINITOOOOOO!!!");
 
 	}
 	

@@ -39,9 +39,7 @@ public abstract class ABS_Semaforo implements Semaforo {
 		Message msg = null;
 		RSU sourceRSU = regolatore.getRSU();
 		/*print*
-		if(source.getId().equals("A")) {
 		System.out.println(this+": messaggio "+messaggio+" alla coda del semaforo = "+coda);
-		}
 		/**/
 		for(Vehicle v : coda){
 			msg = new Message(messaggio, sourceRSU, v, Param.elaborationTime);
