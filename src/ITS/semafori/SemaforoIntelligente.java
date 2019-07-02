@@ -85,8 +85,13 @@ public class SemaforoIntelligente extends ABS_Semaforo{
 
 	@Override
 	public void setRosso() {
-		verde = false;
-		avvisaVeicoli("ROSSO");
+		if(!sempreVerde) {
+			verde = false;
+			avvisaVeicoli("ROSSO");
+		}
+		else {
+			setVerde();
+		}
 	}
 
 

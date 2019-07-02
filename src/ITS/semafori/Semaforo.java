@@ -20,6 +20,7 @@ public interface Semaforo {
 	
 	double setVerde(); //restituisce anche la durata del verde
 	void setRosso();
+	void sempreVerde();
 	
 //	boolean isVerde();
 //	boolean isRosso();

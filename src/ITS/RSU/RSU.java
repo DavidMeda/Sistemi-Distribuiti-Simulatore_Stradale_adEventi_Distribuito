@@ -60,6 +60,8 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 		System.out.println("Creato " + this + "");
 		/**/
 	}
+	
+	
 
 	@Override
 	public void run() {
@@ -70,7 +72,7 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 		while(true) {
 			try {
 				serverStat.updateStatistiche(this,  var);
-				System.out.println(getNameRSU()+" update statistiche");
+//				System.out.println(getNameRSU()+" update statistiche");
 				Thread.sleep(1000);
 			} catch (Exception e) {
 				e.printStackTrace();

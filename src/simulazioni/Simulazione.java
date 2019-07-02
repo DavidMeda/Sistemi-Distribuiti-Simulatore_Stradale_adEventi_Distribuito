@@ -99,7 +99,7 @@ public class Simulazione {
 //			System.out.println("\nSIMULAZIONE "+(i/100)+"\n");
 //			System.out.println("Orario INIZIO: "+new OraCorrente()+"\n");
 //			System.out.println("veicoli: "+i+" rate = "+Param.periodoGenerazione+"ms "+feromone+" seed["+Param.seed+"]\n");
-			Simulazione sim = new Simulazione(dir, numeroVeicoli, Param.periodoGenerazione, Scenario.UNA_DESTINAZIONE_DUE_SORGENTI	);
+			Simulazione sim = new Simulazione(dir, numeroVeicoli, Param.periodoGenerazione, Scenario.RANDOM	);
 	
 			try {
 				sim.display();

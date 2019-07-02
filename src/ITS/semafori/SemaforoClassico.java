@@ -11,6 +11,7 @@ public class SemaforoClassico extends ABS_Semaforo{
 	//tempo di verde in millesecondi
 	private final double tempoDiVerde = 1000;
 	
+	
 	// COSTR /////////////////////
 	public SemaforoClassico(Regolatore regolatore, NetEdge edge) {
 		super(regolatore,edge);
@@ -43,8 +44,14 @@ public class SemaforoClassico extends ABS_Semaforo{
 
 	@Override
 	public void setRosso() {
-		verde = false;
-		avvisaVeicoli("ROSSO");
+		if(!sempreVerde) {
+			verde = false;
+			avvisaVeicoli("ROSSO");
+		}
+		else {
+			setVerde();
+//			System.out.println("Semaforo classico - SEMPRE VERDE");
+		}
 	}
 
 	@Override

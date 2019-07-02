@@ -24,7 +24,7 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 
 	@Override
 	public void updateStatistiche(RemoteRSU RSU, Variabili var) throws RemoteException {
-		System.out.println("Ricevo aggiornamento statistiche da   "+RSU.getNameRSU());
+//		System.out.println("Ricevo aggiornamento statistiche da   "+RSU.getNameRSU());
 		mappaStatistiche.put(RSU, var);
 	}
 

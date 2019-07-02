@@ -56,6 +56,9 @@ public abstract class ABS_Regolatore implements Regolatore{
 			for (int i = 0; i < numeroCorsie; i++) {
 //				s = Semaforo.getType(tipoSemaforo, this, edge);
 				s = new SemaforoClassico(this, edge);
+				if(archiEntranti.size()<=2) {
+					s.sempreVerde();
+				}
 				semaforiPerCorsia.add(s);
 
 			}

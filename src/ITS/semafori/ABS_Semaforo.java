@@ -14,6 +14,7 @@ public abstract class ABS_Semaforo implements Semaforo {
 	
 	//arco associato al semaforo
 	protected NetEdge edge = null;
+	protected boolean sempreVerde = false;
 	
 	//gestore messaggi
 //	protected MessageManager messageManager = null;
@@ -45,6 +46,10 @@ public abstract class ABS_Semaforo implements Semaforo {
 			msg = new Message(messaggio, sourceRSU, v, Param.elaborationTime);
 			sourceRSU.sendEvent(msg);
 		}
+	}
+	
+	public void sempreVerde() {
+		sempreVerde = true;
 	}
 	
 	//from obj
