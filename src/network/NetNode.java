@@ -9,10 +9,9 @@ import simEventiDiscreti.Event;
 import simEventiDiscreti.Scheduler;
 
 public class NetNode extends MultiNode implements Entity {
-//	private Scheduler scheduler;
 	private RSU rsu;
 	private NetGraph graph;
-	
+	private static int idRSU = 0;
 	/////////////////////////////////////////////////////
 	public NetNode(NetGraph graph, String name) {
 		super((AbstractGraph)graph, name);
@@ -22,8 +21,9 @@ public class NetNode extends MultiNode implements Entity {
 	
 	
 	public void init() {
-		rsu = new RSU(this);
-		rsu.init();
+		idRSU++;
+		rsu = new RSU(this, idRSU);
+		rsu.start();
 	}
 	
 	/////////////////////////////////////////////////////////
@@ -55,7 +55,10 @@ public class NetNode extends MultiNode implements Entity {
 //	public void setScheduler(Scheduler scheduler) {
 //		this.scheduler = scheduler;
 //	}
-	
+//	public void updateStatisticheRSU() {
+//		rsu.statistiche();
+//	}
+//	
 	@Override
 	public Scheduler getScheduler() {
 //		return scheduler;

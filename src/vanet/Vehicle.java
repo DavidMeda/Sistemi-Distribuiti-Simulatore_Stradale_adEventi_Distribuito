@@ -264,7 +264,7 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 				if(path.size() <=0 || path.getFirst() == null) {
 					
 					//comunico che il veicolo ha abbandonato l'arco
-					Message cambioArco = new Message("ARRIVATO", this, registeredNode, Param.elaborationTime);
+					Message cambioArco = new Message("DESTINAZIONE", this, registeredNode, Param.elaborationTime);
 					cambioArco.setData(currentEdge.getSourceNode(), null);
 					sendEvent(cambioArco);
 					/*print*
