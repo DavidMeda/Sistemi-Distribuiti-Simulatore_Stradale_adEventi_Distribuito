@@ -252,7 +252,8 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 			tempoDiAttesaSuArco += Param.updatePositionTime;
 		
 			/*print*
-			System.out.println(this+": sono fermo dietro ad un veicolo");
+			if(getId().equals("4") || getId().equals("2"))
+			System.out.println(this+": sono fermo dietro ad un veicolo"+" tempo attesa "+tempoDiAttesaSuArco);
 			/**/
 		
 			return;
@@ -302,7 +303,8 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 					tempoDiAttesaSuArco += Param.updatePositionTime;
 					
 					/*print*
-					System.out.println(this+": sono a FINE ARCO ma il semaforo è ROSSO su "+currentEdge);
+					if(getId().equals("4") || getId().equals("2"))
+					System.out.println(this+": il semaforo è ROSSO su "+currentEdge+" tempo attesa "+tempoDiAttesaSuArco);
 					/**/
 					
 					return;
@@ -313,9 +315,8 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 					tempoDiAttesaSuArco += Param.updatePositionTime;
 					
 					/*print*
-					if(getId().equals("5")){
-					System.out.println();
-					System.out.println(this+": sono a FINE ARCO ma l'arco "+path.getFirst()+" è PIENO");
+					if(getId().equals("4") || getId().equals("2")) {
+					System.out.println(this+": sono a FINE ARCO ma l'arco "+path.getFirst()+" è PIENO"+" tempo attesa "+tempoDiAttesaSuArco);
 					}/**/
 					return;
 				}

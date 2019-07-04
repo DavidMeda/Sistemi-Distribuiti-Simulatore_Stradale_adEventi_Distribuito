@@ -119,7 +119,7 @@ public class Variabili implements Serializable {
 	}
 
 	public void updateTempoDiAttesa(double tempoAttesaVeicoloSuArco) {
-		sommaTempiAttesa = tempoAttesaVeicoloSuArco;
+		sommaTempiAttesa += tempoAttesaVeicoloSuArco;
 	}
 
 	public void updateDistanzaCoperta(double distanzaVeicoloSuArco) {

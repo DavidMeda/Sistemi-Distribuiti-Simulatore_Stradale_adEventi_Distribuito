@@ -9,7 +9,7 @@ public final class Param {
 	public static void setOrizzonteTemporale(double durataSimulazione) {orizzonteTemporaleSimulazione = durataSimulazione;}
 	public static double orizzonteTemporaleSimulazione = 0; //durata simulazione (0 = infinito) [millisec] 
 
-	public static long seed = 666;
+	public static long seed = 369;
 	public static Random random = new Random(seed);
 	public static void resetRandom() {random = new Random(seed);}
 	public static void setSeed(long seed) {

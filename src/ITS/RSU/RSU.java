@@ -48,12 +48,13 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 
 
 	public RSU(Node node, int i) {
+		
 		ID = i;
 		nodo = (NetNode) node;
 		grafo = nodo.getGraph();
 		var = new Variabili(this, ID);
 		/* print */
-		System.out.println("Creato " + this + " i= "+ID);
+		System.out.println("Creato " + this + " ID= "+ID);
 		/**/
 	}
 	
@@ -62,7 +63,7 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 	@Override
 	public void run() {
 		/* print */
-		System.out.println("inizializzazione  " + getName());
+		System.out.println("inizializzazione  " +this+" "+ getName());
 		/**/
 		init();
 		while(true) {
@@ -88,7 +89,8 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 	
 	@Override
 	public void stampaStatistiche(String statistica) throws RemoteException {
-		System.out.println("Il server mi ha mandato " + statistica);
+		System.out.println(this+ "ho ricevuto dal server statistiche:" + statistica);
+		System.exit(-1);
 	}
 
 	public synchronized void init() {
@@ -290,7 +292,7 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 		}
 
 		else if (nameMessage.equals("CAMBIO ARCO")) {
-			var.getNumeroMessRicevutiRSU_Veicolo();
+			var.updateMessaggiRicevutiRSU_Veicolo();
 			var.updateDistanzaCoperta((double)m.getData()[2]);
 			// indirizza auto
 			Vehicle vehicle = (Vehicle) m.getSource();
@@ -329,7 +331,7 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 			Message forCar = new Message("DIREZIONE", nodo, vehicle, Param.elaborationTime);
 			forCar.setData(nextEdge);
 			sendEvent(forCar);
-			var.getNumeroMessInviatiRSU_Veicolo();
+			var.updateMessaggiInviatiRSU_Veicolo();
 
 			// se sono la destinazione non fare niente
 			if (destinationOfVehicle.equals(nodo)) {
@@ -354,48 +356,6 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 			v.addAttribute("ui.label", "");
 		} 
 
-	}
-
-	
-	// METODI PER LE STATISTICHE //////////
-	
-	public double getCongestioneMediaArchi() {
-		double gradoCongestione = 0.0;
-		
-		double gradoCongestioneArcoCorrente = 0.0;
-		double lunghezzaArcoCorrente = 0.0;
-		double capacitaArcoCorrente = 0.0;
-		double numeroVeicoliSuArcoCorrente = 0.0;
-		for(NetEdge e : archiEntranti) {
-			lunghezzaArcoCorrente = (double)e.getAttribute("length");
-			
-			capacitaArcoCorrente = (int)(lunghezzaArcoCorrente / Param.distanzaInterveicolo);
-			numeroVeicoliSuArcoCorrente = ((CityGraph)grafo).getVehiclesOnTheEdge(e.getId()).size();
-			
-			gradoCongestioneArcoCorrente = (numeroVeicoliSuArcoCorrente / capacitaArcoCorrente);
-			
-			gradoCongestione += gradoCongestioneArcoCorrente;
-		}
-		
-		return gradoCongestione / archiEntranti.size();
-	}
-	
-	public double getCongestione() {
-		double veicoliPresentiSugliArchi = 0.0;
-		double capacitaArchi = 0.0;
-		
-		double veicoliSuArcoCorrente = 0.0;
-		double lunghezzaArcoCorrente = 0.0;
-		for(NetEdge e : archiEntranti) {
-			veicoliSuArcoCorrente = ((CityGraph)grafo).getVehiclesOnTheEdge(e.getId()).size();
-			lunghezzaArcoCorrente = (double)e.getAttribute("length");
-			
-			veicoliPresentiSugliArchi += veicoliSuArcoCorrente;
-			capacitaArchi += (lunghezzaArcoCorrente / Param.distanzaInterveicolo);
-		}
-		
-		return veicoliPresentiSugliArchi / capacitaArchi;
-		
 	}
 
 	///////SET E GET///////////////////////

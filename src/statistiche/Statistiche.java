@@ -5,19 +5,15 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map.Entry;
 import ITS.RSU.RemoteRSU;
 
 public class Statistiche extends UnicastRemoteObject implements ServerStatistiche {
-	private LinkedList<RemoteRSU> listaRSU = new LinkedList<RemoteRSU>();
-	private HashMap<RemoteRSU, Variabili> mappaStatistiche = new HashMap<RemoteRSU, Variabili>();
+	private static HashMap<RemoteRSU, Variabili> mappaStatistiche = new HashMap<RemoteRSU, Variabili>();
 	private static final long serialVersionUID = -6219374298605448637L;
 	private int countRSU = 0;
 	
 	private String
-	idRSUminimoTempo,
-	idRSUmassimoTempo,
 	idRSUminimoMessaggi,
 	idRSUmassimoMessaggi;
 	
@@ -46,23 +42,19 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 	}
 
 	public synchronized void richiestaStatisticheGenerali() throws RemoteException {
-		countRSU++;
-		System.out.println("richieste statostiche: "+countRSU +" e ne mancano "+(listaRSU.size()-countRSU));
-		if(countRSU == listaRSU.size()) inviaStatisticheGenerali();
+		countRSU ++;
+		if(countRSU == mappaStatistiche.size()) inviaStatisticheGenerali();
+		System.out.println("richiesta n: "+countRSU+" mancano "+((mappaStatistiche.size())-countRSU));
 	}
 	
 	public void inviaStatisticheGenerali() throws RemoteException{
 		update();
 		 String statistiche = "\n\nSTATISTICHE RSU"
-//				+"\nGrado dei tempi medi di attesa = "+getGradoTempoMedioAttesa()
 				+"\nMedia messaggi totali per RSU = "+getMediaMessTotali()
 				+"\nMedia messaggi ricevuti per RSU = "+getMediaMessRicevuti()
 				+"\nMedia messaggi inviati per RSU = "+getMediaMessInviati()
-				+"\nRSU col minor tempo medio di attesa = "+getSemaforoConMinimoTempoAttesaMedio()+" (tempo = "+tempoMedioDiAttesaMinimo+" millisec )"
-				+"\nRSU col maggior tempo medio di attesa = "+getSemaforoConMassimoTempoAttesaMedio()+" (tempo = "+tempoMedioDiAttesaMassimo+" millisec )"
 				+"\nRSU col minor numero di messaggi = "+getRSUminimoNumDiMessaggi()+" (numero = "+numMessMinimo+")"
 				+"\nRSU col maggior numero di messaggi = "+getRSUmassimoNumDiMessaggi()+" (numero = "+numMessMassimo+")"
-//			  +"\nGrado di scelta ottimale: "+  String.format("%.3f",getGradoSceltaOttimale())
 			  +"\nINFO:"
 			  +"\n  - Sommatoria messaggi totali = "+getNumeroMessTotali()
 			  +"\n  - Sommatoria messaggi ricevuti da RSU = "+getNumeroMessRicevutiRSU_RSU()
@@ -70,14 +62,14 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 			  +"\n  - Sommatoria messaggi inviati a RSU = "+getNumeroMessInviatiRSU_RSU()
 			  +"\n  - Sommatoria messaggi Inviati a Veicoli = "+getNumeroMessInviatiRSU_Veicoli()
 			  +"\n";
-		 for(RemoteRSU rsu : listaRSU) {
-			 rsu.stampaStatistiche(statistiche);
-		 }
+		for(Entry<RemoteRSU, Variabili> e : mappaStatistiche.entrySet()) {
+			e.getKey().stampaStatistiche(statistiche);
+		}
 	}
 
 	public synchronized void registraRSU(RemoteRSU rsu) throws RemoteException {
-		System.out.println("si  è aggiunto " + rsu.getNameRSU());
-		listaRSU.add(rsu);
+		System.out.println("si  è aggiunto " + rsu.getNameRSU()+" size= "+mappaStatistiche.size());
+		mappaStatistiche.put(rsu, null);
 	}
 	
 	
@@ -93,8 +85,6 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 		
 		public String getRSUminimoNumDiMessaggi(){return idRSUminimoMessaggi;}
 		public String getRSUmassimoNumDiMessaggi(){return idRSUmassimoMessaggi;}
-		public String getSemaforoConMinimoTempoAttesaMedio() {return idRSUminimoTempo;}
-		public String getSemaforoConMassimoTempoAttesaMedio() {return idRSUmassimoTempo;}
 		public double getTempoMedioDiAttesaMinimo() {return tempoMedioDiAttesaMinimo;}
 		public double getTempoMedioDiAttesaMassimo() {return tempoMedioDiAttesaMassimo;}
 		public double getGradoTempoMedioAttesa() {
@@ -104,47 +94,11 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 			}
 			return sommaTempiMediAttesa / mappaStatistiche.size();
 		}
-//		public double getGradoSceltaOttimale(){
-//			double sommaGradi = 0.0, cont = 0;
-//			for(Entry<RemoteRSU, Variabili> e : mappaStatistiche.entrySet()){
-//				//Considero solo gli RSU che hanno fatto indirizzamento
-//				if(e.getValue().getNumeroIndirizzamenti() != 0) cont++;
-//				sommaGradi += e.getValue().getIndirizzamentoPercorsoMinimo();
-//			}
-//			return sommaGradi / cont;
-//		}
 		
 		public void update() throws RemoteException {
-			updateSemaforoConMassimoTempoAttesaMedio();
-			updateSemaforoConMinimoTempoAttesaMedio();
 			updateMessaggi();
 			updateRSUnumMassimoMessaggi();
 			updateRSUnumMinimoMessaggi();
-		}
-		
-		public void updateSemaforoConMinimoTempoAttesaMedio()throws RemoteException {
-			Variabili var;
-			for(Entry<RemoteRSU, Variabili> e : mappaStatistiche.entrySet()) {
-				var = e.getValue();
-				if(var.getTempoMedioAttesa() > 0 && var.getTempoMedioAttesa() < tempoMedioDiAttesaMinimo) {
-					tempoMedioDiAttesaMinimo = (int) var.getTempoMedioAttesa();
-					idRSUminimoTempo = ""+e.getKey().getNameRSU();
-				}
-			}
-			
-		}
-		
-		public void updateSemaforoConMassimoTempoAttesaMedio() throws RemoteException {
-			Variabili var;
-			for(Entry<RemoteRSU, Variabili> e : mappaStatistiche.entrySet()) {
-				var = e.getValue();
-				if(var.getTempoMedioAttesa() > tempoMedioDiAttesaMassimo) {
-					tempoMedioDiAttesaMassimo = (int) var.getTempoMedioAttesa();
-					idRSUmassimoTempo = ""+e.getKey().getNameRSU();
-				}
-			}
-			
-			
 		}
 		
 		public void updateMessaggi(){
@@ -188,9 +142,9 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 		try {
 			Statistiche stat = new Statistiche();
 			LocateRegistry.createRegistry(1099);
-			System.out.println("Creato registro");
+			System.out.println("Creato SERVER STATISTICHE sul registro Locale");
 			Naming.rebind("Server", stat);
-			System.out.println("fatto lookup");
+			System.out.println("Attendo clienti...\n");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
