@@ -1,8 +1,8 @@
 package ITS.semafori;
 
 import ITS.regolatoriSemafori.Regolatore;
+import network.CityGraph;
 import network.NetEdge;
-import vanet.CityGraph;
 
 public class SemaforoClassico extends ABS_Semaforo{
 	//lista delle auto sull'arco

@@ -1,7 +1,7 @@
 package events;
 
 import simEventiDiscreti.Event;
-import vanet.CityGraph;
+import network.CityGraph;
 
 public class UpdatePosition extends Event{
 	private CityGraph graph;

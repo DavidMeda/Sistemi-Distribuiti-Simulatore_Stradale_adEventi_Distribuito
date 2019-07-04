@@ -1,4 +1,4 @@
-package vanet;
+package network;
 
 import java.io.IOException;
 import java.util.List;
@@ -7,11 +7,9 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
-import ITS.RSU.RSU;
 import network.NetNode;
 
 public class CityGraphXMLParser {
-//	private static Random random = new Random(167);
 	private static SAXBuilder saxBuilder = new SAXBuilder();
 	
     
@@ -32,7 +30,6 @@ public class CityGraphXMLParser {
     	String name = "";
     	String description = "";
     	String stylesheet = "";
-    	int i =0;
     	//search graph name
     	listElement = rootElement.getChildren("graph");
     	for(Element _graph : listElement){
@@ -52,7 +49,6 @@ public class CityGraphXMLParser {
     			
     			listElement = _graph.getChildren("node");
     			NetNode node = null; 
-//    			StatisticheRSU statisticheRSU = new StatisticheRSU();
     			for(Element _node : listElement){
     				nodeName = _node.getText().trim();
     				//check xy of the node
@@ -71,10 +67,8 @@ public class CityGraphXMLParser {
     				}
     				graph.getNode(nodeName).addAttribute("x", Double.parseDouble(x));
     				graph.getNode(nodeName).addAttribute("y", Double.parseDouble(y));
-//    				statisticheRSU.addStatRSU(((RSU)graph.getNode(nodeName)).getStat());
     				
     			}
-//    			graph.addStatistica(statisticheRSU);
     			
     			//add edges
     			String oneway = "";	//if true, the edge is oriented from node1 to node 2

@@ -14,7 +14,7 @@ public class RegolatoreClassico extends ABS_Regolatore {
 	
 	
 	public RegolatoreClassico (RSU rsu, List<NetEdge> archiEntranti) {
-		super(rsu, archiEntranti);
+		super(rsu, archiEntranti, true);
 	}
 	
 	@Override

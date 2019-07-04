@@ -1,11 +1,8 @@
 package util;
 
 import java.util.Random;
-import ITS.regolatoriSemafori.Regolatore;
-import ITS.semafori.Semaforo;
 
 public final class Param {
-	/** descrizione [unità di misura] */
 	
 	/*/* parametri di simulazione /**/
 	
@@ -28,7 +25,6 @@ public final class Param {
 	
 	public static final double
 	updatePositionTime = 2, //periodo di aggiornamento posizione veicoli [millisec]
-	updateStatisticTime = 1000,
 	elaborationTime = 20; //tempo di elaborazione per l'invio di un messaggio [millisec]
 	
 	
@@ -60,9 +56,6 @@ public final class Param {
 	/*/* parametri RSU /**/
 	
 	public static   double
-	raggioRSU = 15, //raggio d'azione dell'RSU [metri]
-	sogliaFeromone = 0.5, //Soglia accettazione scelta prossimo arco non congestionato
-	sogliaEvaprorazione = 0.5,
 	periodoGenerazione = 200;
 	
 	public static void setPeriodoGenereazione(double rate){
@@ -70,9 +63,6 @@ public final class Param {
 	}
 
 	/*/* parametri semafori /**/
-	
-	public static final Semaforo.Type tipoSemaforo = Semaforo.Type.intelligente;
-	public static final Regolatore.Type tipoRegolatore = Regolatore.Type.INTELLIGENTE;
 
 	public static final double
 	//il semaforo intelligente concede autorizzazioni se il primo veicolo della coda
@@ -81,11 +71,5 @@ public final class Param {
 	//viene accettata l'autorizzazione al prossimo veicolo se la distanza
 	//dall'ultimo veicolo autorizzato è minore della soglia di accettazione
 	sogliaDiAccettazione = 1;
-	
-	
-	
-	// SETTER //////////////////////////////////////
-	
-	
 	
 }

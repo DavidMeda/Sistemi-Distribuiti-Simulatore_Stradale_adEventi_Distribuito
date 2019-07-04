@@ -7,18 +7,15 @@ import java.util.Map.Entry;
 import ITS.RSU.RSU;
 import ITS.semafori.Semaforo;
 import ITS.semafori.SemaforoIntelligente;
+import network.CityGraph;
 import network.NetEdge;
 import network.NetNode;
-import network.message.Message;
-import simEventiDiscreti.Event;
-import simEventiDiscreti.Scheduler;
-import vanet.CityGraph;
 
 public class RegolatoreIntelligente extends ABS_Regolatore{
 	
 
 	public RegolatoreIntelligente(RSU rsu, List<NetEdge> archiEntranti) {
-		super(rsu, archiEntranti);
+		super(rsu, archiEntranti, false);
 	}
 	
 	public synchronized void init() {

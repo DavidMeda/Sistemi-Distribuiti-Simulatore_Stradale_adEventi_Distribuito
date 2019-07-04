@@ -2,10 +2,9 @@ package simulazioni.regole;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-
+import network.CityGraph;
 import simulazioni.Simulazione;
 import util.Param;
-import vanet.CityGraph;
 import vanet.Vehicle;
 
 public class RegolaDestinazioniSorgenti extends Regole {

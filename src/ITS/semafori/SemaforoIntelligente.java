@@ -2,9 +2,9 @@ package ITS.semafori;
 
 import ITS.regolatoriSemafori.Regolatore;
 import ITS.regolatoriSemafori.RegolatoreIntelligente;
+import network.CityGraph;
 import network.NetEdge;
 import util.Param;
-import vanet.CityGraph;
 import vanet.Vehicle;
 
 public class SemaforoIntelligente extends ABS_Semaforo{

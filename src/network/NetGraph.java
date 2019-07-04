@@ -2,7 +2,6 @@ package network;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.EdgeFactory;
 import org.graphstream.graph.Graph;
@@ -12,7 +11,6 @@ import org.graphstream.graph.implementations.MultiGraph;
 import ITS.RSU.RSU;
 import simEventiDiscreti.Scheduler;
 import util.Param;
-import vanet.CityGraph;
 
 public class NetGraph extends MultiGraph {
 	

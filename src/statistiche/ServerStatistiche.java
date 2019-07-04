@@ -11,5 +11,5 @@ public interface ServerStatistiche extends Remote {
 
 	void registraRSU(RemoteRSU rsu) throws RemoteException;
 
-	public String statisticheGenerali() throws RemoteException;
+	public void richiestaStatisticheGenerali() throws RemoteException;
 }

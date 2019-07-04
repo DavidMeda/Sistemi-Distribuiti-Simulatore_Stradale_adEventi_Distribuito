@@ -8,6 +8,7 @@ import java.util.List;
 import ITS.RSU.RSU;
 import ITS.semafori.Semaforo;
 import ITS.semafori.SemaforoClassico;
+import ITS.semafori.SemaforoIntelligente;
 import network.NetEdge;
 import network.NetNode;
 import network.message.Message;
@@ -39,7 +40,7 @@ public abstract class ABS_Regolatore implements Regolatore{
 	
 	// COSTR /////////////////////
 	
-	public ABS_Regolatore(RSU rsu, List<NetEdge> archiEntranti) {
+	public ABS_Regolatore(RSU rsu, List<NetEdge> archiEntranti, boolean semaforoClassico) {
 		sourceRSU = rsu;
 		
 		//preparo le liste dei semafori per gli archi entranti
@@ -50,12 +51,14 @@ public abstract class ABS_Regolatore implements Regolatore{
 		for(NetEdge edge : archiEntranti){	
 			//aggiungo un semaforo per ogni corsia
 			int numeroCorsie = 1;
-			//int numeroCorsie = strada.getNumCorsie(); 
 			semaforiPerCorsia = new ArrayList<>(numeroCorsie);
 			
 			for (int i = 0; i < numeroCorsie; i++) {
 //				s = Semaforo.getType(tipoSemaforo, this, edge);
-				s = new SemaforoClassico(this, edge);
+				if(semaforoClassico)
+					s = new SemaforoClassico(this, edge);
+				else
+					s = new SemaforoIntelligente(this, edge);
 				if(archiEntranti.size()<=2) {
 					s.sempreVerde();
 				}
@@ -67,29 +70,10 @@ public abstract class ABS_Regolatore implements Regolatore{
 		
 	}
 	
-	// SETTER ////////////////////
 	public synchronized void setFasi(ArrayList<Fase> fasi){
 		this.fasi = fasi;
 	}
 	
-//	// OVERRIDE ///////////////////
-//	//from regolatore
-//	@Override
-//	public void handler(Event message) {
-//		if(message.getName().equals("CAMBIO FASE")){
-//			nextPhase();
-//			
-//
-//
-////			//aggiornamento statistiche sulla congestione ad ogni cambio di fase
-////			StatRSU stat = source.getStat();
-////			stat.updateCongestioneMedia();
-////			stat.updateCongestioneMediaArchi();
-//		
-//		}
-//		
-//	}
-
 	
 	@Override
 	public synchronized Fase nextPhase() {

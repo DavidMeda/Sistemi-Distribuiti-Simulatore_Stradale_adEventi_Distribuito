@@ -9,10 +9,6 @@ public class Scheduler extends Thread{
 	@SuppressWarnings("unused")
 	private static final int 
 		MAX_TIMEHORIZON_24DAY = Integer.MAX_VALUE;
-		/*TODO time unit
-		SEC = 1000,
-		MIN = 60000;
-		*/
 	private boolean 
 		realTime = 
 //			false,
@@ -45,29 +41,17 @@ public class Scheduler extends Thread{
 		currentTime = 0;
 	}
 	public synchronized void addEvent(Event event){
-		/*print*
-		if(event.getName().equals("CAMBIO FASE")) {
-			System.out.println("Scheduler: addEvent. "+(event.getName()));
-			System.out.println("---------- current time = "+currentTime);
-			System.out.println("---------- event time = "+event.getTime());
-//			System.out.println("---------- action at "+(currentTime + event.getTime()));
-			System.out.println("---------- contatore = "+(cont++));
-		}
-		/**/
-
 		event.shift(currentTime + event.getTime());
 		queue.add(event);
 		
 		
 	}
 	
-	/////////////////
 	public void stopSimulation(){
 		start = false;
 		queue.clear();
 		
 	}
-	//////////////////
 	public void run(){
 		start = true;
 		Event event = null;
@@ -122,10 +106,10 @@ public class Scheduler extends Thread{
 			
 		}
 		
-		/*print*/
+		/*print*
 		System.out.println("\n"+this+": SIMULAZIONE TERMINATA");
 		/**/
-		System.exit(-1);
+//		System.exit(-1);
 	}
 	// GETTER ////////////////////////////////
 	public double getCurrentTime(){return currentTime;}

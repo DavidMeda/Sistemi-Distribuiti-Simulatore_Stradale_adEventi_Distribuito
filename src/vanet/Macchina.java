@@ -1,8 +1,8 @@
 package vanet;
 
 
+import network.CityGraph;
 import network.NetEdge;
-import network.NetNode;
 import network.message.Message;
 import simEventiDiscreti.Event;
 import util.Param;

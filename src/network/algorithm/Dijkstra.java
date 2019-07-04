@@ -3,14 +3,12 @@ package network.algorithm;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
-
+import network.CityGraph;
 import network.NetEdge;
 import network.NetGraph;
 import network.NetNode;
-import vanet.CityGraph;
 
 public class Dijkstra {
 	

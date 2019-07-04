@@ -1,6 +1,7 @@
-package vanet;
+package network;
 
 import org.graphstream.ui.spriteManager.Sprite;
+
 import network.message.Message;
 import simEventiDiscreti.Entity;
 import simEventiDiscreti.Event;

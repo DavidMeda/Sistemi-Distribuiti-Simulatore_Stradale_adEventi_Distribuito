@@ -15,6 +15,8 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import ITS.regolatoriSemafori.Regolatore;
 import ITS.regolatoriSemafori.RegolatoreClassico;
+import ITS.regolatoriSemafori.RegolatoreIntelligente;
+import network.CityGraph;
 import network.NetEdge;
 import network.NetGraph;
 import network.NetNode;
@@ -27,7 +29,6 @@ import statistiche.ServerStatistiche;
 import statistiche.Variabili;
 import util.Param;
 import util.Path;
-import vanet.CityGraph;
 import vanet.Vehicle;
 
 public class RSU extends Thread implements Entity, RemoteRSU {
@@ -36,28 +37,23 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 	private NetGraph grafo;
 	private LinkedList<Vehicle> listaAutoIncrocio = new LinkedList<Vehicle>();
 	private int ID;
-	// macchine nel raggio d'azione dell'RSU
-	// private ArrayList<Vehicle> nearbyVehicle = new ArrayList<>(20);
-
-	private ArrayList<NetEdge> archiEntranti, archiUscenti;
-	private ArrayList<NetNode> nodiEntranti, nodiUscenti;
 	// tabella di routing con la lista degli archi per arrivare a destinazione
 	private HashMap<NetNode, LinkedList<Path>> routingTable = new HashMap<>();
+	private ArrayList<NetEdge> archiEntranti, archiUscenti;
+	private ArrayList<NetNode> nodiEntranti, nodiUscenti;
 	private ServerStatistiche serverStat;
 	private Variabili var;
-	// regola il verde ai semafori
 	private Regolatore regolatore;
-	// private Regolatore.Type tipoRegolatore = Param.tipoRegolatore;
-	// private Semaphore mutex = new Semaphore(1);
+	private static final boolean regolatoreClassico = true;
 
-	// COSTR //////////////////////////////
+
 	public RSU(Node node, int i) {
 		ID = i;
 		nodo = (NetNode) node;
 		grafo = nodo.getGraph();
 		var = new Variabili(this, ID);
 		/* print */
-		System.out.println("Creato " + this + "");
+		System.out.println("Creato " + this + " i= "+ID);
 		/**/
 	}
 	
@@ -72,24 +68,28 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 		while(true) {
 			try {
 				serverStat.updateStatistiche(this,  var);
-//				System.out.println(getNameRSU()+" update statistiche");
 				Thread.sleep(1000);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			//Se non ci sono più auto in circolazione posso uscire
 			if(((CityGraph)grafo).getNodiInMovimento().size()==0) break;
 		}
-		System.out.println("--------SIMULAZIONE FINITA!--------");
+
 		try {
-			System.out.println(serverStat.statisticheGenerali());
+			serverStat.richiestaStatisticheGenerali();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 	}
 
 	// METHODS ////////////////////////////
+	
+	@Override
+	public void stampaStatistiche(String statistica) throws RemoteException {
+		System.out.println("Il server mi ha mandato " + statistica);
+	}
 
 	public synchronized void init() {
 		var.numVeicoliTot(((CityGraph)grafo).getNumVeicoliTot());
@@ -112,20 +112,21 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 			}
 		}
 		// genera regolatore dei semafori
-		regolatore = new RegolatoreClassico(this, archiEntranti);
+		if(regolatoreClassico)
+			regolatore = new RegolatoreClassico(this, archiEntranti);
+		else
+			regolatore = new RegolatoreIntelligente(this, archiEntranti);
 		regolatore.init();
+		
 		routing();
+		
 		try {
-
 			UnicastRemoteObject.exportObject(this, 1098);
-			try {
-				serverStat = (ServerStatistiche) Naming.lookup("Server");
-			} catch (MalformedURLException | NotBoundException e) {
-				e.printStackTrace();
-			}
-
+			serverStat = (ServerStatistiche) Naming.lookup("Server");
+			
+			//iscrivo l'RSU alla lista del serverStatistiche
 			serverStat.registraRSU(this);
-		} catch (RemoteException e) {
+		} catch (MalformedURLException | NotBoundException  | RemoteException e) {
 			e.printStackTrace();
 		}
 	}
@@ -253,7 +254,6 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 		return routingTablePath;
 	}
 
-	
 	private synchronized NetEdge scegliProssimoArco(NetNode destination, NetEdge arcoDaEscludere) {
 
 		NetEdge arcoScelto = null;
@@ -277,31 +277,27 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 	}
 
 	public void handler(Event message) {
-
 		if (!(message instanceof Message))
 			throw new IllegalArgumentException("the event sended at " + this + " is not a message");
 		
-		
 		Message m = (Message) message;
-
-		// regolatore.handler(m);
-		// colonia.readMessage(m);
-
 		String nameMessage = m.getName();
+		
 		if (nameMessage.equals("ARRIVA MACCHINA")) {
+			var.updateMessaggiRicevutiRSU_RSU();
 			Vehicle v = (Vehicle) m.getData()[0];
 			listaAutoIncrocio.add(v);
-			var.updateMessaggiRicevutiRSU_RSU();
 		}
 
-		if (nameMessage.equals("CAMBIO ARCO")) {
+		else if (nameMessage.equals("CAMBIO ARCO")) {
 			var.getNumeroMessRicevutiRSU_Veicolo();
+			var.updateDistanzaCoperta((double)m.getData()[2]);
 			// indirizza auto
 			Vehicle vehicle = (Vehicle) m.getSource();
 			NetEdge nextEdge = scegliProssimoArco(vehicle.getTargetNode(), vehicle.getCurrentEdge());
 			listaAutoIncrocio.remove(vehicle);
 
-			// se è null vuol dire che soo arrivato a destinazine
+			// se è null vuol dire che la macchina è arrivata a destinazine
 			if (nextEdge != null) {
 				Message toRsu = new Message("ARRIVA MACCHINA", nodo, nextEdge.getTargetNode(), Param.elaborationTime);
 				toRsu.setData(vehicle);
@@ -309,7 +305,7 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 				var.updateMessaggiInviatiRSU_RSU();
 			}
 			// System.out.println(this+" arrivato cambio arco da "+vehicle);
-			// comunica all'auto in quale arco Ã¨ stata indirizzata
+			// comunica all'auto in quale arco è stata indirizzata
 			Message direzione = new Message("DIREZIONE", nodo, vehicle, Param.elaborationTime);
 			direzione.setData(nextEdge);
 			sendEvent(direzione);
@@ -334,8 +330,6 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 			forCar.setData(nextEdge);
 			sendEvent(forCar);
 			var.getNumeroMessInviatiRSU_Veicolo();
-//			Message updateStatistiche = new Message("STATISTICHE", this, this, Param.elaborationTime);
-//			sendEvent(updateStatistiche);
 
 			// se sono la destinazione non fare niente
 			if (destinationOfVehicle.equals(nodo)) {
@@ -344,96 +338,67 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 			}
 
 		} else if (nameMessage.equals("CAMBIO FASE")) {
+			var.updateMessaggiInviatiRSU_RSU();
+			var.updateMessaggiRicevutiRSU_RSU();
 			regolatore.nextPhase();
 			var.getNumeroMessInviatiRSU_RSU();
 		} else if (nameMessage.equals("DESTINAZIONE")) {
 			Vehicle v = (Vehicle) m.getSource();
 			var.updateMessaggiRicevutiRSU_Veicolo();
+			var.updateTempoDiAttesa((double)m.getData()[2]);
+			
 			// rimuovo il veicolo dal grafo
-			// try {
-			// mutex.acquire();
-			// } catch (InterruptedException e) {
-			// e.printStackTrace();
-			// }
 			((CityGraph) grafo).rimuoviVeicolo(v);
 			((CityGraph) grafo).removeMobileNode(v);
-			// mutex.release();
 			v.addAttribute("ui.style", "fill-color: rgba(0,0,0,100);");
 			v.addAttribute("ui.label", "");
-//			statistiche();
-//			try {
-//				System.out.println(serverStat.statisticheGenerali());
-//			} catch (RemoteException e) {
-//				e.printStackTrace();
-//			}
 		} 
-//		else if (nameMessage.equals("STATISTICHE")) {
-//			try {
-//				serverStat.updateStatistiche(ID, "NUMERO AUTO", numMessaggi);
-//				serverStat.updateStatistiche(ID, "NUMERO MESSAGGI", numMessaggi);
-//
-//			} catch (RemoteException e) {
-//				e.printStackTrace();
-//			}
-//		}
 
 	}
 
-//	public void statistiche() {
-//		try {
-//			serverStat.updateStatistiche(this, "NUMERO AUTO", numAuto);
-//			serverStat.updateStatistiche(this, "NUMERO MESSAGGI", numMessaggi);
-////			System.out.println(this+ "update");
-//		} catch (RemoteException e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-	
-	
 	
 	// METODI PER LE STATISTICHE //////////
 	
-		public double getCongestioneMediaArchi() {
-			double gradoCongestione = 0.0;
+	public double getCongestioneMediaArchi() {
+		double gradoCongestione = 0.0;
+		
+		double gradoCongestioneArcoCorrente = 0.0;
+		double lunghezzaArcoCorrente = 0.0;
+		double capacitaArcoCorrente = 0.0;
+		double numeroVeicoliSuArcoCorrente = 0.0;
+		for(NetEdge e : archiEntranti) {
+			lunghezzaArcoCorrente = (double)e.getAttribute("length");
 			
-			double gradoCongestioneArcoCorrente = 0.0;
-			double lunghezzaArcoCorrente = 0.0;
-			double capacitaArcoCorrente = 0.0;
-			double numeroVeicoliSuArcoCorrente = 0.0;
-			for(NetEdge e : archiEntranti) {
-				lunghezzaArcoCorrente = (double)e.getAttribute("length");
-				
-				capacitaArcoCorrente = (int)(lunghezzaArcoCorrente / Param.distanzaInterveicolo);
-				numeroVeicoliSuArcoCorrente = ((CityGraph)grafo).getVehiclesOnTheEdge(e.getId()).size();
-				
-				gradoCongestioneArcoCorrente = (numeroVeicoliSuArcoCorrente / capacitaArcoCorrente);
-				
-				gradoCongestione += gradoCongestioneArcoCorrente;
-			}
+			capacitaArcoCorrente = (int)(lunghezzaArcoCorrente / Param.distanzaInterveicolo);
+			numeroVeicoliSuArcoCorrente = ((CityGraph)grafo).getVehiclesOnTheEdge(e.getId()).size();
 			
-			return gradoCongestione / archiEntranti.size();
+			gradoCongestioneArcoCorrente = (numeroVeicoliSuArcoCorrente / capacitaArcoCorrente);
+			
+			gradoCongestione += gradoCongestioneArcoCorrente;
 		}
 		
-		public double getCongestione() {
-			double veicoliPresentiSugliArchi = 0.0;
-			double capacitaArchi = 0.0;
+		return gradoCongestione / archiEntranti.size();
+	}
+	
+	public double getCongestione() {
+		double veicoliPresentiSugliArchi = 0.0;
+		double capacitaArchi = 0.0;
+		
+		double veicoliSuArcoCorrente = 0.0;
+		double lunghezzaArcoCorrente = 0.0;
+		for(NetEdge e : archiEntranti) {
+			veicoliSuArcoCorrente = ((CityGraph)grafo).getVehiclesOnTheEdge(e.getId()).size();
+			lunghezzaArcoCorrente = (double)e.getAttribute("length");
 			
-			double veicoliSuArcoCorrente = 0.0;
-			double lunghezzaArcoCorrente = 0.0;
-			for(NetEdge e : archiEntranti) {
-				veicoliSuArcoCorrente = ((CityGraph)grafo).getVehiclesOnTheEdge(e.getId()).size();
-				lunghezzaArcoCorrente = (double)e.getAttribute("length");
-				
-				veicoliPresentiSugliArchi += veicoliSuArcoCorrente;
-				capacitaArchi += (lunghezzaArcoCorrente / Param.distanzaInterveicolo);
-			}
-			
-			return veicoliPresentiSugliArchi / capacitaArchi;
-			
+			veicoliPresentiSugliArchi += veicoliSuArcoCorrente;
+			capacitaArchi += (lunghezzaArcoCorrente / Param.distanzaInterveicolo);
 		}
+		
+		return veicoliPresentiSugliArchi / capacitaArchi;
+		
+	}
 
-
+	///////SET E GET///////////////////////
 	@Override
 	public String toString() {
 		return "RSU[nodo " + nodo.getId() + "]";
@@ -458,12 +423,6 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 		return nodo;
 	}
 
-	@Override
-	public void stampaStatistiche(double statistica) throws RemoteException {
-//		System.out.println("Il server mi ha mandato " + statistica);
-
-	}
-
 	public int getID() throws RemoteException {
 		return ID;
 	}
@@ -472,5 +431,6 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 	public String getNameRSU() throws RemoteException {
 		return "RSU[nodo " + nodo.getId() + "]";
 	}
+	
 
 }
