@@ -11,14 +11,9 @@ import vanet.Vehicle;
 public abstract class ABS_Semaforo implements Semaforo {
 	protected boolean verde = false;
 	protected LinkedList<Vehicle> coda = null;
-	
 	//arco associato al semaforo
 	protected NetEdge edge = null;
 	protected boolean sempreVerde = false;
-	
-	//gestore messaggi
-//	protected MessageManager messageManager = null;
-	
 	//regolatore a cui è stato assegnato il semaforo
 	protected Regolatore regolatore = null;
 	
@@ -28,8 +23,6 @@ public abstract class ABS_Semaforo implements Semaforo {
 		this.regolatore = regolatore;
 	}
 	
-	// OVERRIDE /////////////
-	//from semaforo
 
 	@Override
 	public NetEdge getEdge() {

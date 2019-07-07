@@ -5,9 +5,6 @@ import network.CityGraph;
 import network.NetEdge;
 
 public class SemaforoClassico extends ABS_Semaforo{
-	//lista delle auto sull'arco
-//	private LinkedList<Vehicle> coda = null;
-	
 	//tempo di verde in millesecondi
 	private final double tempoDiVerde = 1000;
 	
@@ -28,19 +25,6 @@ public class SemaforoClassico extends ABS_Semaforo{
 		
 		return tempoDiVerde;
 	}
-//	private void avvisaVeicoli(String messaggio){
-//		Message msg = null;
-//		RSU sourceRSU = regolatore.getRSU();
-//		/*print*
-//		if(source.getId().equals("A")) {
-//		System.out.println(this+": messaggio "+messaggio+" alla coda del semaforo = "+coda);
-//		}
-//		/**/
-//		for(Vehicle v : coda){
-//			msg = new Message(messaggio, sourceRSU, v, Param.elaborationTime);
-//			sourceRSU.sendEvent(msg);
-//		}
-//	}
 
 	@Override
 	public void setRosso() {

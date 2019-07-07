@@ -10,12 +10,10 @@ import util.Param;
 import vanet.Vehicle;
 
 public class CityGraph extends NetGraph {
-	// INSTANCE ///////////////////////
 
 	private HashMap<NetEdge, LinkedList<Vehicle>> vehiclesAttached = new HashMap<>();
 	private LinkedList<MobileNode> mobileNodes = new LinkedList<>(), nodiInMovimento = new LinkedList<>();
 	private SpriteManager vehicleManager;
-	// private Statistiche statistiche = new Statistiche();
 	private LinkedList<Vehicle> veicoliDaRimuovere = new LinkedList<>();
 	public static int cont = 0;
 
@@ -26,19 +24,12 @@ public class CityGraph extends NetGraph {
 		vehicleManager = new SpriteManager(this);
 
 	}
-	// public CityGraph(String name, Scheduler scheduler) {
-	// super(name, scheduler);
-	// vehicleManager = new SpriteManager(this);
-	//
-	// }
-	
 
 	// GETTER ///////////////////////////////////
 	public LinkedList<MobileNode> getNodiInMovimento() {
 		return nodiInMovimento;
 	}
 
-	// public Statistiche getStatistiche() {return statistiche;}
 	public HashMap<NetEdge, LinkedList<Vehicle>> getVehicles() {
 		return vehiclesAttached;
 	}
@@ -54,17 +45,8 @@ public class CityGraph extends NetGraph {
 		return vehiclesAttached.get(e);
 	}
 
-	// public void setStatistiche(Statistiche statistiche){this.statistiche = statistiche;}
-
 	// METHODS //////////////////////////////////
 
-//	public void ping() throws InterruptedException {
-		// for(Entry<NetNode, RSU> e : mappaNodoRSU.entrySet() ){
-		// e.getValue().pingToVehicle();
-		// }
-		// getScheduler().addEvent(new Ping(this, Param.pingTime));
-
-//	}
 
 	public void setNodoInMovimento(MobileNode nodoMobile) {
 		mobileNodes.remove(nodoMobile);
@@ -81,23 +63,10 @@ public class CityGraph extends NetGraph {
 			n.move();
 		}
 
-//		if((nodiInMovimento.size()==0 && mobileNodes.size()==0)) {
-//			System.out.println("FINE");
-//			return;
-//		}
 		getScheduler().addEvent(new UpdatePosition(this, Param.updatePositionTime));
 
 	}
 	
-	public void updateStatistiche() {
-//		for (Node n : getEachNode()) {
-//			((NetNode)n).updateStatisticheRSU();
-//		}
-//		getScheduler().addEvent(new UpdateStatistiche(this, Param.updateStatisticTime));
-		
-	}
-
-	// public void addStatistica(Stat stat) {statistiche.addStat(stat);}
 
 	@Override
 	public void init() {
@@ -105,7 +74,6 @@ public class CityGraph extends NetGraph {
 			vehiclesAttached.put((NetEdge) e, new LinkedList<>());
 		}
 		getScheduler().addEvent(new UpdatePosition(this, Param.updatePositionTime));
-//		getScheduler().addEvent(new UpdateStatistiche(this, Param.updateStatisticTime));
 
 		super.init();
 
@@ -154,7 +122,7 @@ public class CityGraph extends NetGraph {
 		if (mobileNodes.size() == 0 && nodiInMovimento.size() == 0) getScheduler().stopSimulation();
 	}
 
-	// return true if is full
+	// return true se l'arco è pieno di veicoli
 	public boolean edgeIsFull(NetEdge edge) {
 		int numMaxVehicle = (int) ((double) edge.getAttribute("length") / (Param.distanzaInterveicolo));
 

@@ -16,9 +16,6 @@ public final class Param {
 		Param.seed = seed;
 		random = new Random(seed);
 	}
-//	public static void setPeriodoGenerazione(double periodoGenerazione){
-//		Param.periodoGenerazione = periodoGenerazione;
-//	}
 	
 	
 	/*/* parametri messaggi /**/

@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.3" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <interface id="1" language="java" name="ITS.RSU.RemoteRSU" project="Sistemi Distribuiti progetto" 
+    file="/Sistemi Distribuiti progetto/src/ITS/RSU/RemoteRSU.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="695" y="-100"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="2" language="java" name="ITS.RSU.RSU" project="Sistemi Distribuiti progetto" 
+    file="/Sistemi Distribuiti progetto/src/ITS/RSU/RSU.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="708" y="275"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="3" language="java" name="ITS.regolatoriSemafori.Regolatore" project="Sistemi Distribuiti progetto" 
+    file="/Sistemi Distribuiti progetto/src/ITS/regolatoriSemafori/Regolatore.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1205" y="280"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="4" language="java" name="ITS.regolatoriSemafori.RegolatoreIntelligente" 
+    project="Sistemi Distribuiti progetto" 
+    file="/Sistemi Distribuiti progetto/src/ITS/regolatoriSemafori/RegolatoreIntelligente.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1683" y="-100"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="ITS.regolatoriSemafori.ABS_Regolatore.Fase" project="Sistemi Distribuiti progetto" 
+    file="/Sistemi Distribuiti progetto/src/ITS/regolatoriSemafori/ABS_Regolatore.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1629" y="304"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="ITS.regolatoriSemafori.RegolatoreClassico" project="Sistemi Distribuiti progetto" 
+    file="/Sistemi Distribuiti progetto/src/ITS/regolatoriSemafori/RegolatoreClassico.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1682" y="41"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="ITS.regolatoriSemafori.ABS_Regolatore" project="Sistemi Distribuiti progetto" 
+    file="/Sistemi Distribuiti progetto/src/ITS/regolatoriSemafori/ABS_Regolatore.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1334" y="3"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="ITS.semafori.ABS_Semaforo" project="Sistemi Distribuiti progetto" 
+    file="/Sistemi Distribuiti progetto/src/ITS/semafori/ABS_Semaforo.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1124" y="546"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="ITS.semafori.SemaforoIntelligente" project="Sistemi Distribuiti progetto" 
+    file="/Sistemi Distribuiti progetto/src/ITS/semafori/SemaforoIntelligente.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1061" y="830"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="ITS.semafori.SemaforoClassico" project="Sistemi Distribuiti progetto" 
+    file="/Sistemi Distribuiti progetto/src/ITS/semafori/SemaforoClassico.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1378" y="787"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="network.NetNode" project="Sistemi Distribuiti progetto" 
+    file="/Sistemi Distribuiti progetto/src/network/NetNode.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="276" y="242"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="12" language="java" name="ITS.semafori.Semaforo" project="Sistemi Distribuiti progetto" 
+    file="/Sistemi Distribuiti progetto/src/ITS/semafori/Semaforo.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="142" width="136" x="1514" y="492"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="13" language="java" name="vanet.Vehicle" project="Sistemi Distribuiti progetto" 
+    file="/Sistemi Distribuiti progetto/src/vanet/Vehicle.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="251" y="972"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <realization id="14">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="12"/>  
+  </realization>  
+  <association id="15">    
+    <bendpoint x="177" y="521"/>    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="16" name="destinationNode">        
+        <position height="20" width="104" x="142" y="464"/>      
+      </attribute>      
+      <multiplicity id="17" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="18">    
+    <bendpoint x="1434" y="209"/>    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="5"/>  
+  </nesting>  
+  <association id="19">    
+    <bendpoint x="1575" y="449"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="20" name="sottoFasi">        
+        <position height="20" width="62" x="1509" y="447"/>      
+      </attribute>      
+      <multiplicity id="21" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="22">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <association id="23">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="24" name="listaAutoIncrocio">        
+        <position height="20" width="104" x="394" y="755"/>      
+      </attribute>      
+      <multiplicity id="25" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="13" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="26">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <association id="27">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="28" name="regolatore"/>      
+      <multiplicity id="29" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="30">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="31" name="fasi">        
+        <position height="20" width="28" x="1491" y="144"/>      
+      </attribute>      
+      <multiplicity id="32" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="33">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="34" name="registeredNode">        
+        <position height="20" width="98" x="213" y="433"/>      
+      </attribute>      
+      <multiplicity id="35" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="36">    
+    <bendpoint x="460" y="281"/>    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="37" name="rsu">        
+        <position height="20" width="26" x="496" y="282"/>      
+      </attribute>      
+      <multiplicity id="38" minimum="0" maximum="1">        
+        <position height="18" width="27" x="478" y="259"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="39">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="40" name="regolatore"/>      
+      <multiplicity id="41" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="42">    
+    <bendpoint x="111" y="513"/>    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="43" name="startingNode">        
+        <position height="20" width="84" x="68" y="426"/>      
+      </attribute>      
+      <multiplicity id="44" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="45">    
+    <bendpoint x="1588" y="164"/>    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="46" name="faseCorrente">        
+        <position height="20" width="81" x="1565" y="133"/>      
+      </attribute>      
+      <multiplicity id="47" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="48">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <association id="49">    
+    <bendpoint x="505" y="211"/>    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="50" name="nodo"/>      
+      <multiplicity id="51" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="52">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="3"/>  
+  </realization>  
+  <association id="53">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="54" name="coda"/>      
+      <multiplicity id="55" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="13" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="56">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <association id="57">    
+    <bendpoint x="355" y="528"/>    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="58" name="currentNode">        
+        <position height="20" width="81" x="290" y="464"/>      
+      </attribute>      
+      <multiplicity id="59" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="60">    
+    <bendpoint x="1620" y="445"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="61" name="semaforoPrincipale">        
+        <position height="20" width="118" x="1628" y="432"/>      
+      </attribute>      
+      <multiplicity id="62" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="63">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <association id="64">    
+    <bendpoint x="404" y="524"/>    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="65" name="nextNode">        
+        <position height="20" width="66" x="373" y="430"/>      
+      </attribute>      
+      <multiplicity id="66" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="67">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="68" name="sourceRSU">        
+        <position height="20" width="77" x="931" y="177"/>      
+      </attribute>      
+      <multiplicity id="69" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

@@ -3,7 +3,7 @@ package statistiche;
 import java.io.Serializable;
 import ITS.RSU.RemoteRSU;
 
-public class Variabili implements Serializable {
+public class Variabile implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private RemoteRSU rsu;
@@ -19,7 +19,7 @@ public class Variabili implements Serializable {
 	messRicevutiRSU_RSU = 0, messInviatiRSU_RSU = 0, messRicevutiRSU_Veicolo = 0, messInviatiRSU_Veicolo = 0,
 					messRicevuti = 0, messInviati = 0, messTotali = 0, veicoliperRSU = 0, veicoliTot = 0;
 
-	public Variabili(RemoteRSU r, int id) {
+	public Variabile(RemoteRSU r, int id) {
 		rsu = r;
 		idRSU = id;
 	}

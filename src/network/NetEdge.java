@@ -31,7 +31,6 @@ public class NetEdge extends AbstractEdge{
 		if(!(o instanceof NetEdge))return false;
 		NetEdge e = (NetEdge)o;
 		boolean sameNode = e.getSourceNode().equals(getSourceNode()) && e.getTargetNode().equals(getTargetNode());
-//		boolean sameLength = (Integer)(e.getAttribute("length")) == (Integer)(getAttribute("length")); 
 		return  sameNode;
 	}
 	@Override

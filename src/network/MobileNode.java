@@ -10,7 +10,6 @@ import simEventiDiscreti.Scheduler;
 public abstract class MobileNode extends Sprite implements Entity{	
 	
 	private CityGraph graph;
-//	private Scheduler scheduler;
 	private String id;
 	
 	//////////////////////////////////////////

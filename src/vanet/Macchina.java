@@ -28,25 +28,8 @@ public class Macchina extends Vehicle{
 			message = (Message)event;
 		}
 		
-		
 		switch(event.getName()){
 		
-		/********/	
-//		case "PING":
-//			/*print*
-//			System.out.println(this+" ha ricevuto ping da "+message.getSource());
-//			/**/
-//			
-//			
-//			if(message.getSource() == registeredNode)return;
-//			
-//			sendEvent(new Message("PONG", this, message.getSource(), Param.elaborationTime));
-//			
-//			registeredNode = (NetNode)message.getSource();
-//			break;
-		
-			
-		/********/		
 		case "VERDE":
 			/*print*
 			System.out.println(this+": è arrivato il verde dal semaforo di "+message.getSource());			
@@ -55,8 +38,6 @@ public class Macchina extends Vehicle{
 			moving = true;
 			break;
 		
-		
-		/********/		
 		case "ROSSO":
 			/*print*
 			System.out.println(this+": è arrivato il rosso dal semaforo di "+message.getSource());
@@ -66,8 +47,6 @@ public class Macchina extends Vehicle{
 			moving = false;
 			break;	
 			
-			
-		/********/		
 		case "DIREZIONE":
 			NetEdge nextEdge = (NetEdge)message.getData()[0];
 			path.add(nextEdge);
@@ -77,11 +56,8 @@ public class Macchina extends Vehicle{
 			System.out.println("\n"+this+": aggiunto "+nextEdge+" al percorso");
 			/**/
 			
-			
 			break;
-		
 			
-		/********/		
 		case "START":
 			/*print*
 			System.out.println("\n"+this+" START!!! destinazione "+destinationNode);
@@ -89,8 +65,6 @@ public class Macchina extends Vehicle{
 			moving = true;
 			registeredNode = getCurrentNode();
 			
-//			getGraph().setNodoInMovimento(this);
-//			getPathTo(destinationNode);
 			path.clear();
 			
 			/*print*
@@ -98,7 +72,6 @@ public class Macchina extends Vehicle{
 			/**/
 			
 			Message askPath = new Message("RICHIESTA PERCORSO", this, currentNode, Param.elaborationTime); 
-			
 			askPath.setData(destinationNode);
 			sendEvent(askPath);
 			break;
@@ -111,11 +84,5 @@ public class Macchina extends Vehicle{
 		return "Macchina["+getId()+"]";
 	}
 	
-	////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////
-	
-//	public static void main(String[] args) {
-//	
-//	}
 
 }

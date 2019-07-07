@@ -34,31 +34,6 @@ public class Message extends Event {
 	
 	public void action() {
 		destination.handler(this);
-		if(destination != source && !getName().equals("START") && !getName().equals("CAMBIO_FASE")){
-			
-//			if(source instanceof Vehicle && destination instanceof RSU){
-//				((Vehicle)source).getStat().updateMessTotali();
-//				((Vehicle)source).getStat().updateMessInviatiVeicolo_RSU();
-//				((RSU)destination).getStat().updateMessaggiRicevutiRSU_Veicolo();
-//				((RSU)destination).getStat().updateMessaggiTotali();
-//			}
-//			
-//			
-//			if(source instanceof RSU &&  destination instanceof Vehicle){
-//				((RSU)source).getStat().updateMessaggiTotali();
-//				((RSU)source).getStat().updateMessaggiInviatiRSU_Veicolo();
-//				((Vehicle)destination).getStat().updateMessTotali();
-//				((Vehicle)destination).getStat().updateMessRicevutiVeicolo_RSU();
-//				
-//			}
-//			if(source instanceof RSU &&  destination instanceof RSU ){
-//				((RSU)source).getStat().updateMessaggiTotali();
-//				((RSU)source).getStat().updateMessaggiTotali();
-//				((RSU)source).getStat().updateMessaggiInviatiRSU_RSU();
-//				((RSU)source).getStat().updateMessaggiRicevutiRSU_RSU();
-//
-//			}
-		}
 		
 	}
 

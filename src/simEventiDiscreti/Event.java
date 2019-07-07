@@ -3,7 +3,6 @@ package simEventiDiscreti;
 public abstract class Event implements Comparable<Event>{
 	//name of the event
 	String name = null;
-	
 	//tra quanti millisecondi parte l'evento
 	Double shiftTime = null;
 	
@@ -14,7 +13,6 @@ public abstract class Event implements Comparable<Event>{
 		shiftTime = amongManyMillisec;
 
 	}
-	//////////////////////////////////////////////
 	
 	//azione da compiere dopo l'evento
 	public abstract void action();

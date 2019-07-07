@@ -14,7 +14,6 @@ import util.Param;
 
 public class NetGraph extends MultiGraph {
 	
-	protected HashMap<NetNode,RSU> mappaNodoRSU = new HashMap<NetNode,RSU>();
 
 	// //////////////////////
 	// node factory
@@ -45,13 +44,6 @@ public class NetGraph extends MultiGraph {
 		scheduler = new Scheduler(Param.orizzonteTemporaleSimulazione);
 
 	}
-	// public NetGraph(String name, Scheduler scheduler) {
-	// super(name);
-	// setNodeFactory(new NetNodeFactory());
-	// setEdgeFactory(new NetEdgeFactory());
-	// this.scheduler = scheduler;
-	// }
-	//////////////////////////////////////
 
 	// SETTER /////////////////////////
 	public NetGraph setDescription(String description) {
@@ -68,7 +60,6 @@ public class NetGraph extends MultiGraph {
 		return description;
 	}
 	
-	public HashMap<NetNode,RSU> getMappa(){return mappaNodoRSU;}
 
 	// METHODS ///////////////////
 	public void resetScheduler() {
@@ -78,9 +69,6 @@ public class NetGraph extends MultiGraph {
 	public void init() {
 		for (Node n : getEachNode()) {
 			((NetNode)n).init();
-//			RSU rsu = new RSU(n);
-//			mappaNodoRSU.put(((NetNode)n), rsu);
-//			rsu.start();
 		}
 	}
 
@@ -125,9 +113,5 @@ public class NetGraph extends MultiGraph {
 	}
 	//////////////////////////////////////////////////////////
 
-	// public static void main(String[] args) {
-	// NetGraph n = new NetGraph("");
-	//
-	// }
 
 }

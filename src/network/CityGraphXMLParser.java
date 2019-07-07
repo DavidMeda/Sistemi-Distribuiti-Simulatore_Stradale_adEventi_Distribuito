@@ -108,59 +108,6 @@ public class CityGraphXMLParser {
     				}
     			}
 
-    			//create flows of mobile node
-//    			listElement = _graph.getChildren("flow");
-//
-//    			String type = "";
-//    			String flowName = "";
-//    			String startingNode, endingNode;
-//    			Class<Macchina> sprite = null;
-//    			Sprite vehicle = null;
-//    			int maxNode = 0;
-//    			int idVehicle = 0;
-//    			long generationPeriod = 0;
-//    			FlussoVeicolare flusso;
-//    			StatFlusso statFlusso;
-//    			StatisticheFlussi statisticheFlussi = new StatisticheFlussi();
-//    			for(Element _flow : listElement) {
-//    				
-//    				
-//    				flowName = _flow.getAttributeValue("name");
-//    				type = _flow.getAttributeValue("type");
-//    				startingNode = _flow.getAttributeValue("source");
-//    				endingNode = _flow.getAttributeValue("destination");
-//    				generationPeriod = Long.parseLong(_flow.getAttributeValue("generationPeriod"));
-//    				maxNode = Integer.parseInt(_flow.getAttributeValue("numberOfNode"));
-//    				
-//    				switch(type){
-//        			case "macchina": sprite = Macchina.class; break;
-//        			default: throw new IllegalArgumentException("type not specificated");
-//        			}
-//    				
-//        			
-//        			flusso = new FlussoVeicolare(flowName, startingNode, endingNode, generationPeriod);
-//        			statFlusso = new StatFlusso(flusso);
-//
-//        			int i = idVehicle;
-//        			int t = 0;
-//        			for(; i< idVehicle+maxNode; i++) {
-//        				vehicle = graph.addMobileNode(i, sprite);
-//        				
-//        				if(vehicle instanceof Vehicle){
-//        					((Vehicle)vehicle).setStartingNode(startingNode);
-//        					((Vehicle)vehicle).setTargetNode(endingNode);
-//							//START macchina
-//							((Vehicle)vehicle).beginsToMoveAt((t++) * generationPeriod);
-//							((Vehicle)vehicle).addAttribute("ui.label", vehicle.getId());
-//							((Vehicle)vehicle).setStatFlusso(statFlusso);
-//						}
-//        			}
-//        			statisticheFlussi.addStatFlusso(statFlusso);
-//        			idVehicle = i;
-//    				
-//    			}
-//    			graph.getStatistiche().addStat(statisticheFlussi);
-//    			graph.addStatistica(new StatisticheVeicoli());
     			
     			//set graphic 
     			listElement = _graph.getChildren("stylesheet");
@@ -175,22 +122,4 @@ public class CityGraphXMLParser {
     
     }
     
-    
-    /////////////////////////////////////////////////
-	/////////////////////////////////////////////
-//    public static void main(String[] args) {
-//		CityGraph g = new CityGraph("");
-//		g.addNode("A").addAttribute("ui.label", "A");
-//		
-//		g.display();
-//	}
-    
-//    public static void main(String[] args) {
-//		CityGraph g = new CityGraph("");
-//		NetNode a = g.addNode("A");
-//		MultiNode b = g.addNode("B");
-//		
-//		g.addEdge(":(", a, b);
-//		g.display();
-//	}
 }

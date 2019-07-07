@@ -7,6 +7,5 @@ public interface Entity {
 	//aggiungi evento allo sheduler
 	void sendEvent(Event event);
 		
-//	void setScheduler(Scheduler scheduler);
 	Scheduler getScheduler();
 }

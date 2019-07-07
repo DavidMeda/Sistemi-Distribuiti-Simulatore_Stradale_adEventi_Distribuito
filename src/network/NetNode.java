@@ -42,26 +42,11 @@ public class NetNode extends MultiNode implements Entity {
 	//from entity
 	@Override
 	public void handler(Event event){
-//		HashMap<NetNode,RSU> mappaNodoRSU =  ((NetGraph)getGraph()).getMappa();
-//		for(Entry<NetNode, RSU> e : mappaNodoRSU.entrySet()) {
-//			if(e.getKey().equals(this)) {
-//				e.getValue().handler(event);
-//			}
-//		}
 		rsu.handler(event);
 	}
 
-//	@Override
-//	public void setScheduler(Scheduler scheduler) {
-//		this.scheduler = scheduler;
-//	}
-//	public void updateStatisticheRSU() {
-//		rsu.statistiche();
-//	}
-//	
 	@Override
 	public Scheduler getScheduler() {
-//		return scheduler;
 		return graph.getScheduler();
 	}
 
@@ -70,35 +55,21 @@ public class NetNode extends MultiNode implements Entity {
 		graph.getScheduler().addEvent(event);
 	}
 	
-	
-	
 	public RSU getRsu() {
 		return rsu;
 	}
 
-
-	
 	public void setRsu(RSU rsu) {
 		this.rsu = rsu;
 	}
 
-
-	
 	public NetGraph getGraph() {
 		return graph;
 	}
 
-
-	
 	public void setGraph(NetGraph graph) {
 		this.graph = graph;
 	}
-
-
-//	public void ping() throws InterruptedException {
-//		rsu.pingToVehicle();
-//	}
-	
 	//from object
 	@Override
 	public boolean equals(Object netNode){

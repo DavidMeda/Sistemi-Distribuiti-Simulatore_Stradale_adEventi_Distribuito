@@ -9,13 +9,8 @@ import vanet.Vehicle;
 
 public class SemaforoIntelligente extends ABS_Semaforo{
 	private boolean verde = false;
-//	private LinkedList<Vehicle> coda = null;
-	
-//	private double velocitaVeicolo = Param.velocitaVeicolo;
 	private double raggioAccettazione = Param.distanzaMinimaAutorizzazione;
-	
 	private double sogliaCongestione = 0.8;
-	
 	//soglia minima e massima del tempo di verde
 	private double tempoMin, tempoMax;
 
@@ -33,16 +28,6 @@ public class SemaforoIntelligente extends ABS_Semaforo{
 	}
 	
 	// METHODS /////////////////
-//	private void avvisaVeicoli(String messaggio){
-//		Message msg = null;
-//		RSU source = regolatore.getRSU();
-//		
-//		for(Vehicle v : coda){
-//			msg = new Message(messaggio, source, v, Param.elaborationTime);
-//			source.sendEvent(msg);
-//		}
-//	}
-	
 	private boolean macchineVicine(){
 		double lunghezzaArco = ((Double)edge.getAttribute("length"));
 		double distanzaMinima = lunghezzaArco - ((Double)coda.getFirst().getPositionOnTheEdge());
