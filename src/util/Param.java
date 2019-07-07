@@ -16,6 +16,9 @@ public final class Param {
 		Param.seed = seed;
 		random = new Random(seed);
 	}
+	public static boolean semaforoClassico;
+	
+	public static void setSemaforo(boolean flag) { semaforoClassico = flag;}
 	
 	
 	/*/* parametri messaggi /**/
@@ -44,7 +47,7 @@ public final class Param {
 	public static void setVelocitaVeicoli(double chilometriOrari) {velocitaVeicolo = conversione_Km_h(chilometriOrari);}
 	
 	public static final double
-	lunghezzaVeicolo = 3, //[metri]
+	lunghezzaVeicolo = 4, //[metri]
 	distanzaDiSicurezza = 2, //distanza minima tra due veicoli consecutivi [metri]
 	//distanza tra i centri di 2 veicoli consecutivi [metri]
 	distanzaInterveicolo = lunghezzaVeicolo + distanzaDiSicurezza; 

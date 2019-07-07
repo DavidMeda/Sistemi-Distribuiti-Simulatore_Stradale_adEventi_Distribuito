@@ -1,13 +1,13 @@
 package ITS.semafori;
 
 import ITS.regolatoriSemafori.Regolatore;
-import ITS.regolatoriSemafori.RegolatoreIntelligente;
+import ITS.regolatoriSemafori.RegolatoreASoglia;
 import network.CityGraph;
 import network.NetEdge;
 import util.Param;
 import vanet.Vehicle;
 
-public class SemaforoIntelligente extends ABS_Semaforo{
+public class SemaforoASoglia extends ABS_Semaforo{
 	private boolean verde = false;
 	private double raggioAccettazione = Param.distanzaMinimaAutorizzazione;
 	private double sogliaCongestione = 0.8;
@@ -15,9 +15,10 @@ public class SemaforoIntelligente extends ABS_Semaforo{
 	private double tempoMin, tempoMax;
 
 	
-	public SemaforoIntelligente(Regolatore regolatore, NetEdge edge) {
+	public SemaforoASoglia(Regolatore regolatore, NetEdge edge) {
 		super(regolatore,edge);
 		CityGraph g = (CityGraph)edge.getTargetNode().getGraph();
+		//lista che viene assegnata come riferimento dal grafo che ne gestisce aggiunta e rimozione 
 		coda = g.getVehiclesOnTheEdge(edge.getId());
 		
 		//tempo per far arrivare all'incrocio l'auto all'interno del raggio
@@ -25,6 +26,7 @@ public class SemaforoIntelligente extends ABS_Semaforo{
 				
 		//tempo per far passare tutta la coda
 		tempoMax = ((double)edge.getAttribute("length") / Param.velocitaVeicolo) - tempoMin;
+		System.out.println("SEMAFORO INTELLIGENTE");
 	}
 	
 	// METHODS /////////////////
@@ -50,7 +52,7 @@ public class SemaforoIntelligente extends ABS_Semaforo{
 		if(!macchineVicine())return 0.0;
 		
 		//restituisce quanto contribuisce quest'arco a congestionare l'incrocio
-		double gradoCongestione = ((double)((RegolatoreIntelligente)regolatore).getCongestione(this));
+		double gradoCongestione = ((double)((RegolatoreASoglia)regolatore).getCongestione(this));
 		
 		//si da preferenza alle code che provocano meno congestione
 		double percentuale =  ((double)1 - gradoCongestione);

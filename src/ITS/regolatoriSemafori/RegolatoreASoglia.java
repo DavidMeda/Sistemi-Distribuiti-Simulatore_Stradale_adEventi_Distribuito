@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.Map.Entry;
 import ITS.RSU.RSU;
 import ITS.semafori.Semaforo;
-import ITS.semafori.SemaforoIntelligente;
+import ITS.semafori.SemaforoASoglia;
 import network.CityGraph;
 import network.NetEdge;
 import network.NetNode;
 
-public class RegolatoreIntelligente extends ABS_Regolatore{
+public class RegolatoreASoglia extends ABS_Regolatore{
 	
 
-	public RegolatoreIntelligente(RSU rsu, List<NetEdge> archiEntranti) {
+	public RegolatoreASoglia(RSU rsu, List<NetEdge> archiEntranti) {
 		super(rsu, archiEntranti, false);
 	}
 	
@@ -37,15 +37,13 @@ public class RegolatoreIntelligente extends ABS_Regolatore{
 		setFasi(fasi);
 
 //		//inizia il ciclo delle fasi
-//		Message start = new Message("CAMBIO FASE", sourceRSU, sourceRSU, 0);
-//		sourceRSU.sendEvent(start);
 		super.init();
 		nextPhase();
 		
 		
 	}
 
-	public double getCongestione(SemaforoIntelligente semaforo){
+	public double getCongestione(SemaforoASoglia semaforo){
 		//restituisce il grado di congestione dell'arco rispetto al nodo
 		NetEdge edge = semaforo.getEdge();
 		double veicoliTotali = 0;

@@ -15,7 +15,7 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import ITS.regolatoriSemafori.Regolatore;
 import ITS.regolatoriSemafori.RegolatoreClassico;
-import ITS.regolatoriSemafori.RegolatoreIntelligente;
+import ITS.regolatoriSemafori.RegolatoreASoglia;
 import network.CityGraph;
 import network.NetEdge;
 import network.NetGraph;
@@ -43,7 +43,7 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 	private ServerStatistiche serverStatistiche;
 	private Variabile variabile;
 	private Regolatore regolatore;
-	private static final boolean regolatoreClassico = true;
+	private static final boolean regolatoreClassico = Param.semaforoClassico;
 
 
 	public RSU(Node node, int i) {
@@ -112,7 +112,8 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 		if(regolatoreClassico)
 			regolatore = new RegolatoreClassico(this, archiEntranti);
 		else
-			regolatore = new RegolatoreIntelligente(this, archiEntranti);
+			regolatore = new RegolatoreASoglia(this, archiEntranti);
+		
 		regolatore.init();
 		
 		routing();

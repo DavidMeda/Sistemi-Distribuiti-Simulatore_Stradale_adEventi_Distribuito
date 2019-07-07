@@ -8,7 +8,7 @@ import java.util.List;
 import ITS.RSU.RSU;
 import ITS.semafori.Semaforo;
 import ITS.semafori.SemaforoClassico;
-import ITS.semafori.SemaforoIntelligente;
+import ITS.semafori.SemaforoASoglia;
 import network.NetEdge;
 import network.NetNode;
 import network.message.Message;
@@ -58,7 +58,7 @@ public abstract class ABS_Regolatore implements Regolatore{
 				if(semaforoClassico)
 					s = new SemaforoClassico(this, edge);
 				else
-					s = new SemaforoIntelligente(this, edge);
+					s = new SemaforoASoglia(this, edge);
 				if(archiEntranti.size()<=2) {
 					s.sempreVerde();
 				}

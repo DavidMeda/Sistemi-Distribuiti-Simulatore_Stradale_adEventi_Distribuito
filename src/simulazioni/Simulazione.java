@@ -1,10 +1,15 @@
 package simulazioni;
 
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -17,7 +22,7 @@ import util.Param;
 import vanet.Macchina;
 import vanet.Vehicle;
 
-public class Simulazione extends JPanel {
+public class Simulazione extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private CityGraph grafo;
 	private double numeroVeicoli = 0.0;
@@ -25,7 +30,9 @@ public class Simulazione extends JPanel {
 	private Scenario scenario;
 	private String nome;
 
-	public Simulazione() {}
+	public Simulazione() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
 
 	// GETTER ///////////////////////////////
 
@@ -97,11 +104,13 @@ public class Simulazione extends JPanel {
 	}
 
 	public void inputParam() {
-		JPanel p = new JPanel();
+		JPanel p = new JPanel(new GridLayout(4, 2, 5,10));
 		JTextField veicoli = new JTextField(10);
 		JTextField perGenerazione = new JTextField(10);
 
 		JComboBox scenarioScelto = new JComboBox(Scenario.values());
+		String [] semafori = {"SEMAFORO CLASSICO","SEMAFORO A SOGLIA"}; 
+		JComboBox semaforoScelto = new JComboBox(semafori);
 
 		p.add(new JLabel("Numero di veicoli: "));
 		p.add(veicoli);
@@ -109,6 +118,10 @@ public class Simulazione extends JPanel {
 		p.add(perGenerazione);
 		p.add(new JLabel("Scegli scenario: "));
 		p.add(scenarioScelto);
+		scenarioScelto.setBackground(new Color(255,255,255));
+		p.add(new JLabel("Scegli tipo di semaforo: "));
+		p.add(semaforoScelto);
+		semaforoScelto.setBackground(new Color(255,255,255));
 
 		do {
 			int res = JOptionPane.showConfirmDialog(null, p, "PARAMETRI DI INPUT: ", JOptionPane.OK_CANCEL_OPTION);
@@ -120,7 +133,13 @@ public class Simulazione extends JPanel {
 				if (perGenerazione.getText().matches("[0-9]*") && !perGenerazione.getText().trim().equals(""))
 					periodoGenerazione = Double.parseDouble(perGenerazione.getText());
 				else periodoGenerazione = 0;
+				
+				if(semaforoScelto.getSelectedItem().equals("SEMAFORO CLASSICO")) Param.setSemaforo(true);
+				else Param.setSemaforo(false);
+				
 				scenario = (Scenario) scenarioScelto.getSelectedItem();
+				
+				
 			} else System.exit(-1);
 			String errore = "";
 			if (numeroVeicoli == 0 || periodoGenerazione == 0) {
@@ -133,16 +152,11 @@ public class Simulazione extends JPanel {
 
 
 	public static void main(String[] args) throws IOException {
-		// String dir = new
-		// File(System.getProperty("user.dir")+File.separator+"XMLConfig\\CityGraph4.xml").toString();
 		Simulazione sim = new Simulazione();
 		String directory = sim.chooseFile().toString();
-		// int numeroVeicoli = 10;
 		sim.inputParam();
 		try {
 			sim.start(directory);
-
-			// sim.start(directory, numeroVeicoli, Param.periodoGenerazione, Scenario.RANDOM);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

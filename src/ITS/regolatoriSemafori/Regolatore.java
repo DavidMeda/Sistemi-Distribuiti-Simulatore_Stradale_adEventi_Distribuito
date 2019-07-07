@@ -16,7 +16,7 @@ public interface Regolatore {
 		
 		case CLASSICO : return new RegolatoreClassico(rsu, archiEntranti);
 		
-		case INTELLIGENTE : return new RegolatoreIntelligente(rsu, archiEntranti);  
+		case INTELLIGENTE : return new RegolatoreASoglia(rsu, archiEntranti);  
 		
 		default: throw new IllegalArgumentException("Il tipo di regolatore specificato non esiste");
 		}
