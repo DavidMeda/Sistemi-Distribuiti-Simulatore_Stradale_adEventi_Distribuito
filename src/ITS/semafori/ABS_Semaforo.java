@@ -6,7 +6,7 @@ import ITS.regolatoriSemafori.Regolatore;
 import network.NetEdge;
 import network.message.Message;
 import util.Param;
-import vanet.Vehicle;
+import veicoli.Vehicle;
 
 public abstract class ABS_Semaforo implements Semaforo {
 	protected boolean verde = false;

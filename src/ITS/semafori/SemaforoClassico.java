@@ -15,7 +15,6 @@ public class SemaforoClassico extends ABS_Semaforo{
 		CityGraph g = (CityGraph)regolatore.getRSU().getGraph();
 		//lista che viene assegnata come riferimento dal grafo che ne gestisce aggiunta e rimozione 
 		coda = g.getVehiclesOnTheEdge(edge.getId());
-		System.out.println("SEMAFORO CLASSICO");
 
 	}
 	

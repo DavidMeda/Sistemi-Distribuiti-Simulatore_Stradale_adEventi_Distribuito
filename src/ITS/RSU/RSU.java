@@ -1,5 +1,11 @@
 package ITS.RSU;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -10,12 +16,17 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import ITS.regolatoriSemafori.Regolatore;
-import ITS.regolatoriSemafori.RegolatoreClassico;
 import ITS.regolatoriSemafori.RegolatoreASoglia;
+import ITS.regolatoriSemafori.RegolatoreClassico;
 import network.CityGraph;
 import network.NetEdge;
 import network.NetGraph;
@@ -29,9 +40,9 @@ import statistiche.ServerStatistiche;
 import statistiche.Variabile;
 import util.Param;
 import util.Path;
-import vanet.Vehicle;
+import veicoli.Vehicle;
 
-public class RSU extends Thread implements Entity, RemoteRSU {
+public class RSU extends Thread implements Entity, RemoteRSU, ActionListener {
 
 	private NetNode nodo;
 	private NetGraph grafo;
@@ -44,27 +55,33 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 	private Variabile variabile;
 	private Regolatore regolatore;
 	private static final boolean regolatoreClassico = Param.semaforoClassico;
+	private static JFrame f = new JFrame("Border Layout");
+	private static JTextArea area = new JTextArea("\n\t\tSTATISTICHE GENERALE\n\n");
+	private static JButton b = new JButton("CLOSE");
 
 
 	public RSU(Node node, int i) {
-		
+		super();
 		ID = i;
 		nodo = (NetNode) node;
 		grafo = nodo.getGraph();
 		variabile = new Variabile(this, ID);
-		/* print */
-		System.out.println("Creato " + this + " ID= "+ID);
-		/**/
 		
+		
+		area.setEditable(false);
+		JScrollPane scrollPane = new JScrollPane(area); 
+		area.setBounds(50,50, 700,700);
+		b.addActionListener(this);  
+		f.add(scrollPane, BorderLayout.CENTER);  
+        f.add(b, BorderLayout.SOUTH);
+        f.setSize(800,800);  
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        f.setLocation(dim.width/2-f.getSize().width/2, dim.height/2-f.getSize().height/2);
 	}
-	
 	
 
 	@Override
 	public void run() {
-		/* print */
-		System.out.println("inizializzazione  " +this+" "+ getName());
-		/**/
 		init();
 		while(true) {
 			try {
@@ -89,8 +106,13 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 	
 	@Override
 	public void stampaStatistiche(String statistica) throws RemoteException {
-		System.out.println(this+ "ho ricevuto dal server statistiche:" + statistica);
+		System.out.println(this+ " ho ricevuto dal server statistiche:" + statistica);
+		f.setVisible(true); 
+		area.append(this+ " ho ricevuto dal server statistiche:" + statistica+"\n");
 	}
+	public void actionPerformed(ActionEvent e){  
+	    System.exit(-1);
+	}  
 
 	public synchronized void init() {
 		variabile.numVeicoliTot(((CityGraph)grafo).getNumVeicoliTot());

@@ -7,7 +7,7 @@ import org.graphstream.ui.spriteManager.Sprite;
 import org.graphstream.ui.spriteManager.SpriteManager;
 import events.UpdatePosition;
 import util.Param;
-import vanet.Vehicle;
+import veicoli.Vehicle;
 
 public class CityGraph extends NetGraph {
 

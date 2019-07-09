@@ -112,7 +112,6 @@ public class CityGraphXMLParser {
     			//set graphic 
     			listElement = _graph.getChildren("stylesheet");
     			if(listElement.size()>1){
-    			/**TODO tanto non funziona */	
     				stylesheet = listElement.get(0).getText().trim();
     				graph.setAttribute("ui.stylesheet", stylesheet);
     			}

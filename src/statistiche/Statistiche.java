@@ -1,8 +1,6 @@
 package statistiche;
 
-import java.rmi.Naming;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -40,11 +38,9 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 
 	public synchronized void richiestaStatisticheGenerali() throws RemoteException {
 		countRSU++;
-		System.out.println("richiesta n: " + countRSU + " mancano " + ((mappaStatistiche.size()) - countRSU));
 		if (countRSU >= (mappaStatistiche.size() )) {
 			inviaStatisticheGenerali();
 			nuovaSesione = true;
-			System.out.println("LA PROSSIMA VOLTA CANCELLO");
 		}
 	}
 	
@@ -52,29 +48,32 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 		if (nuovaSesione) {
 			reset();
 			nuovaSesione = false;
-			System.out.println("CANCELLO MAPPA VECCHIA");
 		}
 		mappaStatistiche.put(rsu, null);
-		System.out.println("si  è aggiunto " + rsu.getNameRSU() + " size= " + mappaStatistiche.size());
+//		System.out.println("si  è aggiunto " + rsu.getNameRSU() + " size= " + mappaStatistiche.size());
 	}
 
 	public void inviaStatisticheGenerali() throws RemoteException {
 		update();
-		String statistiche = "\n\nSTATISTICHE RSU" + "\nMedia messaggi totali per RSU = " + getMediaMessTotali()
-						+ "\nMedia messaggi ricevuti per RSU = " + getMediaMessRicevuti()
-						+ "\nMedia messaggi inviati per RSU = " + getMediaMessInviati()
-						+ "\nRSU col minor numero di messaggi = " + getRSUminimoNumDiMessaggi() + " (numero = "
-						+ numMessMinimo + ")" + "\nRSU col maggior numero di messaggi = " + getRSUmassimoNumDiMessaggi()
-						+ " (numero = " + numMessMassimo + ")" + "\nINFO:" + "\n  - Sommatoria messaggi totali = "
-						+ getNumeroMessTotali() + "\n  - Sommatoria messaggi ricevuti da RSU = "
-						+ getNumeroMessRicevutiRSU_RSU() + "\n  - Sommatoria messaggi ricevuti da Veicoli = "
-						+ getNumeroMessRicevutiRSU_Veicoli() + "\n  - Sommatoria messaggi inviati a RSU = "
-						+ getNumeroMessInviatiRSU_RSU() + "\n  - Sommatoria messaggi Inviati a Veicoli = "
-						+ getNumeroMessInviatiRSU_Veicoli() + "\n";
+		String statistiche = "\n\tSTATISTICHE RSU" 
+						+ "\n\tMedia messaggi totali per RSU = " + getMediaMessTotali()
+						+ "\n\tMedia messaggi ricevuti per RSU = " + getMediaMessRicevuti()
+						+ "\n\tMedia messaggi inviati per RSU = " + getMediaMessInviati()
+						+ "\n\tRSU col minor numero di messaggi = " + getRSUminimoNumDiMessaggi() + " (numero ="+ numMessMinimo + ")" 
+						+ "\n\tRSU col maggior numero di messaggi = " + getRSUmassimoNumDiMessaggi()+ " (numero = " + numMessMassimo + ")" 
+						+ "\n\tINFO GENERALI:" 
+						+ "\n\t\t- Sommatoria messaggi totali = "+ getNumeroMessTotali() 
+						+ "\n\t\t- Sommatoria messaggi ricevuti da RSU = "+ getNumeroMessRicevutiRSU_RSU() 
+						+ "\n\t\t- Sommatoria messaggi ricevuti da Veicoli = "+ getNumeroMessRicevutiRSU_Veicoli() 
+						+ "\n\t\t- Sommatoria messaggi inviati a RSU = "+ getNumeroMessInviatiRSU_RSU() 
+						+ "\n\t\t- Sommatoria messaggi Inviati a Veicoli = "+ getNumeroMessInviatiRSU_Veicoli() + "\n";
+		
 		for (Entry<RemoteRSU, Variabile> e : mappaStatistiche.entrySet()) {
 			e.getKey().stampaStatistiche(statistiche);
 		}
 	}
+	
+	
 	
 	private void reset() {
 		countRSU = 0;
@@ -196,16 +195,6 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 		}
 	}
 
-	public static void main(String[] args) {
-		try {
-			Statistiche stat = new Statistiche();
-			LocateRegistry.createRegistry(1099);
-			System.out.println("Creato SERVER STATISTICHE sul registro Locale");
-			Naming.rebind("Server", stat);
-			System.out.println("Attendo clienti...\n");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	
 
 }

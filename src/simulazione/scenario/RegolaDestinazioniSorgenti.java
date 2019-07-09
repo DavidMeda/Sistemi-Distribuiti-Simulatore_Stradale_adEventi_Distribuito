@@ -1,11 +1,11 @@
-package simulazioni.regole;
+package simulazione.scenario;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import network.CityGraph;
-import simulazioni.Simulazione;
+import simulazione.Launcher.MainSimulazione;
 import util.Param;
-import vanet.Vehicle;
+import veicoli.Vehicle;
 
 public class RegolaDestinazioniSorgenti extends Regole {
 	/**
@@ -30,7 +30,7 @@ public class RegolaDestinazioniSorgenti extends Regole {
 	
 
 	@Override
-	public void applicaRegole(Simulazione simulazione, LinkedList<Vehicle> listaVeicoli) {
+	public void applicaRegole(MainSimulazione simulazione, LinkedList<Vehicle> listaVeicoli) {
 		partenzeVeicoli(simulazione, listaVeicoli);
 		CityGraph grafo = simulazione.getGrafo();
 		

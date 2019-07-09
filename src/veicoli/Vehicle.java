@@ -1,4 +1,4 @@
-package vanet;
+package veicoli;
 
 import java.util.LinkedList;
 import org.graphstream.ui.graphicGraph.stylesheet.StyleConstants.Units;

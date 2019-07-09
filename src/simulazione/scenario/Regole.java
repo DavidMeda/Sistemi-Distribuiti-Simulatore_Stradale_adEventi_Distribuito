@@ -1,18 +1,17 @@
-package simulazioni.regole;
+package simulazione.scenario;
 
 import java.util.LinkedList;
-
-import simulazioni.Simulazione;
-import vanet.Vehicle;
+import simulazione.Launcher.MainSimulazione;
+import veicoli.Vehicle;
 
 public abstract class Regole {
 	
 	
-	public abstract void applicaRegole(Simulazione simulazione, LinkedList<Vehicle>listaVeicoli);
+	public abstract void applicaRegole(MainSimulazione simulazione, LinkedList<Vehicle>listaVeicoli);
 	
 	
 	
-	protected void partenzeVeicoli(Simulazione simulazione, LinkedList<Vehicle> veicoli){
+	protected void partenzeVeicoli(MainSimulazione simulazione, LinkedList<Vehicle> veicoli){
 		Vehicle veicolo = null;
 		double periodoDiGenerazione = simulazione.getPeriodoGenerazione();
 		

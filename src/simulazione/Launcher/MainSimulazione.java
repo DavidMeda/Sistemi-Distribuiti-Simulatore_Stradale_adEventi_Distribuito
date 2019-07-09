@@ -1,8 +1,6 @@
-package simulazioni;
+package simulazione.Launcher;
 
 import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
@@ -17,12 +15,13 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 import network.CityGraph;
 import network.CityGraphXMLParser;
-import simulazioni.regole.Regole;
+import simulazione.scenario.Regole;
+import simulazione.scenario.Scenario;
 import util.Param;
-import vanet.Macchina;
-import vanet.Vehicle;
+import veicoli.Macchina;
+import veicoli.Vehicle;
 
-public class Simulazione extends JFrame {
+public class MainSimulazione extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private CityGraph grafo;
 	private double numeroVeicoli = 0.0;
@@ -30,7 +29,7 @@ public class Simulazione extends JFrame {
 	private Scenario scenario;
 	private String nome;
 
-	public Simulazione() {
+	public MainSimulazione() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
@@ -114,7 +113,7 @@ public class Simulazione extends JFrame {
 
 		p.add(new JLabel("Numero di veicoli: "));
 		p.add(veicoli);
-		p.add(new JLabel("tempo generazione veicoli: "));
+		p.add(new JLabel("tempo generazione veicoli (in millisecondi): "));
 		p.add(perGenerazione);
 		p.add(new JLabel("Scegli scenario: "));
 		p.add(scenarioScelto);
@@ -152,7 +151,7 @@ public class Simulazione extends JFrame {
 
 
 	public static void main(String[] args) throws IOException {
-		Simulazione sim = new Simulazione();
+		MainSimulazione sim = new MainSimulazione();
 		String directory = sim.chooseFile().toString();
 		sim.inputParam();
 		try {

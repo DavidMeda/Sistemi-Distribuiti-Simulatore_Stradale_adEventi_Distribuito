@@ -1,7 +1,7 @@
-package simulazioni;
+package simulazione.scenario;
 
-import simulazioni.regole.RegolaDestinazioniSorgenti;
-import simulazioni.regole.Regole;
+import simulazione.scenario.RegolaDestinazioniSorgenti;
+import simulazione.scenario.Regole;
 
 public enum Scenario {
 	UNA_SORGENTE(new RegolaDestinazioniSorgenti(0,1)),

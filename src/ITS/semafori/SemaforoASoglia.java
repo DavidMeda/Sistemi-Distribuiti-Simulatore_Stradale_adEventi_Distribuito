@@ -5,7 +5,7 @@ import ITS.regolatoriSemafori.RegolatoreASoglia;
 import network.CityGraph;
 import network.NetEdge;
 import util.Param;
-import vanet.Vehicle;
+import veicoli.Vehicle;
 
 public class SemaforoASoglia extends ABS_Semaforo{
 	private boolean verde = false;
@@ -26,7 +26,6 @@ public class SemaforoASoglia extends ABS_Semaforo{
 				
 		//tempo per far passare tutta la coda
 		tempoMax = ((double)edge.getAttribute("length") / Param.velocitaVeicolo) - tempoMin;
-		System.out.println("SEMAFORO INTELLIGENTE");
 	}
 	
 	// METHODS /////////////////

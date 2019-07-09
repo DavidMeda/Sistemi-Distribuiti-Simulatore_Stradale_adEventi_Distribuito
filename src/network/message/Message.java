@@ -1,9 +1,11 @@
 package network.message;
 
+import java.io.Serializable;
 import simEventiDiscreti.Entity;
 import simEventiDiscreti.Event;
 
-public class Message extends Event { 
+public class Message extends Event implements Serializable { 
+	private static final long serialVersionUID = 1L;
 	private Object[] data;
 	private int TTL;
 	

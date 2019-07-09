@@ -1,6 +1,5 @@
 package network;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.EdgeFactory;
@@ -8,7 +7,6 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.NodeFactory;
 import org.graphstream.graph.implementations.MultiGraph;
-import ITS.RSU.RSU;
 import simEventiDiscreti.Scheduler;
 import util.Param;
 
@@ -44,22 +42,6 @@ public class NetGraph extends MultiGraph {
 		scheduler = new Scheduler(Param.orizzonteTemporaleSimulazione);
 
 	}
-
-	// SETTER /////////////////////////
-	public NetGraph setDescription(String description) {
-		this.description = description;
-		return this;
-	}
-
-	// GETTER /////////////////////////
-	public Scheduler getScheduler() {
-		return scheduler;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-	
 
 	// METHODS ///////////////////
 	public void resetScheduler() {
@@ -99,6 +81,21 @@ public class NetGraph extends MultiGraph {
 		}
 		return false;
 	}
+	
+	// SETTER /////////////////////////
+		public NetGraph setDescription(String description) {
+			this.description = description;
+			return this;
+		}
+
+		// GETTER /////////////////////////
+		public Scheduler getScheduler() {
+			return scheduler;
+		}
+
+		public String getDescription() {
+			return description;
+		}
 
 	// OVERRIDE ////////////////////////////////////////////////////////
 	// from abs graph
