@@ -1,7 +1,8 @@
-package statistiche;
+package statistiche.Laucher;
 
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
+import statistiche.Statistiche;
 
 public class MainStatistiche {
 	

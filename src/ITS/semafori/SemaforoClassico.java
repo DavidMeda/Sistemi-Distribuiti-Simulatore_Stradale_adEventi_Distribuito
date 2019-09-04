@@ -35,8 +35,8 @@ public class SemaforoClassico extends ABS_Semaforo{
 			avvisaVeicoli("ROSSO");
 		}
 		else {
+			//serve per avere semafori sempre verdi se ci sono solo due strade
 			setVerde();
-//			System.out.println("Semaforo classico - SEMPRE VERDE");
 		}
 	}
 

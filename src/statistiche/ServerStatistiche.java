@@ -7,7 +7,10 @@ import ITS.RSU.RemoteRSU;
 
 public interface ServerStatistiche extends Remote {
 
-	void updateStatistiche(RemoteRSU idRSU, Variabile var) throws RemoteException;
+	void updateStatisticheRSU(RemoteRSU idRSU, VariabileStatRSU varRSU) throws RemoteException;
+	
+	void updateStatisticheVeicolo(VariabileStatVeicolo varVeicol) throws RemoteException;
+
 
 	void registraRSU(RemoteRSU rsu) throws RemoteException;
 

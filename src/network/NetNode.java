@@ -19,7 +19,9 @@ public class NetNode extends MultiNode implements Entity {
 		
 	}
 	
-	
+	public String toString() {
+		return "Incrocio ["+getId()+"]";
+	}
 	public void init() {
 		idRSU++;
 		rsu = new RSU(this, idRSU);

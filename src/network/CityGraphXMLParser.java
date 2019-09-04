@@ -3,6 +3,7 @@ package network;
 import java.io.IOException;
 import java.util.List;
 import org.graphstream.graph.Edge;
+import org.graphstream.graph.implementations.MultiGraph;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -14,7 +15,7 @@ public class CityGraphXMLParser {
 	
     
     
-    public static CityGraph getGraph(String graphName, String XMLFile){
+    public static MultiGraph getGraph(String graphName, String XMLFile){
 //		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
     	    	
     	//load file   

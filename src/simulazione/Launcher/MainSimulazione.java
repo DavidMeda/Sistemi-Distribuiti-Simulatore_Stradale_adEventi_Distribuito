@@ -13,6 +13,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
+import org.graphstream.ui.swingViewer.ViewPanel;
+import org.graphstream.ui.view.Viewer;
 import network.CityGraph;
 import network.CityGraphXMLParser;
 import simulazione.scenario.Regole;
@@ -53,8 +55,8 @@ public class MainSimulazione extends JFrame {
 
 	// METHODS ///////////////////////////////
 
-	public void start(String directoryXMLGraph) throws InterruptedException {
-		this.grafo = CityGraphXMLParser.getGraph("Cosenza", directoryXMLGraph);
+	private void start(String directoryXMLGraph) throws InterruptedException {
+		this.grafo = (CityGraph) CityGraphXMLParser.getGraph("Cosenza", directoryXMLGraph);
 		grafo.display().disableAutoLayout();
 		// this.numeroVeicoli = numeroVeicoli;
 		// this.periodoGenerazione = periodoDiGenerazione;
@@ -75,7 +77,7 @@ public class MainSimulazione extends JFrame {
 		grafo.startSimulation();
 	}
 
-	public File chooseFile() {
+	private File chooseFile() {
 		JFileChooser fc = new JFileChooser();
 
 		fc.setFileFilter(new FileFilter() {
@@ -102,7 +104,7 @@ public class MainSimulazione extends JFrame {
 
 	}
 
-	public void inputParam() {
+	private void inputParam() {
 		JPanel p = new JPanel(new GridLayout(4, 2, 5,10));
 		JTextField veicoli = new JTextField(10);
 		JTextField perGenerazione = new JTextField(10);

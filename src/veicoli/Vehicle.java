@@ -5,6 +5,7 @@ import org.graphstream.ui.graphicGraph.stylesheet.StyleConstants.Units;
 import network.NetEdge;
 import network.NetNode;
 import network.message.Message;
+import statistiche.VariabileStatVeicolo;
 import util.Param;
 import network.*;
 
@@ -51,6 +52,8 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 	startTime,
 	// indica la distanza percorsa
 	distanceTraveled = 0; // metri
+	
+	protected VariabileStatVeicolo variabileStat;
 
 	//////////////////////////
 
@@ -58,7 +61,6 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 
 	public Vehicle(CityGraph graph, String name) {
 		super(graph, name);
-
 	}
 
 	/// GETTER //////////////
@@ -81,6 +83,8 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 	public NetEdge getCurrentEdge() {
 		return currentEdge;
 	}
+	
+	
 
 	// SETTER ///////////////
 	public Vehicle setStartingNode(int index) {
@@ -89,7 +93,7 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 		 **/
 		startingNode = getGraph().getNode(index);
 		setCurrentNode(index);
-
+		variabileStat = new VariabileStatVeicolo(id);
 		return this;
 
 	}
@@ -182,12 +186,14 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 				nextNode = currentEdge.getTargetNode();
 
 				distanceTraveled += (double) currentEdge.getAttribute("length");
+				variabileStat.updateDistanzaPercorsa(distanceTraveled);
 				attachToEdge(currentEdge.getId());
 
 				// comunico al primo RSU che inizio a muovermi
 				Message cambioArco = new Message("CAMBIO ARCO", this, registeredNode, Param.elaborationTime);
-				cambioArco.setData(currentNode, nextNode, distanceTraveled);
+				cambioArco.setData(currentNode, nextNode);
 				sendEvent(cambioArco);
+				variabileStat.updateNumAttraversamenti();
 
 				/*
 				 * print* System.out.println(this+": inizio a muovermi per la prima volta sull'arco "
@@ -218,22 +224,17 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 			// se sono a fine arco
 			if (position >= 1) {
 				// se sono arrivato a destinazione
-				if (path.size() <= 0 || path.getFirst() == null) {
+				if (path.getFirst() == null) {
 
 					// aggiorno i parametri statistici
 					tempoDiAttesaTotale += tempoDiAttesaSuArco;
+					double tempoTotale = getScheduler().getCurrentTime() - startTime;
+					variabileStat.updateTempoTotAttesa(tempoDiAttesaTotale);
+					variabileStat.updateTempoTot(tempoTotale);
 					// comunico che il veicolo ha abbandonato l'arco
 					Message destinazione = new Message("DESTINAZIONE", this, registeredNode, Param.elaborationTime);
-					destinazione.setData(currentEdge.getSourceNode(), null, tempoDiAttesaTotale);
+					destinazione.setData(currentEdge.getSourceNode(), variabileStat);
 					sendEvent(destinazione);
-					/*
-					 * print* System.out.println(this+": ARRIVATO!"); /
-					 **/
-
-					// //rimuovo il veicolo dal grafo
-					// getGraph().rimuoviVeicolo(this);
-					// addAttribute("ui.style", "fill-color: rgba(0,0,0,100);");
-					// addAttribute("ui.label", "");
 					/*
 					 * print* System.out.println("\n"+
 					 * this+": sono arrivato a destinazione, tempo di attesa totale = "+tempoDiAttesaTotale);
@@ -245,7 +246,6 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 				// se il semaforo è rosso resto fermo
 				if (!verdeAlSemaforo) {
 					tempoDiAttesaSuArco += Param.updatePositionTime;
-
 					/*
 					 * print* if(getId().equals("4") || getId().equals("2"))
 					 * System.out.println(this+": il semaforo è ROSSO su "+currentEdge+" tempo attesa "
@@ -254,7 +254,7 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 
 					return;
 				}
-
+				
 				// se il prossimo arco è pieno resto fermo
 				if (getGraph().edgeIsFull(path.getFirst())) {
 					tempoDiAttesaSuArco += Param.updatePositionTime;
@@ -266,7 +266,6 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 					 **/
 					return;
 				}
-
 				// cambio arco
 				NetNode nodoProvenienza = currentEdge.getSourceNode();
 
@@ -282,13 +281,16 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 				tempoDiAttesaTotale += tempoDiAttesaSuArco;
 				tempoDiAttesaSuArco = 0;
 				distanceTraveled += (double) currentEdge.getAttribute("length");
+				variabileStat.updateDistanzaPercorsa(distanceTraveled);
+
 				// numNodiAttraversati++;
 				attachToEdge(currentEdge.getId());
 
 				// comunico il cambio arco all'RSU
 				Message cambioArco = new Message("CAMBIO ARCO", this, registeredNode, Param.elaborationTime);
-				cambioArco.setData(nodoProvenienza, nodoSuccessuvo, distanceTraveled);
+				cambioArco.setData(nodoProvenienza, nodoSuccessuvo);
 				sendEvent(cambioArco);
+				variabileStat.updateNumAttraversamenti();
 				/*
 				 * print* System.out.println(this+": invio cambio arco sono su "+currentEdge+"  "); /
 				 **/

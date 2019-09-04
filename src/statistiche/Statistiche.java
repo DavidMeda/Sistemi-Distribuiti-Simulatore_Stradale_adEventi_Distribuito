@@ -1,200 +1,281 @@
 package statistiche;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map.Entry;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import java.util.Set;
+import java.util.TreeSet;
 import ITS.RSU.RemoteRSU;
 
 public class Statistiche extends UnicastRemoteObject implements ServerStatistiche {
 
-	private HashMap<RemoteRSU, Variabile> mappaStatistiche = new HashMap<RemoteRSU, Variabile>();
+	private HashMap<RemoteRSU, VariabileStatRSU> mappaStatistiche = new HashMap<RemoteRSU, VariabileStatRSU>();
+	private Set<VariabileStatVeicolo> listaStatVeicoli = new TreeSet<VariabileStatVeicolo>();
 	private static final long serialVersionUID = -6219374298605448637L;
-	private int countRSU = 0;
 	private boolean nuovaSesione = true;
 
-	private String idRSUminimoMessaggi, idRSUmassimoMessaggi;
+	// variabili RSU
+	private String idRSUMessMax, idRSUMessMin, idRSUGradoOttMin, idRSUGradoOttMax;
+	private int RSUtot = 0, numMessMassimo = Integer.MIN_VALUE, numMessMinimo = Integer.MAX_VALUE, sommaMessTotali = 0,
+					sommaMessInviatiRSU_RSU = 0, sommaMessRicevutiRSU_RSU = 0, sommaMessInviatiRSU_Veicoli = 0,
+					sommaMessRicevutiRSU_Veicoli = 0, mediaPersorsiMinimi = 0, mediaPercorsiTot = 0,
+					mediaMessRicevuti = 0, mediaMessInviati = 0, mediaMessTot = 0;
+	private double sommaGradoOttimalitaPercorsiMinimi = 0.0, sommaGradoCongestione = 0.0, mediaGradoCongestione = 0.0,
+					mediaGradoOttimalitaPercorsiMinimi = 0.0, mediaDurataTotale = 0.0, durataTotale = 0.0,
+					gradoOttMin = Double.MAX_VALUE, gradoOttMax = Double.MIN_VALUE;
 
-	private int 
-	tempoMedioDiAttesaMinimo = Integer.MAX_VALUE, 
-	tempoMedioDiAttesaMassimo = Integer.MIN_VALUE,
-	numMessMassimo = Integer.MIN_VALUE, 
-	numMessMinimo = Integer.MAX_VALUE,
-	sommaMessTotali, 
-	sommaMessInviatiRSU_RSU, 
-	sommaMessRicevutiRSU_RSU, 
-	sommaMessInviatiRSU_Veicoli,
-	sommaMessRicevutiRSU_Veicoli;
+	// variabili veicoli
+	private String idVeicoloAttesaMassima = "", idVeicoloAttesaMinima = "";
+	private double tempoDiAttesaMinimo = Double.MAX_VALUE, tempoDiAttesaMassimo = Double.MIN_VALUE;
+	private double distanzaPercorsaMedia = 0.0, tempoTotalePercorrenzaMedio = 0.0, tempoTotaleAttesaMedio = 0.0;
+	private int numTotaleVeicoli = 0, numAttraversamentiMedio = 0, numSemaforiRossiMedio = 0, numSemaforiVerdiMedio = 0;
 
 	public Statistiche() throws RemoteException {
 		super();
 	}
 
 	@Override
-	public synchronized void updateStatistiche(RemoteRSU RSU, Variabile var) throws RemoteException {
+	public synchronized void updateStatisticheRSU(RemoteRSU RSU, VariabileStatRSU var) throws RemoteException {
 		// System.out.println("Ricevo aggiornamento statistiche da "+RSU.getNameRSU());
 		mappaStatistiche.put(RSU, var);
 	}
 
+	public synchronized void updateStatisticheVeicolo(VariabileStatVeicolo varVeicol) throws RemoteException {
+		listaStatVeicoli.add(varVeicol);
+	}
+
 	public synchronized void richiestaStatisticheGenerali() throws RemoteException {
-		countRSU++;
-		if (countRSU >= (mappaStatistiche.size() )) {
-			inviaStatisticheGenerali();
+		RSUtot++;
+		if (RSUtot >= (mappaStatistiche.size())) {
+			calcolaStatisticheGenerali();
 			nuovaSesione = true;
 		}
 	}
-	
+
 	public synchronized void registraRSU(RemoteRSU rsu) throws RemoteException {
 		if (nuovaSesione) {
 			reset();
 			nuovaSesione = false;
 		}
 		mappaStatistiche.put(rsu, null);
-//		System.out.println("si  è aggiunto " + rsu.getNameRSU() + " size= " + mappaStatistiche.size());
+		// System.out.println("si è aggiunto " + rsu.getNameRSU() + " size= " +
+		// mappaStatistiche.size());
 	}
 
-	public void inviaStatisticheGenerali() throws RemoteException {
-		update();
-		String statistiche = "\n\tSTATISTICHE RSU" 
-						+ "\n\tMedia messaggi totali per RSU = " + getMediaMessTotali()
-						+ "\n\tMedia messaggi ricevuti per RSU = " + getMediaMessRicevuti()
-						+ "\n\tMedia messaggi inviati per RSU = " + getMediaMessInviati()
-						+ "\n\tRSU col minor numero di messaggi = " + getRSUminimoNumDiMessaggi() + " (numero ="+ numMessMinimo + ")" 
-						+ "\n\tRSU col maggior numero di messaggi = " + getRSUmassimoNumDiMessaggi()+ " (numero = " + numMessMassimo + ")" 
-						+ "\n\tINFO GENERALI:" 
-						+ "\n\t\t- Sommatoria messaggi totali = "+ getNumeroMessTotali() 
-						+ "\n\t\t- Sommatoria messaggi ricevuti da RSU = "+ getNumeroMessRicevutiRSU_RSU() 
-						+ "\n\t\t- Sommatoria messaggi ricevuti da Veicoli = "+ getNumeroMessRicevutiRSU_Veicoli() 
-						+ "\n\t\t- Sommatoria messaggi inviati a RSU = "+ getNumeroMessInviatiRSU_RSU() 
-						+ "\n\t\t- Sommatoria messaggi Inviati a Veicoli = "+ getNumeroMessInviatiRSU_Veicoli() + "\n";
-		
-		for (Entry<RemoteRSU, Variabile> e : mappaStatistiche.entrySet()) {
+	private void calcolaStatisticheGenerali() throws RemoteException {
+		updateStatRSU();
+		updateStatVeicoli();
+		StringBuilder sb = new StringBuilder();
+		sb.append("\nSTATISTICHE SU VEICOLI TOTALE = " + numTotaleVeicoli);
+		sb.append("\n\t- Distanza media percorsa [metri]: " + distanzaPercorsaMedia);
+		sb.append("\n\t- Tempo di percorrenza medio [secondi]: " + tempoTotalePercorrenzaMedio);
+		sb.append("\n\t- Tempo di attesa medio [secondi]: " + tempoTotaleAttesaMedio);
+		sb.append("\n\t- Numero medio di strade attraversate: " + numAttraversamentiMedio);
+		sb.append("\n\t- Numero medio di semafori rossi incotrati: " + numSemaforiRossiMedio);
+		sb.append("\n\t- Numero medio di semafori verdi incotrati: " + numSemaforiVerdiMedio);
+		sb.append("\n\t- Veicolo con il minor tempo di attesa: " + idVeicoloAttesaMinima + " [" + tempoDiAttesaMinimo
+						+ " sec]");
+		sb.append("\n\t- Veicolo con il maggior tempo di attesa: " + idVeicoloAttesaMassima + " ["
+						+ tempoDiAttesaMassimo + " sec]");
+		sb.append("\nSTATISTICHE SU RSU TOTALI = " + RSUtot);
+		// sb.append("\n\t- Durata totale traffico della rete [secondi] = " + durataTotale);
+		sb.append("\n\t- Media messaggi ricevuti per RSU = " + mediaMessRicevuti);
+		sb.append("\n\t- Media messaggi inviati per RSU = " + mediaMessInviati);
+		sb.append("\n\t- RSU col maggior numero di messaggi = " + idRSUMessMax + " (num: " + numMessMassimo + ")");
+		sb.append("\n\t- RSU col minor numero di messaggi = " + idRSUMessMin + " (num: " + numMessMinimo + ")");
+		sb.append("\n\t- Sommatoria messaggi totali = " + sommaMessTotali);
+		sb.append("\n\t- Sommatoria messaggi ricevuti da RSU = " + sommaMessRicevutiRSU_RSU);
+		sb.append("\n\t- Sommatoria messaggi ricevuti da Veicoli = " + sommaMessRicevutiRSU_Veicoli);
+		sb.append("\n\t- Sommatoria messaggi inviati a RSU = " + sommaMessInviatiRSU_RSU);
+		sb.append("\n\t- Sommatoria messaggi Inviati a Veicoli = " + sommaMessInviatiRSU_Veicoli);
+		// sb.append("\n\t- Media grado congestione della rete = " + mediaGradoCongestione);
+		sb.append("\n\t- Percentuale ottimalità percorsi minimi = " + mediaGradoOttimalitaPercorsiMinimi);
+		sb.append("\n\t- RSU col minor grado di ottimalità sui percorsi minimi = " + idRSUGradoOttMin + " (num: "
+						+ gradoOttMin + ")");
+		sb.append("\n\t- RSU col maggior grado di ottimalità sui percorsi minimi = " + idRSUGradoOttMax + " (num: "
+						+ gradoOttMax + ")\n");
+		sb.append("\nSTATISTICHE PER VEICOLO");
+		for (VariabileStatVeicolo var : listaStatVeicoli) {
+			sb.append("\n" + var);
+			// System.out.println(var);
+		}
+		String statistiche = sb.toString();
+		// System.out.println("\n\n\n");
+		// System.out.println(sb.toString());
+		for (Entry<RemoteRSU, VariabileStatRSU> e : mappaStatistiche.entrySet()) {
 			e.getKey().stampaStatistiche(statistiche);
 		}
-	}
-	
-	
-	
-	private void reset() {
-		countRSU = 0;
-		
-		mappaStatistiche.clear();
-		mappaStatistiche = new HashMap<RemoteRSU, Variabile>();
-		tempoMedioDiAttesaMinimo = Integer.MAX_VALUE; 
-		tempoMedioDiAttesaMassimo = Integer.MIN_VALUE;
-		numMessMassimo = Integer.MIN_VALUE; 
-		numMessMinimo = Integer.MAX_VALUE;
-		sommaMessTotali = 0; 
-		sommaMessInviatiRSU_RSU= 0;  
-		sommaMessRicevutiRSU_RSU= 0;  
-		sommaMessInviatiRSU_Veicoli= 0; 
-		sommaMessRicevutiRSU_Veicoli= 0;
-		idRSUminimoMessaggi = ""; 
-		idRSUmassimoMessaggi = "";
+		displayText(statistiche);
+
 	}
 
-	
+	private void displayText(String statistiche) {
+		JFrame frame = new JFrame("SERVER STATISTICHE");
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-	// GETTER ///////////////////////////
-	public double getNumeroMessTotali() {
-		return sommaMessTotali;
+		JTextArea textArea = new JTextArea("STATISTICHE GENERALI");
+		JScrollPane scrollPanel = new JScrollPane(textArea);
+		textArea.setEditable(false);
+		textArea.setLineWrap(true);
+		Font font = new Font(textArea.getFont().getName(), Font.BOLD, 15);
+		textArea.setFont(font);
+		frame.add(scrollPanel, BorderLayout.CENTER);
+		JButton b = new JButton("exit");
+		b.setPreferredSize(new Dimension(40, 40));
+		b.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+
+			}
+		});
+
+		frame.add(b, BorderLayout.SOUTH);
+		frame.setSize(900, 600);
+		frame.setVisible(true);
+		textArea.append(statistiche);
 	}
 
-	public double getNumeroMessRicevutiRSU_RSU() {
-		return sommaMessRicevutiRSU_RSU;
-	}
+	private void updateStatVeicoli() {
+		numTotaleVeicoli = listaStatVeicoli.size();
+		double distanzaPercorsa = 0.0, tempoTotalePercorrenza = 0.0, tempoTotaleAttesa = 0.0;
+		int numAttraversamenti = 0, numSemaforiRossi = 0, numSemaforiVerdi = 0;
 
-	public double getNumeroMessInviatiRSU_RSU() {
-		return sommaMessInviatiRSU_RSU;
-	}
+		for (VariabileStatVeicolo var : listaStatVeicoli) {
+			distanzaPercorsa += var.getDistanzaPercorsa();
+			tempoTotalePercorrenza += var.getTempoTotalePercorrenza();
 
-	public double getNumeroMessInviatiRSU_Veicoli() {
-		return sommaMessInviatiRSU_Veicoli;
-	}
+			if (var.getTempoTotaleAttesa() < tempoDiAttesaMinimo) {
+				tempoDiAttesaMinimo = var.getTempoTotaleAttesa();
+				idVeicoloAttesaMinima = var.getIDveicolo();
+			}
 
-	public double getNumeroMessRicevutiRSU_Veicoli() {
-		return sommaMessRicevutiRSU_Veicoli;
-	}
-
-	public int getMediaMessRicevuti() {
-		return (int) ((sommaMessRicevutiRSU_RSU + sommaMessRicevutiRSU_Veicoli) / mappaStatistiche.size());
-	}
-
-	public int getMediaMessInviati() {
-		return (int) ((sommaMessInviatiRSU_RSU + sommaMessInviatiRSU_Veicoli) / mappaStatistiche.size());
-	}
-
-	public int getMediaMessTotali() {
-		return (int) ((sommaMessTotali) / mappaStatistiche.size());
-	}
-
-	public String getRSUminimoNumDiMessaggi() {
-		return idRSUminimoMessaggi;
-	}
-
-	public String getRSUmassimoNumDiMessaggi() {
-		return idRSUmassimoMessaggi;
-	}
-
-	public double getTempoMedioDiAttesaMinimo() {
-		return tempoMedioDiAttesaMinimo;
-	}
-
-	public double getTempoMedioDiAttesaMassimo() {
-		return tempoMedioDiAttesaMassimo;
-	}
-
-	public double getGradoTempoMedioAttesa() {
-		double sommaTempiMediAttesa = 0.0;
-		for (Entry<RemoteRSU, Variabile> e : mappaStatistiche.entrySet()) {
-			sommaTempiMediAttesa += e.getValue().getTempoMedioAttesa();
+			if (var.getTempoTotaleAttesa() > tempoDiAttesaMassimo) {
+				tempoDiAttesaMassimo = var.getTempoTotaleAttesa();
+				idVeicoloAttesaMassima = var.getIDveicolo();
+			}
+			tempoTotaleAttesa += var.getTempoTotaleAttesa();
+			numAttraversamenti += var.getNumAttraversamenti();
+			numSemaforiRossi += var.getNumSemaforiRossi();
+			numSemaforiVerdi += var.getNumSemaforiVerdi();
 		}
-		return sommaTempiMediAttesa / mappaStatistiche.size();
+		distanzaPercorsaMedia = distanzaPercorsa / numTotaleVeicoli;
+		tempoTotalePercorrenzaMedio = tempoTotalePercorrenza / numTotaleVeicoli;
+		tempoTotaleAttesaMedio = tempoTotaleAttesa / numTotaleVeicoli;
+		numAttraversamentiMedio = numAttraversamenti / numTotaleVeicoli;
+		numSemaforiRossiMedio = numSemaforiRossi / numTotaleVeicoli;
+		numSemaforiVerdiMedio = numSemaforiVerdi / numTotaleVeicoli;
+
 	}
 
-	public void update() throws RemoteException {
-		updateMessaggi();
-		updateRSUnumMassimoMessaggi();
-		updateRSUnumMinimoMessaggi();
-	}
-
-	public void updateMessaggi() {
-		Variabile var;
-
-		for (Entry<RemoteRSU, Variabile> e : mappaStatistiche.entrySet()) {
+	private void updateStatRSU() throws RemoteException {
+		VariabileStatRSU var;
+		int countOtti = 0;
+		for (Entry<RemoteRSU, VariabileStatRSU> e : mappaStatistiche.entrySet()) {
 			var = e.getValue();
+			if (var.getNumeroMessTotali() > 0 && var.getNumeroMessTotali() < numMessMinimo) {
+				numMessMinimo = var.getNumeroMessTotali();
+				idRSUMessMax = "" + e.getKey().getNameRSU();
+			}
+			if (var.getNumeroMessTotali() > numMessMassimo) {
+				numMessMassimo = var.getNumeroMessTotali();
+				idRSUMessMin = "" + e.getKey().getNameRSU();
+			}
 			sommaMessTotali += var.getNumeroMessTotali();
 			sommaMessRicevutiRSU_RSU += var.getNumeroMessRicevutiRSU_RSU();
 			sommaMessInviatiRSU_RSU += var.getNumeroMessRicevutiRSU_RSU();
 			sommaMessInviatiRSU_Veicoli += var.getNumeroMessInviatiRSU_Veicolo();
 			sommaMessRicevutiRSU_Veicoli += var.getNumeroMessRicevutiRSU_Veicolo();
-		}
-	}
+			durataTotale = var.getDurataTotale();
 
-	public void updateRSUnumMinimoMessaggi() throws RemoteException {
-		Variabile var;
+			if (var.getGradoOttimalitaPercorsiMin() > 0) {
+				sommaGradoOttimalitaPercorsiMinimi += var.getGradoOttimalitaPercorsiMin();
+				countOtti++;
 
-		for (Entry<RemoteRSU, Variabile> e : mappaStatistiche.entrySet()) {
-			var = e.getValue();
-			if (var.getNumeroMessTotali() > 0 && var.getNumeroMessTotali() < numMessMinimo) {
-				numMessMinimo = var.getNumeroMessTotali();
-				idRSUminimoMessaggi = "" + e.getKey().getNameRSU();
+				if (var.getGradoOttimalitaPercorsiMin() > gradoOttMax) {
+					gradoOttMax = var.getGradoOttimalitaPercorsiMin();
+					idRSUGradoOttMax = "" + e.getKey().getNameRSU();
+				}
+
+				if (var.getGradoOttimalitaPercorsiMin() < gradoOttMin) {
+					gradoOttMin = var.getGradoOttimalitaPercorsiMin();
+					idRSUGradoOttMin = "" + e.getKey().getNameRSU();
+				}
 			}
+			mediaMessRicevuti = (sommaMessRicevutiRSU_RSU + sommaMessRicevutiRSU_Veicoli) / RSUtot;
+			mediaMessInviati = (sommaMessInviatiRSU_RSU + sommaMessInviatiRSU_Veicoli) / RSUtot;
+			mediaMessTot = sommaMessTotali / RSUtot;
+			mediaDurataTotale = durataTotale / RSUtot;
+			mediaGradoOttimalitaPercorsiMinimi = (sommaGradoOttimalitaPercorsiMinimi / countOtti) * 100;
+			// mediaGradoCongestione = durataTotale / listaStatVeicoli.size();
+
+			// TODO
+			// grado congestione e indirizzamento massimo e minimo
 		}
+
 	}
 
-	public void updateRSUnumMassimoMessaggi() throws RemoteException {
-		Variabile var;
+	private void reset() {
 
-		for (Entry<RemoteRSU, Variabile> e : mappaStatistiche.entrySet()) {
-			var = e.getValue();
-			if (var.getNumeroMessTotali() > numMessMassimo) {
-				numMessMassimo = var.getNumeroMessTotali();
-				idRSUmassimoMessaggi = "" + e.getKey().getNameRSU();
-			}
-		}
+		mappaStatistiche.clear();
+		listaStatVeicoli.clear();
+		mappaStatistiche = new HashMap<RemoteRSU, VariabileStatRSU>();
+		listaStatVeicoli = new TreeSet<VariabileStatVeicolo>();
+
+		tempoDiAttesaMinimo = Double.MAX_VALUE;
+		tempoDiAttesaMassimo = Double.MIN_VALUE;
+		numMessMassimo = Integer.MIN_VALUE;
+		numMessMinimo = Integer.MAX_VALUE;
+		sommaMessTotali = 0;
+		sommaMessInviatiRSU_RSU = 0;
+		sommaMessRicevutiRSU_RSU = 0;
+		sommaMessInviatiRSU_Veicoli = 0;
+		sommaMessRicevutiRSU_Veicoli = 0;
+
+		RSUtot = 0;
+		numMessMassimo = Integer.MIN_VALUE;
+		numMessMinimo = Integer.MAX_VALUE;
+		sommaMessTotali = 0;
+		sommaMessInviatiRSU_RSU = 0;
+		sommaMessRicevutiRSU_RSU = 0;
+		sommaMessInviatiRSU_Veicoli = 0;
+		sommaMessRicevutiRSU_Veicoli = 0;
+		sommaGradoOttimalitaPercorsiMinimi = 0;
+		sommaGradoCongestione = 0;
+		mediaGradoCongestione = 0;
+		mediaGradoOttimalitaPercorsiMinimi = 0;
+		mediaPersorsiMinimi = 0;
+		mediaPercorsiTot = 0;
+		mediaMessRicevuti = 0;
+		mediaMessInviati = 0;
+		mediaMessTot = 0;
+
+		idVeicoloAttesaMassima = "";
+		idVeicoloAttesaMinima = "";
+		tempoDiAttesaMinimo = Double.MAX_VALUE;
+		tempoDiAttesaMassimo = Double.MIN_VALUE;
+		distanzaPercorsaMedia = 0.0;
+		tempoTotalePercorrenzaMedio = 0.0;
+		tempoTotaleAttesaMedio = 0.0;
+		numTotaleVeicoli = 0;
+		numAttraversamentiMedio = 0;
+		numSemaforiRossiMedio = 0;
+		numSemaforiVerdiMedio = 0;
 	}
-
-	
 
 }
