@@ -73,16 +73,15 @@ public class Scheduler extends Thread {
 				event.action();
 				/*
 				 * print* if(!event.getName().equals("UPDATE POSITION") &&
-				 * !event.getName().equals("PING")) {
 				 * System.out.println("SCHEDULER - ACTION SU "+event.getName()+" a "+event.getTime()); //
 				 * System.out.println("---- messaggio inviato da "+((Message)event).getSource()); } //
 				 * if(event.getName().equals("CAMBIO ARCO")){ // } /
 				 **/
 
-//				// stop simulation if time horizon is end
-//				if (timeHorizon > 0 && currentTime > timeHorizon) {
-//					start = false;
-//				}
+				// // stop simulation if time horizon is end
+				// if (timeHorizon > 0 && currentTime > timeHorizon) {
+				// start = false;
+				// }
 
 			} else {
 				start = false;

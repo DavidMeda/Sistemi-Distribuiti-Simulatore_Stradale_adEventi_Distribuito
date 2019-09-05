@@ -4,38 +4,38 @@ import ITS.regolatoriSemafori.Regolatore;
 import network.CityGraph;
 import network.NetEdge;
 
-public class SemaforoClassico extends ABS_Semaforo{
-	//tempo di verde in millesecondi
+public class SemaforoClassico extends ABS_Semaforo {
+
+	// tempo di verde in millesecondi
 	private final double tempoDiVerde = 1000;
-	
-	
+
 	// COSTR /////////////////////
 	public SemaforoClassico(Regolatore regolatore, NetEdge edge) {
-		super(regolatore,edge);
-		CityGraph g = (CityGraph)regolatore.getRSU().getGraph();
-		//lista che viene assegnata come riferimento dal grafo che ne gestisce aggiunta e rimozione 
+		super(regolatore, edge);
+		CityGraph g = (CityGraph) regolatore.getRSU().getGraph();
+		// lista che viene assegnata come riferimento dal grafo che ne gestisce aggiunta e
+		// rimozione
 		coda = g.getVehiclesOnTheEdge(edge.getId());
 
 	}
-	
+
 	// OVERRIDE //////////////////
-	//from abs_semaforo
+	// from abs_semaforo
 	@Override
 	public double setVerde() {
 		verde = true;
 		avvisaVeicoli("VERDE");
-		
+
 		return tempoDiVerde;
 	}
 
 	@Override
 	public void setRosso() {
-		if(!sempreVerde) {
+		if (!sempreVerde) {
 			verde = false;
 			avvisaVeicoli("ROSSO");
-		}
-		else {
-			//serve per avere semafori sempre verdi se ci sono solo due strade
+		} else {
+			// serve per avere semafori sempre verdi se ci sono solo due strade
 			setVerde();
 		}
 	}
@@ -44,9 +44,5 @@ public class SemaforoClassico extends ABS_Semaforo{
 	public NetEdge getEdge() {
 		return edge;
 	}
-
-	
-
-	
 
 }

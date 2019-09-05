@@ -33,8 +33,10 @@ public class CityGraph extends NetGraph {
 	public HashMap<NetEdge, LinkedList<Vehicle>> getVehicles() {
 		return vehiclesAttached;
 	}
-	
-	public int getNumVeicoliTot() {return mobileNodes.size();}
+
+	public int getNumVeicoliTot() {
+		return mobileNodes.size();
+	}
 
 	public LinkedList<MobileNode> getMobileNodes() {
 		return mobileNodes;
@@ -46,7 +48,6 @@ public class CityGraph extends NetGraph {
 	}
 
 	// METHODS //////////////////////////////////
-
 
 	public void setNodoInMovimento(MobileNode nodoMobile) {
 		mobileNodes.remove(nodoMobile);
@@ -66,7 +67,6 @@ public class CityGraph extends NetGraph {
 		getScheduler().addEvent(new UpdatePosition(this, Param.updatePositionTime));
 
 	}
-	
 
 	@Override
 	public void init() {
@@ -130,8 +130,5 @@ public class CityGraph extends NetGraph {
 		return !(numVehicleEdge < numMaxVehicle);
 
 	}
-
-
-	
 
 }

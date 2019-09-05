@@ -67,6 +67,7 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 	public synchronized void registraRSU(RemoteRSU rsu) throws RemoteException {
 		if (nuovaSesione) {
 			reset();
+			System.out.println("Fatto reset sommaMess "+sommaMessTotali);
 			nuovaSesione = false;
 		}
 		mappaStatistiche.put(rsu, null);
@@ -90,7 +91,6 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 		sb.append("\n\t- Veicolo con il maggior tempo di attesa: " + idVeicoloAttesaMassima + " ["
 						+ tempoDiAttesaMassimo + " sec]");
 		sb.append("\nSTATISTICHE SU RSU TOTALI = " + RSUtot);
-		// sb.append("\n\t- Durata totale traffico della rete [secondi] = " + durataTotale);
 		sb.append("\n\t- Media messaggi ricevuti per RSU = " + mediaMessRicevuti);
 		sb.append("\n\t- Media messaggi inviati per RSU = " + mediaMessInviati);
 		sb.append("\n\t- RSU col maggior numero di messaggi = " + idRSUMessMax + " (num: " + numMessMassimo + ")");
@@ -222,12 +222,7 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 			mediaMessTot = sommaMessTotali / RSUtot;
 			mediaDurataTotale = durataTotale / RSUtot;
 			mediaGradoOttimalitaPercorsiMinimi = (sommaGradoOttimalitaPercorsiMinimi / countOtti) * 100;
-			// mediaGradoCongestione = durataTotale / listaStatVeicoli.size();
-
-			// TODO
-			// grado congestione e indirizzamento massimo e minimo
 		}
-
 	}
 
 	private void reset() {
@@ -236,16 +231,6 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 		listaStatVeicoli.clear();
 		mappaStatistiche = new HashMap<RemoteRSU, VariabileStatRSU>();
 		listaStatVeicoli = new TreeSet<VariabileStatVeicolo>();
-
-		tempoDiAttesaMinimo = Double.MAX_VALUE;
-		tempoDiAttesaMassimo = Double.MIN_VALUE;
-		numMessMassimo = Integer.MIN_VALUE;
-		numMessMinimo = Integer.MAX_VALUE;
-		sommaMessTotali = 0;
-		sommaMessInviatiRSU_RSU = 0;
-		sommaMessRicevutiRSU_RSU = 0;
-		sommaMessInviatiRSU_Veicoli = 0;
-		sommaMessRicevutiRSU_Veicoli = 0;
 
 		RSUtot = 0;
 		numMessMassimo = Integer.MIN_VALUE;

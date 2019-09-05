@@ -1,6 +1,5 @@
 package simulazione.Launcher;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -155,30 +154,30 @@ public class MainSimulazione {
 
 	public void inputParam() {
 		JPanel p = new JPanel(new GridLayout(4, 2, 5, 10));
-		
+
 		JTextField veicoli = new JTextField(10);
 		JTextField perGenerazione = new JTextField(10);
 		JComboBox scenarioScelto = new JComboBox(Scenario.values());
 		String[] semafori = { "SEMAFORO CLASSICO", "SEMAFORO A SOGLIA" };
 		JComboBox semaforoScelto = new JComboBox(semafori);
-		
+
 		JLabel veic = new JLabel("Inserire numero di veicoli: ");
-		veic.setFont( new Font(Font.SANS_SERIF, Font.CENTER_BASELINE, 15));
+		veic.setFont(new Font(Font.SANS_SERIF, Font.CENTER_BASELINE, 15));
 		p.add(veic);
 		p.add(veicoli);
-		
+
 		JLabel tempo = new JLabel("Inserire tempo generazione veicoli (in millis): ");
-		tempo.setFont( new Font(Font.SANS_SERIF, Font.CENTER_BASELINE, 15));
+		tempo.setFont(new Font(Font.SANS_SERIF, Font.CENTER_BASELINE, 15));
 		p.add(tempo);
 		p.add(perGenerazione);
-		
+
 		JLabel scen = new JLabel("Scegliere scenario: ");
-		scen.setFont( new Font(Font.SANS_SERIF, Font.CENTER_BASELINE, 15));
+		scen.setFont(new Font(Font.SANS_SERIF, Font.CENTER_BASELINE, 15));
 		p.add(scen);
 		p.add(scenarioScelto);
-		
-		JLabel sem =new JLabel("Scegliere il tipo di semaforo: ");
-		sem.setFont( new Font(Font.SANS_SERIF, Font.CENTER_BASELINE, 15));
+
+		JLabel sem = new JLabel("Scegliere il tipo di semaforo: ");
+		sem.setFont(new Font(Font.SANS_SERIF, Font.CENTER_BASELINE, 15));
 		p.add(sem);
 		p.add(semaforoScelto);
 

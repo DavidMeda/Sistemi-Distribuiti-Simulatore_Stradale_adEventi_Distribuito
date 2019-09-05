@@ -6,7 +6,6 @@ import ITS.RSU.RemoteRSU;
 public class VariabileStatRSU implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private RemoteRSU rsu;
 	private int idRSU;
 
 	// variabili RSU
@@ -16,8 +15,7 @@ public class VariabileStatRSU implements Serializable {
 					messInviatiRSU_RSU = 0, messRicevutiRSU_Veicolo = 0, messInviatiRSU_Veicolo = 0, messRicevuti = 0,
 					messInviati = 0, messTotali = 0, veicoliPerRSU = 0;
 
-	public VariabileStatRSU(RemoteRSU r, int id) {
-		rsu = r;
+	public VariabileStatRSU(int id) {
 		idRSU = id;
 	}
 

@@ -11,7 +11,6 @@ import simEventiDiscreti.Scheduler;
 import util.Param;
 
 public class NetGraph extends MultiGraph {
-	
 
 	// //////////////////////
 	// node factory
@@ -50,7 +49,7 @@ public class NetGraph extends MultiGraph {
 
 	public void init() {
 		for (Node n : getEachNode()) {
-			((NetNode)n).init();
+			((NetNode) n).init();
 		}
 	}
 
@@ -81,21 +80,21 @@ public class NetGraph extends MultiGraph {
 		}
 		return false;
 	}
-	
+
 	// SETTER /////////////////////////
-		public NetGraph setDescription(String description) {
-			this.description = description;
-			return this;
-		}
+	public NetGraph setDescription(String description) {
+		this.description = description;
+		return this;
+	}
 
-		// GETTER /////////////////////////
-		public Scheduler getScheduler() {
-			return scheduler;
-		}
+	// GETTER /////////////////////////
+	public Scheduler getScheduler() {
+		return scheduler;
+	}
 
-		public String getDescription() {
-			return description;
-		}
+	public String getDescription() {
+		return description;
+	}
 
 	// OVERRIDE ////////////////////////////////////////////////////////
 	// from abs graph
@@ -109,6 +108,5 @@ public class NetGraph extends MultiGraph {
 		return null;
 	}
 	//////////////////////////////////////////////////////////
-
 
 }

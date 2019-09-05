@@ -56,7 +56,7 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 	private VariabileStatRSU variabileRSU;
 	private Regolatore regolatore;
 	private static final boolean regolatoreClassico = Param.semaforoClassico;
-	private static JFrame frame = new JFrame();
+	private static JFrame frame = new JFrame("Messaggi");
 	private static JTextArea area = new JTextArea("MESSAGGI SIMULAZIONE");
 	private static JButton b = new JButton("Interrupt simulation");
 	private static JScrollPane scrollPane = new JScrollPane(area);
@@ -66,30 +66,8 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 		ID = i;
 		nodo = (NetNode) node;
 		grafo = nodo.getGraph();
-		variabileRSU = new VariabileStatRSU(this, ID);
+		variabileRSU = new VariabileStatRSU(ID);
 		initGUI();
-	}
-
-	private void initGUI() {
-		frame.setLocation(400, 700);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setLocation((dim.width / 2 - frame.getSize().width / 2)+500, dim.height / 2 - frame.getSize().height / 2);
-		area.setEditable(false);
-		area.setLineWrap(true);
-		Font font = new Font(area.getFont().getName(), Font.BOLD, 16);
-		area.setFont(font);
-		b.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		frame.add(scrollPane, BorderLayout.CENTER);
-		frame.add(b, BorderLayout.SOUTH);
-		frame.setSize(800, 600);
-		frame.setVisible(true);
 	}
 
 	@Override
@@ -112,9 +90,6 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 			}
 		}
 
-//		time = getScheduler().getCurrentTime();
-//		variabileRSU.updateTempoFine(time);
-//		variabileRSU.updateDurataTotale();
 		try {
 			serverStatistiche.richiestaStatisticheGenerali();
 		} catch (RemoteException e) {
@@ -127,7 +102,7 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 
 	@Override
 	public void stampaStatistiche(String statistica) throws RemoteException {
-		area.append("\n"+this + " ricevute le statistiche generali dal server");
+		area.append("\n" + this + " ricevute le statistiche generali dal server");
 		scrollPane.getViewport().setViewPosition(new Point(0, area.getDocument().getLength()));
 	}
 
@@ -155,7 +130,7 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 
 		try {
 			UnicastRemoteObject.exportObject(this, 1098);
-			serverStatistiche = (ServerStatistiche) Naming.lookup("Server");
+			serverStatistiche = (ServerStatistiche) Naming.lookup("ServerStatistiche");
 
 			// iscrivo l'RSU alla lista del serverStatistiche
 			serverStatistiche.registraRSU(this);
@@ -215,8 +190,8 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 			NetEdge nextEdge = scegliProssimoArco(destinationOfVehicle, vehicle.getCurrentEdge());
 
 			area.append("\n" + this + " arrivato messaggio RICHIESTA PERCORSO da veicolo N° " + vehicle.getId()
-							+ "\n\tcon destinazione: " + destinationOfVehicle + ", prossima strada da raggiungere: arco "
-							+ nextEdge);
+							+ "\n\tcon destinazione: " + destinationOfVehicle
+							+ ", prossima strada da raggiungere: arco " + nextEdge);
 			scrollPane.getViewport().setViewPosition(new Point(0, area.getDocument().getLength()));
 
 			// System.out.println("------ arco consigliato "+nextEdge);
@@ -261,6 +236,29 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 			listaAutoIncrocio.remove(v);
 		}
 
+	}
+
+	private void initGUI() {
+		frame.setLocation(400, 700);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setLocation((dim.width / 2 - frame.getSize().width / 2) + 500, dim.height / 2
+						- frame.getSize().height / 2);
+		area.setEditable(false);
+		area.setLineWrap(true);
+		Font font = new Font(area.getFont().getName(), Font.BOLD, 16);
+		area.setFont(font);
+		b.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		frame.add(scrollPane, BorderLayout.CENTER);
+		frame.add(b, BorderLayout.SOUTH);
+		frame.setSize(800, 600);
+		frame.setVisible(true);
 	}
 
 	private void routing() {
