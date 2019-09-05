@@ -67,7 +67,6 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 	public synchronized void registraRSU(RemoteRSU rsu) throws RemoteException {
 		if (nuovaSesione) {
 			reset();
-			System.out.println("Fatto reset sommaMess "+sommaMessTotali);
 			nuovaSesione = false;
 		}
 		mappaStatistiche.put(rsu, null);

@@ -1,4 +1,4 @@
-package statistiche.Laucher;
+package statistiche.Launcher;
 
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
@@ -11,7 +11,7 @@ public class MainStatistiche {
 			Statistiche stat = new Statistiche();
 			LocateRegistry.createRegistry(1099);
 			System.out.println("Creato SERVER STATISTICHE sul registro Locale porta 1099");
-			Naming.rebind("ServerStatistiche", stat);
+			Naming.rebind("rmi//localhost:1099/ServerStatistiche", stat);
 			System.out.println("Attendo client RSU...\n");
 
 		} catch (Exception e) {
