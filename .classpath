@@ -23,6 +23,5 @@
 	<classpathentry kind="lib" path="lib/parser/jdom-2.0.5-junit.jar"/>
 	<classpathentry kind="lib" path="lib/parser/jdom-2.0.5-sources.jar"/>
 	<classpathentry kind="lib" path="lib/parser/jdom-2.0.5.jar"/>
-	<classpathentry kind="lib" path="lib/gs/jfreechart-1.0.14.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

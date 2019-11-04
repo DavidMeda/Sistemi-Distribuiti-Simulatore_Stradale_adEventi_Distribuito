@@ -6,6 +6,10 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
@@ -13,11 +17,14 @@ import java.util.LinkedList;
 import java.util.Map.Entry;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.jar.JarInputStream;
 import ITS.RSU.RemoteRSU;
+import util.Param;
 
 public class Statistiche extends UnicastRemoteObject implements ServerStatistiche {
 
@@ -79,9 +86,9 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 		updateStatVeicoli();
 		StringBuilder sb = new StringBuilder();
 		sb.append("\nSTATISTICHE SU VEICOLI TOTALE = " + numTotaleVeicoli);
-		sb.append("\n\t- Distanza media percorsa [metri]: " + String.format("%4.3f" , distanzaPercorsaMedia));
-		sb.append("\n\t- Tempo di percorrenza medio [secondi]: " + String.format("%4.3f" , tempoTotalePercorrenzaMedio));
-		sb.append("\n\t- Tempo di attesa medio [secondi]: " + String.format("%4.3f" ,tempoTotaleAttesaMedio));
+		sb.append("\n\t- Distanza media percorsa [metri]: " + String.format("%4.3f", distanzaPercorsaMedia));
+		sb.append("\n\t- Tempo di percorrenza medio [secondi]: " + String.format("%4.3f", tempoTotalePercorrenzaMedio));
+		sb.append("\n\t- Tempo di attesa medio [secondi]: " + String.format("%4.3f", tempoTotaleAttesaMedio));
 		sb.append("\n\t- Numero medio di strade attraversate: " + numAttraversamentiMedio);
 		sb.append("\n\t- Numero medio di semafori rossi incotrati: " + numSemaforiRossiMedio);
 		sb.append("\n\t- Numero medio di semafori verdi incotrati: " + numSemaforiVerdiMedio);
@@ -122,8 +129,9 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 
 	private void displayText(String statistiche) {
 		JFrame frame = new JFrame("SERVER STATISTICHE");
-//		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-//		frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
+		// Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		// frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 -
+		// frame.getSize().height / 2);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JTextArea textArea = new JTextArea("STATISTICHE GENERALI");
@@ -133,12 +141,18 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 		Font font = new Font(textArea.getFont().getName(), Font.BOLD, 17);
 		textArea.setFont(font);
 		frame.add(scrollPanel, BorderLayout.CENTER);
-		JButton b = new JButton("exit");
+		JButton b = new JButton("SALVA ED ESCI");
 		b.setPreferredSize(new Dimension(40, 40));
 		b.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				String nomeFile = JOptionPane.showInputDialog(new JFrame("SALVATAGGIO"), "Scegli nome file da memorizzare");
+				try {
+					salvaStatistiche(statistiche, nomeFile);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 				frame.dispose();
 
 			}
@@ -146,8 +160,8 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 
 		frame.add(b, BorderLayout.SOUTH);
 		int x = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-		int y = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-		frame.setSize(x,y);
+		int y = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 50;
+		frame.setSize(x, y);
 		frame.setVisible(true);
 		textArea.append(statistiche);
 	}
@@ -262,6 +276,25 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 		numAttraversamentiMedio = 0;
 		numSemaforiRossiMedio = 0;
 		numSemaforiVerdiMedio = 0;
+	}
+	
+	private static void salvaStatistiche(String statistiche, String nomeFile) throws IOException {
+		String path = new File(System.getProperty("user.dir")+File.separator+"dati statistiche").toString();
+		
+		if (!(new File(path)).isDirectory() ){
+			boolean f = new File(path).mkdirs();
+			if(!f)throw new IOException("non si può creare la cartella");
+		}
+			try {
+				
+				ObjectOutputStream o = null;
+				o = new ObjectOutputStream(new FileOutputStream(path+File.separator+nomeFile+".txt"));
+				o.writeObject(statistiche);
+				o.close();
+				
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null,"impossibile creare file "+path);
+			}
 	}
 
 }
