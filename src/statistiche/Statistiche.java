@@ -138,7 +138,7 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 		JScrollPane scrollPanel = new JScrollPane(textArea);
 		textArea.setEditable(false);
 		textArea.setLineWrap(true);
-		Font font = new Font(textArea.getFont().getName(), Font.BOLD, 17);
+		Font font = new Font(textArea.getFont().getName(), Font.BOLD, 20);
 		textArea.setFont(font);
 		frame.add(scrollPanel, BorderLayout.CENTER);
 		JButton b = new JButton("SALVA ED ESCI");
@@ -147,7 +147,8 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String nomeFile = JOptionPane.showInputDialog(new JFrame("SALVATAGGIO"), "Scegli nome file da memorizzare");
+				String nomeFile = JOptionPane.showInputDialog(new JFrame(
+								"SALVATAGGIO"), "Scegli nome file da memorizzare");
 				try {
 					salvaStatistiche(statistiche, nomeFile);
 				} catch (IOException e1) {
@@ -189,6 +190,8 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 			numSemaforiRossi += var.getNumSemaforiRossi();
 			numSemaforiVerdi += var.getNumSemaforiVerdi();
 		}
+		if (tempoDiAttesaMassimo == Double.MIN_VALUE) tempoDiAttesaMassimo = 0.0;
+		if (tempoDiAttesaMinimo == Double.MAX_VALUE) tempoDiAttesaMinimo = 0.0;
 		distanzaPercorsaMedia = distanzaPercorsa / numTotaleVeicoli;
 		tempoTotalePercorrenzaMedio = tempoTotalePercorrenza / numTotaleVeicoli;
 		tempoTotaleAttesaMedio = tempoTotaleAttesa / numTotaleVeicoli;
@@ -277,24 +280,24 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 		numSemaforiRossiMedio = 0;
 		numSemaforiVerdiMedio = 0;
 	}
-	
+
 	private static void salvaStatistiche(String statistiche, String nomeFile) throws IOException {
-		String path = new File(System.getProperty("user.dir")+File.separator+"dati statistiche").toString();
-		
-		if (!(new File(path)).isDirectory() ){
+		String path = new File(System.getProperty("user.dir") + File.separator + "dati statistiche").toString();
+
+		if (!(new File(path)).isDirectory()) {
 			boolean f = new File(path).mkdirs();
-			if(!f)throw new IOException("non si può creare la cartella");
+			if (!f) throw new IOException("non si può creare la cartella");
 		}
-			try {
-				
-				ObjectOutputStream o = null;
-				o = new ObjectOutputStream(new FileOutputStream(path+File.separator+nomeFile+".txt"));
-				o.writeObject(statistiche);
-				o.close();
-				
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null,"impossibile creare file "+path);
-			}
+		try {
+
+			ObjectOutputStream o = null;
+			o = new ObjectOutputStream(new FileOutputStream(path + File.separator + nomeFile + ".txt"));
+			o.writeObject(statistiche);
+			o.close();
+
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "impossibile creare file " + path);
+		}
 	}
 
 }

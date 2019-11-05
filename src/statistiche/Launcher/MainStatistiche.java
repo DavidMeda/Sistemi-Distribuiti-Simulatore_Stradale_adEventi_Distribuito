@@ -2,6 +2,7 @@ package statistiche.Launcher;
 
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
+import simulazione.Launcher.MainSimulazione;
 import statistiche.Statistiche;
 
 public class MainStatistiche {
@@ -17,6 +18,7 @@ public class MainStatistiche {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 }
