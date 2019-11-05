@@ -5,4 +5,4 @@ Per avviare il sistema bisogna:
 
 
 INFO sistema
-Per il server statistiche remoto è stato utilizzato il LocateRegistry sulla porta 1099 registrato sotto il nome di "ServerStatistiche".
+Per il server statistiche remoto è stato utilizzato il LocateRegistry sulla porta 1099 registrato sotto il nome di "rmi//localhost:1099/ServerStatistiche".
