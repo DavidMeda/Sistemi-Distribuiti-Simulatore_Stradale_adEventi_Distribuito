@@ -56,7 +56,8 @@ public class SemaforoCodaLunga extends ABS_Semaforo {
 
 		// si da preferenza alle code che provocano più congestione
 		double percentuale = gradoCongestione;
-
+		
+//		System.out.println("semaforo coda lunga "+percentuale);
 		// passano tutte le auto se la coda è troppo corta
 //		if (percentuale > sogliaCongestione) {
 //			percentuale = 1;

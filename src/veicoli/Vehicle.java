@@ -188,7 +188,11 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 				distanceTraveled += (double) currentEdge.getAttribute("length");
 				variabileStat.updateDistanzaPercorsa(distanceTraveled);
 				attachToEdge(currentEdge.getId());
-
+//				if(getId().equals("40")){
+//					  System.out.println(this+": sono i l'ARCO "+currentEdge);
+//					  System.out.println(this+": cambio arco"); }
+//					 
+				
 				// comunico al primo RSU che inizio a muovermi
 				Message cambioArco = new Message("CAMBIO ARCO", this, registeredNode, Param.elaborationTime);
 				cambioArco.setData(currentNode, nextNode);
@@ -285,7 +289,7 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 
 				// numNodiAttraversati++;
 				attachToEdge(currentEdge.getId());
-
+				
 				// comunico il cambio arco all'RSU
 				Message cambioArco = new Message("CAMBIO ARCO", this, registeredNode, Param.elaborationTime);
 				cambioArco.setData(nodoProvenienza, nodoSuccessuvo);
@@ -295,11 +299,11 @@ public abstract class Vehicle extends MobileNode implements Comparable<Vehicle> 
 				 * print* System.out.println(this+": invio cambio arco sono su "+currentEdge+"  "); /
 				 **/
 
-				/*
-				 * print* if(getId().equals("5")){
-				 * System.out.println(this+": sono in mezzo l'ARCO "+currentEdge);
-				 * System.out.println(this+": tempo di attesa totale = "+tempoDiAttesaTotale); } /
-				 **/
+				
+//				 if(getId().equals("40")){
+//				  System.out.println(this+": sono in mezzo l'ARCO "+currentEdge);
+//				  System.out.println(this+": cambio arco"); }
+//				 
 			}
 
 			// aggiorno posizione sull'arco

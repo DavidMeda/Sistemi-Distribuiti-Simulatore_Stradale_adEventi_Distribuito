@@ -125,11 +125,11 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 		if (tipo_regolatore == 0) regolatore = new RegolatoreClassico(this, archiEntranti);
 		else if (tipo_regolatore == 1) regolatore = new RegolatoreCodaCorta(this, archiEntranti);
 		else  regolatore = new RegolatoreCodaLunga(this, archiEntranti);
-
 		regolatore.init();
 
 		routing();
 
+		//JAVA RMI
 		try {
 			UnicastRemoteObject.exportObject(this, 1098);
 			serverStatistiche = (ServerStatistiche) Naming.lookup("rmi//localhost:1099/ServerStatistiche");
@@ -212,9 +212,9 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 
 		} else if (nameMessage.equals("CAMBIO FASE")) {
 			regolatore.nextPhase();
-			variabileRSU.updateMessaggiInviatiRSU_RSU();
-			variabileRSU.updateMessaggiRicevutiRSU_RSU();
-			variabileRSU.getNumeroMessInviatiRSU_RSU();
+//			variabileRSU.updateMessaggiInviatiRSU_RSU();
+//			variabileRSU.updateMessaggiRicevutiRSU_RSU();
+//			variabileRSU.getNumeroMessInviatiRSU_RSU();
 		} else if (nameMessage.equals("DESTINAZIONE")) {
 			Vehicle v = (Vehicle) m.getSource();
 			// rimuovo il veicolo dal grafo
