@@ -134,7 +134,7 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 		frame.add(scrollPanel, BorderLayout.CENTER);
 		JButton b = new JButton("SALVA ED ESCI");
 		b.setPreferredSize(new Dimension(40, 40));
-		System.out.println("Statichiche stmapio statistiche");
+//		System.out.println("Statichiche stmapio statistiche");
 		b.addActionListener(new ActionListener() {
 		
 			@Override
@@ -142,7 +142,7 @@ public class Statistiche extends UnicastRemoteObject implements ServerStatistich
 				String nomeFile = JOptionPane.showInputDialog(new JFrame("SALVATAGGIO"), "Scegli nome file da memorizzare");
 				if(nomeFile != null){
 					try{
-						System.out.println("\tSalvataggio");
+//						System.out.println("\tSalvataggio");
 						if (JOptionPane.showConfirmDialog(null, "Vuoi salvare anche i dati dei veicoli?", "WARNING",JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 								    statisticheFinali = statisticheGen+"\n"+statisticheVeicoli;
 								} else {

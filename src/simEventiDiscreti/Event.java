@@ -1,7 +1,10 @@
 package simEventiDiscreti;
 
-public abstract class Event implements Comparable<Event> {
+import java.io.Serializable;
 
+public abstract class Event implements Serializable, Comparable<Event> {
+
+	private static final long serialVersionUID = 1L;
 	// name of the event
 	String name = null;
 	// tra quanti millisecondi parte l'evento

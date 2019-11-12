@@ -72,7 +72,7 @@ public final class Param {
 	public static final double
 		// il semaforo intelligente concede autorizzazioni se il primo veicolo della coda
 		// non supera la distanza minima [metri]
-		distanzaMinimaAutorizzazione = 3.0,
+		distanzaMinimaAutorizzazione = 5.0,
 		// viene accettata l'autorizzazione al prossimo veicolo se la distanza
 		// dall'ultimo veicolo autorizzato è minore della soglia di accettazione
 		sogliaDiAccettazione = 1;
