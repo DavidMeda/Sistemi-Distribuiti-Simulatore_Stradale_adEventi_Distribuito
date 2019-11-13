@@ -9,6 +9,8 @@ public final class Param {
 	public static void setOrizzonteTemporale(double durataSimulazione) {
 		orizzonteTemporaleSimulazione = durataSimulazione;
 	}
+	
+	public static int PORT = 1098;
 
 	public static double orizzonteTemporaleSimulazione = 0; // durata simulazione (0 = infinito) [millisec]
 

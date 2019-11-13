@@ -80,6 +80,7 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 
 		while (true) {
 			try {
+				if(serverStatistiche==null) break;
 				serverStatistiche.updateStatisticheRSU(this, variabileRSU);
 				Thread.sleep(1000);
 			} catch (Exception e) {
@@ -131,7 +132,7 @@ public class RSU extends Thread implements Entity, RemoteRSU {
 
 		//JAVA RMI
 		try {
-			UnicastRemoteObject.exportObject(this, 1098);
+			UnicastRemoteObject.exportObject(this, Param.PORT);
 			serverStatistiche = (ServerStatistiche) Naming.lookup("rmi//localhost:1099/ServerStatistiche");
 
 			// iscrivo l'RSU alla lista del serverStatistiche
